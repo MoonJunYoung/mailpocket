@@ -12,8 +12,8 @@ class MailService:
         self.user_repository = UserRepository()
         self.channel_repository = ChannelRepository()
 
-    def recv(self, mail_content, s3_object_key):
-        mail = Mail(mail_content, s3_object_key)
+    def recv(self, s3_object_key):
+        mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
         user: User = self.user_repository.ReadByIdentifier(mail.to_name).run()
         if not user:

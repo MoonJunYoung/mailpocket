@@ -21,7 +21,9 @@ class ChannelRepository:
             for channel_model in channel_models:
                 channel = Channel(
                     id=channel_model.id,
-                    channel_key=channel_model.channel_key,
+                    user_key=channel_model.user_key,
+                    access_token=channel_model.access_token,
+                    team_name=channel_model.team_name,
                     user_id=channel_model.user_id,
                 )
                 channels.append(channel)
