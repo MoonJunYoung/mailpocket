@@ -5,38 +5,15 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { postSignUpData } from '../../api/api'
 import Nav from '../Nav'
+import Symbol from '../Symbol'
 
 const SignInContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 100px;
-  @media (max-width: 760px) {
-    margin-top: 70px;
-    }
 `
 
-const Symbol = styled.img`
-  width: 120px;
-  animation: bounceAnimation 900ms;
-  @keyframes bounceAnimation {
-  0%, 50%, 80%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  40% {
-    transform: translateY(-50px) rotate(30deg);
-  }
-  60% {
-    transform: translateY(-15px) rotate(-15deg);
-  }
-
-}
-  @media (max-width: 760px) {
-    width: 100px;
-    }
-  
-`
 
 const FormContainer = styled.div`
   border: 1px solid white;
@@ -201,7 +178,7 @@ const SignUp = () => {
     <div>
       <Nav />
       <SignInContainer>
-        <Symbol src='/images/MailpocketSymbol.png' alt='symbol' />
+        <Symbol />
         <FormContainer>
           <InputContainer onSubmit={handleSubmit}>
             <AuthTitle>

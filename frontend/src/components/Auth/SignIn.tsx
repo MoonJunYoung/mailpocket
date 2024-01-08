@@ -5,38 +5,15 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { postSignInData } from '../../api/api'
 import Nav from '../Nav'
+import Symbol from '../Symbol'
 
 const SignInContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 100px;
-  @media (max-width: 760px) {
-    margin-top: 70px;
-    }
 `
 
-const Symbol = styled.img`
-  width: 120px;
-  animation: bounceAnimation 900ms;
-  @keyframes bounceAnimation {
-  0%, 50%, 80%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  40% {
-    transform: translateY(-50px) rotate(30deg);
-  }
-  60% {
-    transform: translateY(-15px) rotate(-15deg);
-  }
-
-}
-  @media (max-width: 760px) {
-    width: 100px;
-    }
-  
-`
 
 const FormContainer = styled.div`
   border: 1px solid white;
@@ -164,16 +141,12 @@ const SignIn = () => {
     try {
       const response = await postSignInData(formData);
       if (response.status === 201) {
-        console.log(response.data)
         Cookies.set("authToken", response.data, {
           expires: 30,
         });
         navigate("/mypage");
       } else {
-        Cookies.set("authToken", response.data, {
-          expires: 30,
-        });
-        navigate("/");
+        alert("아이디 및 비밀번호를 확인해주세요.")
       }
     } catch (error) {
       alert("실패했습니다. 다시 시도하세요.");
@@ -192,7 +165,7 @@ const SignIn = () => {
     <div>
       <Nav />
       <SignInContainer>
-        <Symbol src='/images/MailpocketSymbol.png' alt='symbol' />
+        <Symbol />
         <FormContainer>
           <InputContainer onSubmit={handleSubmit}>
             <AuthTitle>

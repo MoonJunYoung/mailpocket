@@ -4,6 +4,7 @@ import MainPage from "./pages/MainPage";
 import SignIn from './components/Auth/SignIn';
 import SingUp from './components/Auth/SingUp';
 import MyPage from "./pages/MyPage";
+import RedirectMypage from './components/RedirectMypage';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SingUp />} />
+        <Route path="/slack-oauth" element={<RedirectMypage />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route index element={<MainPage />} />
       </Routes>
