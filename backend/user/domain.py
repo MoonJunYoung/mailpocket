@@ -4,7 +4,6 @@ from backend.common.exceptions import (
     IdentifierAlreadyException,
     PasswordNotMatchException,
 )
-from backend.mail.domain import Mail
 
 
 class User:

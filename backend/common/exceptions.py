@@ -9,9 +9,13 @@ logging.error(traceback.format_exc())
 
 def catch_exception(exce, requests: Request = None):
     if issubclass(exce.__class__, CustomException):
-        logging.error(f"\n===\nA custom error occurred. : {exce}\n===")
+        # logging.error(f"\n===\nA custom error occurred. : {exce}\n===")
+        print(f"\n===\nA custom error occurred. : {exce}\n===")
         raise HTTPException(status_code=exce.status_code, detail=exce.detail)
-    logging.error(
+    # logging.error(
+    #     f"\n===\nAn unexpected error occurred. : {exce}\ndetail : {traceback.format_exc()}==="
+    # )
+    print(
         f"\n===\nAn unexpected error occurred. : {exce}\ndetail : {traceback.format_exc()}==="
     )
     raise HTTPException(
