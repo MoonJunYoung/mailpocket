@@ -21,13 +21,7 @@ class ChannelService:
 
     def add(self, code, user_id):
         channel = self.slack_api.install(code, user_id)
-        user: User = self.user_repository.ReadByID(user_id).run()
-        if not user:
-            # 메일 수신자 정보가 조회되지않을때 처리로직 추가해야함
-            pass
-        channels: list[Channel] = self.channel_repository.ReadByUserID(user.id).run()
-        for channel in channels:
-            channel.send_notification(mail)
+        self.channel_repository.Create(channel).run()
 
     def read(self, user_id):
         channel_list = list()
