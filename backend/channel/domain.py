@@ -39,7 +39,7 @@ class Channel:
             },
             {
                 "type": "section",
-                "fields": [{"type": "mrkdwn", "text": f"from: {mail.from_name}"}],
+                "fields": [{"type": "mrkdwn", "text": f"*from: {mail.from_name}*"}],
             },
             {
                 "type": "actions",
