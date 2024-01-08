@@ -1,3 +1,4 @@
+from backend.common.exceptions import IdentifierNotFoundException
 from backend.user.domain import User
 from backend.user.repository import UserRepository
 
@@ -22,8 +23,7 @@ class UserService:
     def sign_in(self, identifier, password):
         user: User = self.user_repository.ReadByIdentifier(identifier).run()
         if not user:
-            # 사용자 검색 실패 로직 추가해야함
-            pass
+            raise IdentifierNotFoundException(identifier=identifier)
         user.check_password_match(password)
         return user.id
 

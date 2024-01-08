@@ -1,13 +1,18 @@
 import bcrypt
 
+from backend.common.exceptions import (
+    IdentifierAlreadyException,
+    PasswordNotMatchException,
+)
 from backend.mail.domain import Mail
 
 
 class User:
-    def __init__(self, id, identifier=None, password=None) -> None:
+    def __init__(self, id, identifier=None, password=None, name=None) -> None:
         self.id = id
         self.identifier = identifier
         self.password = password
+        self.name = name
 
     def password_encryption(self):
         salt = bcrypt.gensalt()
@@ -16,9 +21,9 @@ class User:
 
     def check_password_match(self, password):
         if not bcrypt.checkpw(password.encode(), self.password.encode()):
-            # 비밀번호 불일치 로직 추가해야함
-            pass
+            raise PasswordNotMatchException(
+                identifier=self.identifier, password=password
+            )
 
     def identifier_is_not_unique(self):
-        # 아이디 중복 로직 추가해야함
-        pass
+        raise IdentifierAlreadyException(self.identifier)

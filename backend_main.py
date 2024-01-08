@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.mail.presentation import MailPresentation
+from backend.user.presentation import UserPresentation
 
 app = FastAPI()
 
@@ -37,3 +38,4 @@ async def log_requests(request: Request, call_next):
 
 
 app.include_router(MailPresentation.router)
+app.include_router(UserPresentation.router)
