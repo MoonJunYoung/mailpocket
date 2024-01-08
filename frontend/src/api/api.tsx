@@ -4,7 +4,7 @@ import axios from "axios";
 export let Token = () => Cookies.get("authToken");
 const axiosData = () =>
   axios.create({
-    baseURL: "https://mailpocket.site",
+    baseURL: "https://mailpocket.site/",
     headers: {
       Authorization: Token(),
     },
