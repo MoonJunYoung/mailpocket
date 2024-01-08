@@ -14,6 +14,7 @@ class UserRepository:
                 id=None,
                 identifier=self.user.identifier,
                 password=self.user.password,
+                name=self.user.name,
             )
             self.session.add(user_model)
             self.session.commit()
@@ -36,6 +37,7 @@ class UserRepository:
                 id=user_model.id,
                 identifier=user_model.identifier,
                 password=user_model.password,
+                name=user_model.name,
             )
             return user
 
@@ -54,5 +56,6 @@ class UserRepository:
                 id=user_model.id,
                 identifier=user_model.identifier,
                 password=user_model.password,
+                name=user_model.name,
             )
             return user
