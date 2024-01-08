@@ -19,7 +19,7 @@ app.add_middleware(
 )
 
 
-@app.get("/", status_code=200)
+@app.get("/api", status_code=200)
 def haelth_check():
     return "haelth_check"
 
