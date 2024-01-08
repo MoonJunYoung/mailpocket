@@ -28,3 +28,20 @@ class ChannelRepository:
                 )
                 channels.append(channel)
             return channels
+
+    class Create(MysqlCRUDTemplate):
+        def __init__(self, channel: Channel) -> None:
+            self.channel = channel
+            super().__init__()
+
+        def execute(self):
+            channel_model = ChannelModel(
+                id=None,
+                user_key=self.channel.user_key,
+                access_token=self.channel.access_token,
+                team_name=self.channel.team_name,
+                user_id=self.channel.user_id,
+            )
+            self.session.add(channel_model)
+            self.session.commit()
+            self.channel.id = channel_model.id

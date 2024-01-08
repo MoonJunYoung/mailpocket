@@ -15,7 +15,7 @@ class SlackOauthData(BaseModel):
 class ChannelPresentation:
     router = APIRouter(prefix="/api/channel")
 
-    @router.get("/", status_code=200)
+    @router.get("", status_code=200)
     async def read_channels(Authorization=Header(None)):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
@@ -25,7 +25,7 @@ class ChannelPresentation:
         except Exception as e:
             catch_exception(e)
 
-    @router.post("/", status_code=201)
+    @router.post("", status_code=201)
     async def add_channel(slack_oauth_data: SlackOauthData, Authorization=Header(None)):
         try:
             user_id = Token.get_user_id_by_token(Authorization)

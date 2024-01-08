@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.channel.presentation import ChannelPresentation
 from backend.mail.presentation import MailPresentation
 from backend.user.presentation import UserPresentation
 
@@ -18,7 +19,7 @@ app.add_middleware(
 )
 
 
-@app.get("/", status_code=200)
+@app.get("/api/haelth-check", status_code=200)
 def haelth_check():
     return "haelth_check"
 
@@ -39,3 +40,4 @@ async def log_requests(request: Request, call_next):
 
 app.include_router(MailPresentation.router)
 app.include_router(UserPresentation.router)
+app.include_router(ChannelPresentation.router)
