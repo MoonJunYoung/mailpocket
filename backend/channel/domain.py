@@ -27,7 +27,7 @@ class Channel:
         notification_text = [
             {
                 "type": "section",
-                "fields": [{"type": "mrkdwn", "text": "*뉴스레터가 도착했어요.*"}],
+                "fields": [{"type": "mrkdwn", "text": "*새로운 메일이 도착했어요.*"}],
             },
             {
                 "type": "header",
@@ -39,21 +39,22 @@ class Channel:
             },
             {
                 "type": "section",
-                "fields": [{"type": "mrkdwn", "text": f"{mail.from_name}"}],
+                "fields": [{"type": "mrkdwn", "text": f"from: {mail.from_name}"}],
             },
             {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "*메일 보러가기*",
-                },
-                "accessory": {
-                    "type": "button",
-                    "text": {"type": "plain_text", "text": "Click Me", "emoji": True},
-                    "value": "click_me_123",
-                    "url": f"{mail.read_link}",
-                    "action_id": "button-action",
-                },
+                "type": "actions",
+                "elements": [
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "메일 보러가기",
+                        },
+                        "value": "click_me",
+                        "url": f"{mail.read_link}",
+                        "action_id": "button-action",
+                    }
+                ],
             },
         ]
 
