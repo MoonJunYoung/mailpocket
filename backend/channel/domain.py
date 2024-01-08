@@ -39,13 +39,21 @@ class Channel:
             },
             {
                 "type": "section",
-                "fields": [
-                    {"type": "mrkdwn", "text": f"*뉴스레터 보러가기:*\n{mail.read_link}"}
-                ],
+                "fields": [{"type": "mrkdwn", "text": f"{mail.from_name}"}],
             },
             {
                 "type": "section",
-                "fields": [{"type": "mrkdwn", "text": f"{mail.from_name}"}],
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*메일 보러가기*",
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": "Click Me", "emoji": True},
+                    "value": "click_me_123",
+                    "url": f"{mail.read_link}",
+                    "action_id": "button-action",
+                },
             },
         ]
 
