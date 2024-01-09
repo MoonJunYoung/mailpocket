@@ -1,3 +1,4 @@
+import datetime
 import logging
 import traceback
 
@@ -7,16 +8,26 @@ logging.basicConfig(filename="./backend_error.log", level=logging.ERROR)
 logging.error(traceback.format_exc())
 
 
-def catch_exception(exce, requests: Request = None):
+def catch_exception(exce, request: Request):
+    date = datetime.datetime.now()
+    x_forwarded_for = request.headers.get("x-forwarded-for")
+    if x_forwarded_for:
+        client_ip = x_forwarded_for.split(",")[0]
+    else:
+        client_ip = request.client.host
+    request_path = request.url.path
+
     if issubclass(exce.__class__, CustomException):
-        # logging.error(f"\n===\nA custom error occurred. : {exce}\n===")
-        print(f"\n===\nA custom error occurred. : {exce}\n===")
+        # logging.error(f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nA custom error occurred. : {exce}\n===")
+        print(
+            f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nA custom error occurred. : {exce}\n==="
+        )
         raise HTTPException(status_code=exce.status_code, detail=exce.detail)
     # logging.error(
-    #     f"\n===\nAn unexpected error occurred. : {exce}\ndetail : {traceback.format_exc()}==="
+    #     f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nA custom error occurred. : {exce}\n===""
     # )
     print(
-        f"\n===\nAn unexpected error occurred. : {exce}\ndetail : {traceback.format_exc()}==="
+        f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nAn unexpected error occurred. : {exce}\ndetail : {traceback.format_exc()}==="
     )
     raise HTTPException(
         status_code=500,
