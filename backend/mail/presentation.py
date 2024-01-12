@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
 from backend.common.exceptions import catch_exception
@@ -20,5 +21,16 @@ class MailPresentation:
             mail_service.recv(
                 s3_object_key=s3_email_recv_data.s3_object_key,
             )
+
+        except Exception as e:
+            catch_exception(e, request)
+
+    @router.get("", status_code=200)
+    async def read_mail(request: Request, mail: str):
+        try:
+            mail_html = mail_service.read(
+                s3_object_key=mail,
+            )
+            return HTMLResponse(content=mail_html)
         except Exception as e:
             catch_exception(e, request)
