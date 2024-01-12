@@ -24,6 +24,7 @@ class ChannelRepository:
                     user_key=channel_model.user_key,
                     access_token=channel_model.access_token,
                     team_name=channel_model.team_name,
+                    team_icon=channel_model.team_icon,
                     user_id=channel_model.user_id,
                 )
                 channels.append(channel)
@@ -40,6 +41,7 @@ class ChannelRepository:
                 user_key=self.channel.user_key,
                 access_token=self.channel.access_token,
                 team_name=self.channel.team_name,
+                team_icon=self.channel.team_icon,
                 user_id=self.channel.user_id,
             )
             self.session.add(channel_model)

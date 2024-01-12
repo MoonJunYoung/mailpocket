@@ -9,7 +9,9 @@ from backend.user.repository import UserRepository
 
 class ChannelDTO:
     def __init__(self, channel: Channel) -> None:
+        self.id = channel.id
         self.team_name = channel.team_name
+        self.team_icon = channel.team_icon
 
 
 class ChannelService:

@@ -7,12 +7,19 @@ from backend.mail.domain import Mail
 
 class Channel:
     def __init__(
-        self, id=None, user_key=None, access_token=None, team_name=None, user_id=None
+        self,
+        id=None,
+        user_key=None,
+        access_token=None,
+        team_name=None,
+        team_icon=None,
+        user_id=None,
     ) -> None:
         self.id = id
         self.user_key = user_key
         self.access_token = access_token
         self.team_name = team_name
+        self.team_icon = team_icon
         self.user_id = user_id
 
     def send_notification(self, mail: Mail):
