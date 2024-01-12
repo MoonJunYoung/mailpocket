@@ -22,3 +22,8 @@ class MailService:
         channels: list[Channel] = self.channel_repository.ReadByUserID(user.id).run()
         for channel in channels:
             channel.send_notification(mail)
+
+    def read(self, s3_object_key):
+        mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
+        mail.parser_eamil()
+        return mail.html_body

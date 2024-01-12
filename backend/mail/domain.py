@@ -33,6 +33,7 @@ class Mail:
         self.to_email = to_email
         self.subject = subject
         self.html_body = html_body
-        self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
-
+        # self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
+        self.read_link = f"https://mailpocket.site/api/mail?mail={self.s3_object_key}"
+        print("===", self.html_body, "====")
         del self.mail_content
