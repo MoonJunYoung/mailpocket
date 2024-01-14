@@ -110,7 +110,7 @@ const SignUp = () => {
           </form>
           <div>
             <span className='auth-guidecoment'>이미 아이디가 있으신가요?</span>
-            <Link className='auth-link' to="/sign-up">로그인 하기</Link>
+            <Link className='auth-link' to="/sign-in">로그인 하기</Link>
           </div>
         </div>
       </div>

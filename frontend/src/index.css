@@ -57,24 +57,20 @@ code {
 
 /* auth style */
 
-.channel-container {
-  @apply h-[550px] w-[450px] md:w-[350px] md:h-[420px]
-}
-
 .signin-container {
-  @apply h-[550px] w-[450px] md:w-[350px] md:h-[420px]
+  @apply h-[450px] w-[380px] md:w-[350px] md:h-[420px] 
 }
 
 .signup-container {
-  @apply h-[650px] w-[450px] md:w-[350px] md:h-[550px]
+  @apply h-[530px] w-[380px] md:w-[350px] md:h-[500px]
 }
 
 .authcontainer-submit {
-  @apply flex flex-col items-start p-10 md:p-5
+  @apply flex flex-col items-start p-8 md:p-5
 }
 
 .authcontainer-submit_box {
-  @apply flex justify-center items-center w-full h-14 rounded-lg bg-gray-100 md:h-11
+  @apply flex justify-center items-center w-full h-12 rounded-lg bg-gray-100 md:h-11
 }
 
 .authcontainer-submit_data {
@@ -82,18 +78,24 @@ code {
 }
 
 .authcontainer-submit_title {
-  @apply my-3 text-4xl font-extrabold md:text-2xl
+  @apply my-2 text-2xl font-extrabold md:text-2xl
 }
 
 .authcontainer-submit_coment {
-  @apply mt-4 mb-2 text-xl font-extrabold md:text-lg
+  @apply mt-4 mb-2 text-lg font-extrabold md:text-lg
 }
 
 
 .auth-guidecoment {
-  @apply text-lg font-bold mr-1 md:text-sm
+  @apply text-sm font-bold mr-1 md:text-sm
 }
 
 .auth-link {
-  @apply text-lg font-bold text-customPurple no-underline md:text-sm
+  @apply text-sm font-bold text-customPurple no-underline md:text-sm
+}
+
+/* channle style */
+
+.channel-container {
+  @apply h-[550px] w-[400px] md:w-[350px] md:h-[420px]
 }
