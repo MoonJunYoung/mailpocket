@@ -58,23 +58,23 @@ code {
 /* auth style */
 
 .signin-container {
-  @apply h-[450px] w-[380px] md:w-[350px] md:h-[420px] 
+  @apply h-[410px] w-[330px] md:w-[350px] md:h-[420px] 
 }
 
 .signup-container {
-  @apply h-[530px] w-[380px] md:w-[350px] md:h-[500px]
+  @apply h-[500px] w-[330px] md:w-[350px] md:h-[500px]
 }
 
 .authcontainer-submit {
-  @apply flex flex-col items-start p-8 md:p-5
+  @apply flex flex-col items-start p-6 md:p-5
 }
 
 .authcontainer-submit_box {
-  @apply flex justify-center items-center w-full h-12 rounded-lg bg-gray-100 md:h-11
+  @apply flex justify-center items-center w-full h-11 rounded-lg bg-gray-100 md:h-11
 }
 
 .authcontainer-submit_data {
-  @apply w-[330px] h-9 border-none text-xl bg-gray-100 md:w-[280px] md:h-6 md:text-base
+  @apply w-[250px] h-7 border-none text-sm bg-gray-100 md:w-[280px] md:h-6 md:text-base
 }
 
 .authcontainer-submit_title {
@@ -97,5 +97,5 @@ code {
 /* channle style */
 
 .channel-container {
-  @apply h-[550px] w-[400px] md:w-[350px] md:h-[420px]
+  @apply h-[410px] w-[330px] md:w-[350px] md:h-[420px]
 }
