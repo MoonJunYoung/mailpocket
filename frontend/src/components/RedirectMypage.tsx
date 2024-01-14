@@ -3,9 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { postSlackToken } from "../api/api";
 
 
-type AxiosHeaders = {
-  get?(headerName: string): string | null;
-};
 
 const RedirectMypage = () => {
   const navigate = useNavigate();
@@ -21,8 +18,7 @@ const RedirectMypage = () => {
         try {
           const response = await postSlackToken({ code: accessCode });
           if (response.status === 201) {
-            const responseHeaders = (response.headers as AxiosHeaders).get?.("Location");
-            navigate(`/${responseHeaders}`);
+            navigate("/");
           } else {
             console.log("API 서버로 전송 중 오류가 발생했습니다.");
           }
