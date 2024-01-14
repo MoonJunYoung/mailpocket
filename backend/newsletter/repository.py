@@ -7,7 +7,7 @@ from backend.user.domain import User
 
 class NewsLetterRepository:
     def __init__(self) -> None:
-        with open("backend/newsletter/category.json", "r") as json_file:
+        with open("backend/newsletter/list.json", "r") as json_file:
             self.platforms = json.load(json_file)
 
     def load_all_newsletters(self) -> list[NewsLetter]:
