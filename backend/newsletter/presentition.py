@@ -30,8 +30,6 @@ class NewsLetterPresentation:
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
-            newsletters = newsletter_service.subscribe_to_newsletters(
-                user_id, subscribe_data.keys
-            )
+            newsletter_service.subscribe(user_id, subscribe_data.keys)
         except Exception as e:
             catch_exception(e, request)

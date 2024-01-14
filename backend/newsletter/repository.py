@@ -1,6 +1,7 @@
 import json
 
 from backend.common.database.connector import MysqlCRUDTemplate
+from backend.common.database.model import SubscribeModel
 from backend.newsletter.domain import NewsLetter
 from backend.user.domain import User
 
@@ -21,10 +22,17 @@ class NewsLetterRepository:
             result.append(newsletter)
         return result
 
-    def load_newsletters_by_keys(self, keys: list):
+    def load_newsletters_by_keys(self, keys: list) -> list[NewsLetter]:
         result = list()
-        for key, platform in self.platforms.items():
-            pass
+        for key in keys:
+            platform = self.platforms.get(key)
+            newsletter = NewsLetter(
+                id=key,
+                name=platform.get("name"),
+                category=platform.get("category"),
+            )
+            result.append(newsletter)
+        return result
 
     class CreateUserNewslettersMapping(MysqlCRUDTemplate):
         def __init__(self, user: User, newsletters: list[NewsLetter]) -> None:
@@ -34,4 +42,8 @@ class NewsLetterRepository:
 
         def execute(self):
             for newsletter in self.newsletters:
-                
+                subscribe_model = SubscribeModel(
+                    id=None, newsletter=newsletter.id, user_id=self.user.id
+                )
+                self.session.add(subscribe_model)
+            self.session.commit()

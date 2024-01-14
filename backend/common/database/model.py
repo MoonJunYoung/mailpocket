@@ -38,7 +38,7 @@ class ChannelModel(Base):
         self.user_id = user_id
 
 
-class Subscribe(Base):
+class SubscribeModel(Base):
     __tablename__ = "subscribe"
     id = Column("id", Integer, primary_key=True)
     newsletter = Column(String)
