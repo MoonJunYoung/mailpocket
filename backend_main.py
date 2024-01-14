@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.channel.presentation import ChannelPresentation
 from backend.mail.presentation import MailPresentation
+from backend.newsletter.presentition import NewsLetterPresentation
 from backend.user.presentation import UserPresentation
 
 app = FastAPI()
@@ -27,3 +28,4 @@ def haelth_check():
 app.include_router(MailPresentation.router)
 app.include_router(UserPresentation.router)
 app.include_router(ChannelPresentation.router)
+app.include_router(NewsLetterPresentation.router)

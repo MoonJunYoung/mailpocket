@@ -36,3 +36,15 @@ class ChannelModel(Base):
         self.team_name = team_name
         self.team_icon = team_icon
         self.user_id = user_id
+
+
+class Subscribe(Base):
+    __tablename__ = "subscribe"
+    id = Column("id", Integer, primary_key=True)
+    newsletter = Column(String)
+    user_id = Column(Integer)
+
+    def __init__(self, id, newsletter, user_id):
+        self.id = id
+        self.newsletter = newsletter
+        self.user_id = user_id
