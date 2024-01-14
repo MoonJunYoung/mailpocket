@@ -21,7 +21,8 @@ class ChannelRepository:
             for channel_model in channel_models:
                 channel = Channel(
                     id=channel_model.id,
-                    user_key=channel_model.user_key,
+                    key=channel_model.key,
+                    name=channel_model.name,
                     access_token=channel_model.access_token,
                     team_name=channel_model.team_name,
                     team_icon=channel_model.team_icon,
@@ -38,8 +39,9 @@ class ChannelRepository:
         def execute(self):
             channel_model = ChannelModel(
                 id=None,
-                user_key=self.channel.user_key,
+                key=self.channel.key,
                 access_token=self.channel.access_token,
+                name=self.channel.name,
                 team_name=self.channel.team_name,
                 team_icon=self.channel.team_icon,
                 user_id=self.channel.user_id,

@@ -21,15 +21,17 @@ class UserModel(Base):
 class ChannelModel(Base):
     __tablename__ = "channel"
     id = Column("id", Integer, primary_key=True)
-    user_key = Column(String)
+    key = Column(String)
+    name = Column(String)
     access_token = Column(String)
     team_name = Column(String)
     team_icon = Column(String)
     user_id = Column(Integer)
 
-    def __init__(self, id, user_key, access_token, team_name, team_icon, user_id):
+    def __init__(self, id, key, name, access_token, team_name, team_icon, user_id):
         self.id = id
-        self.user_key = user_key
+        self.key = key
+        self.name = name
         self.access_token = access_token
         self.team_name = team_name
         self.team_icon = team_icon

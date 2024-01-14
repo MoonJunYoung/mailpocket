@@ -9,22 +9,24 @@ class Channel:
     def __init__(
         self,
         id=None,
-        user_key=None,
+        key=None,
         access_token=None,
         team_name=None,
         team_icon=None,
+        name=None,
         user_id=None,
     ) -> None:
         self.id = id
-        self.user_key = user_key
+        self.key = key
         self.access_token = access_token
         self.team_name = team_name
         self.team_icon = team_icon
+        self.name = name
         self.user_id = user_id
 
     def send_notification(self, mail: Mail):
         notification_text = json.dumps(self.__make_notification_text(mail))
-        data = {"channel": f"{self.user_key}", "blocks": f"{notification_text}"}
+        data = {"channel": f"{self.key}", "blocks": f"{notification_text}"}
         headers = {"Authorization": f"Bearer {self.access_token}"}
         requests.post(
             url="https://slack.com/api/chat.postMessage", headers=headers, data=data

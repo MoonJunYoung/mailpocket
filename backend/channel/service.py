@@ -12,6 +12,7 @@ class ChannelDTO:
         self.id = channel.id
         self.team_name = channel.team_name
         self.team_icon = channel.team_icon
+        self.name = channel.name
 
 
 class ChannelService:
@@ -22,7 +23,7 @@ class ChannelService:
         self.slack_api = SlackAPI()
 
     def add(self, code, user_id):
-        channel = self.slack_api.install(code, user_id)
+        channel = self.slack_api.add(code, user_id)
         self.channel_repository.Create(channel).run()
 
     def read(self, user_id):
