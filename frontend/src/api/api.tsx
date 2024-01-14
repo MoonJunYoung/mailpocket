@@ -34,7 +34,7 @@ export const postSignUpData = (data: postSignUpDataType) => {
 };
 
 export const postSlackToken = (data: SlackTokenType) => {
-  return axiosData().post("/api/slack", data);
+  return axiosData().post("/api/channel", data);
 };
 
 export const getChannelData = (query:string) => {
