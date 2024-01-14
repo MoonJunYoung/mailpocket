@@ -33,4 +33,5 @@ class NewsLetterRepository:
             super().__init__()
 
         def execute(self):
-            pass
+            for newsletter in self.newsletters:
+                
