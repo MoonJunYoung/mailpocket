@@ -16,7 +16,6 @@ class NewsLetterRepository:
             newsletter = NewsLetter(
                 id=id,
                 name=platform.get("name"),
-                icon=platform.get("icon"),
                 category=platform.get("category"),
             )
             result.append(newsletter)
