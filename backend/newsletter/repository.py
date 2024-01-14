@@ -12,9 +12,9 @@ class NewsLetterRepository:
 
     def load_all_newsletters(self) -> list[NewsLetter]:
         result = list()
-        for key, platform in self.platforms.items():
+        for id, platform in self.platforms.items():
             newsletter = NewsLetter(
-                key=key,
+                id=id,
                 name=platform.get("name"),
                 icon=platform.get("icon"),
                 category=platform.get("category"),
