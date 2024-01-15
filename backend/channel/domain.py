@@ -23,9 +23,9 @@ class Channel:
         self.user_id = user_id
 
     def send_notification(self, mail: Mail):
-        notification_text = json.dumps(self.__make_notification_text(mail))
-        data = {"text": f"{notification_text}"}
-        requests.post(url=self.webhook_url, data=data)
+        notification_text = self.__make_notification_text(mail)
+        data = {"blocks": f"{notification_text}"}
+        requests.post(url=self.webhook_url, data=json.dumps(data))
 
     def __make_notification_text(self, mail: Mail):
         notification_text = [
