@@ -1,6 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import MainPage from "./pages/MainPage";
+import MainPage from "./pages/MyPage";
+import Subscribe from "./pages/Subscribe";
 import SignIn from './components/Auth/SignIn';
 import SingUp from './components/Auth/SingUp';
 import RedirectMypage from './components/RedirectMypage';
@@ -14,6 +15,7 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SingUp />} />
         <Route path="/slack-oauth" element={<RedirectMypage />} />
+        <Route path="/subscribe" element={<Subscribe />} />
         <Route index element={<MainPage />} />
       </Routes>
     </Router>

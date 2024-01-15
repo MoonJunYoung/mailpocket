@@ -7,6 +7,8 @@ module.exports = {
     extend: {
       colors: {
         customPurple: '#8F20FF',
+        darkgray: '#a9a9a9',
+        lightgrey : '#d3d3d3'
       },
     },
     screens: {

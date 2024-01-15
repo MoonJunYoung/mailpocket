@@ -48,11 +48,11 @@ code {
 }
 
 .basecontainer-submitcontainer {
-  @apply border-white border rounded-lg mt-10 bg-white
+  @apply border-white border rounded-lg mt-10 bg-white relative
 }
 
 .basecontainer-submitdata  {
-  @apply w-full mt-8 h-[50px] rounded-lg border-none bg-customPurple text-white text-lg font-bold
+  @apply w-full mt-8 h-[40px] rounded-lg border-none bg-customPurple text-white text-base font-bold
 }
 
 /* auth style */
@@ -70,7 +70,7 @@ code {
 }
 
 .authcontainer-submit_box {
-  @apply flex justify-center items-center w-full h-11 rounded-lg bg-gray-100 md:h-11
+  @apply flex justify-center items-center w-full h-10 rounded-lg bg-gray-100 md:h-11
 }
 
 .authcontainer-submit_data {
@@ -97,5 +97,5 @@ code {
 /* channle style */
 
 .channel-container {
-  @apply h-[410px] w-[330px] md:w-[350px] md:h-[420px]
+  @apply h-[420px] w-[330px] md:w-[350px] md:h-[420px]
 }

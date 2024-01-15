@@ -40,3 +40,7 @@ export const postSlackToken = (data: SlackTokenType) => {
 export const getChannelData = (query:string) => {
   return axiosData().get(query);
 };
+
+export const getSubscribeData = (query:string) => {
+  return axiosData().get(query);
+};
