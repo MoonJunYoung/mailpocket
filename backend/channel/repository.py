@@ -21,9 +21,8 @@ class ChannelRepository:
             for channel_model in channel_models:
                 channel = Channel(
                     id=channel_model.id,
-                    key=channel_model.key,
+                    webhook_url=channel_model.webhook_url,
                     name=channel_model.name,
-                    access_token=channel_model.access_token,
                     team_name=channel_model.team_name,
                     team_icon=channel_model.team_icon,
                     user_id=channel_model.user_id,
@@ -39,8 +38,7 @@ class ChannelRepository:
         def execute(self):
             channel_model = ChannelModel(
                 id=None,
-                key=self.channel.key,
-                access_token=self.channel.access_token,
+                webhook_url=self.channel.webhook_url,
                 name=self.channel.name,
                 team_name=self.channel.team_name,
                 team_icon=self.channel.team_icon,

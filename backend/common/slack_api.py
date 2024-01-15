@@ -16,14 +16,13 @@ class SlackAPI:
         data = {"client_id": client_id, "client_secret": client_secret, "code": code}
         response_json = requests.post(url, data=data).json()
         access_token = response_json.get("access_token")
-        key = response_json.get("incoming_webhook").get("channel_id")
+        webhook_url = response_json.get("incoming_webhook").get("url").replace("\\", "")
         name = response_json.get("incoming_webhook").get("channel")
         team_name = response_json.get("team").get("name")
         team_icon = self._get_team_icon(access_token)
         channel = Channel(
             id=None,
-            key=key,
-            access_token=access_token,
+            webhook_url=webhook_url,
             team_name=team_name,
             team_icon=team_icon,
             name=name,
