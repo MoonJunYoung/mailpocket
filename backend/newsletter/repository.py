@@ -32,12 +32,12 @@ class NewsLetterRepository:
         )
         return newsletter
 
-    def load_newsletters_by_keys(self, keys: list) -> list[NewsLetter]:
+    def load_newsletters_by_ids(self, ids: list) -> list[NewsLetter]:
         result = list()
-        for key in keys:
-            platform = self.platforms.get(key)
+        for id in ids:
+            platform = self.platforms.get(id)
             newsletter = NewsLetter(
-                id=key,
+                id=id,
                 name=platform.get("name"),
                 category=platform.get("category"),
             )

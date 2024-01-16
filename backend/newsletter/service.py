@@ -15,9 +15,9 @@ class NewsLetterService:
         newsletter = self.newsletter_repository.load_all_newsletters()
         return newsletter
 
-    def subscribe(self, user_id, newsletter_keys):
+    def subscribe(self, user_id, newsletter_ids):
         user = self.user_repository.ReadByID(user_id)
         newsletters = self.newsletter_repository.load_newsletters_by_keys(
-            newsletter_keys
+            newsletter_ids
         )
         self.newsletter_repository.CreateUserNewslettersMapping(user, newsletters).run()
