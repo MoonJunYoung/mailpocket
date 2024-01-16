@@ -39,10 +39,10 @@ class ChannelModel(Base):
 class SubscribeModel(Base):
     __tablename__ = "subscribe"
     id = Column("id", Integer, primary_key=True)
-    newsletter = Column(String)
+    newsletter_id = Column(String)
     user_id = Column(Integer)
 
-    def __init__(self, id, newsletter, user_id):
+    def __init__(self, id, newsletter_id, user_id):
         self.id = id
-        self.newsletter = newsletter
+        self.newsletter_id = newsletter_id
         self.user_id = user_id
