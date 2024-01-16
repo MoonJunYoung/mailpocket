@@ -3,6 +3,7 @@ import json
 import requests
 
 from backend.mail.domain import Mail
+from backend.newsletter.domain import NewsLetter
 
 
 class Channel:
@@ -22,12 +23,14 @@ class Channel:
         self.name = name
         self.user_id = user_id
 
-    def send_notification(self, mail: Mail):
-        notification_text = self.__make_notification_text(mail)
-        data = {"blocks": f"{notification_text}"}
-        requests.post(url=self.webhook_url, data=json.dumps(data))
+    def send_notification(self, mail: Mail, newsletter: NewsLetter):
+        notification_text = self.__make_notification_text(mail, newsletter)
+        data = {"blocks": notification_text}
+        print(data)
+        resp = requests.post(url=self.webhook_url, data=json.dumps(data))
+        print(resp.text)
 
-    def __make_notification_text(self, mail: Mail):
+    def __make_notification_text(self, mail: Mail, newsletter: NewsLetter):
         notification_text = [
             {
                 "type": "section",
@@ -43,7 +46,7 @@ class Channel:
             },
             {
                 "type": "section",
-                "fields": [{"type": "mrkdwn", "text": f"*from: {mail.from_name}*"}],
+                "fields": [{"type": "mrkdwn", "text": f"*{newsletter.name}*"}],
             },
             {
                 "type": "actions",

@@ -24,7 +24,7 @@ class NewsLetterPresentation:
         except Exception as e:
             catch_exception(e, request)
 
-    @router.post("/subscribe", status_code=200)
+    @router.post("/subscribe", status_code=201)
     async def subscribe(
         request: Request, subscribe_data: SubscribeData, Authorization=Header(None)
     ):

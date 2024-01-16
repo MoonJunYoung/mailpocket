@@ -1,7 +1,8 @@
 import json
 
+from backend.channel.domain import Channel
 from backend.common.database.connector import MysqlCRUDTemplate
-from backend.common.database.model import SubscribeModel
+from backend.common.database.model import ChannelModel, SubscribeModel, UserModel
 from backend.newsletter.domain import NewsLetter
 from backend.user.domain import User
 
@@ -21,6 +22,15 @@ class NewsLetterRepository:
             )
             result.append(newsletter)
         return result
+
+    def load_newsletter_by_id(self, id) -> NewsLetter:
+        platform = self.platforms.get(id)
+        newsletter = NewsLetter(
+            id=id,
+            name=platform.get("name"),
+            category=platform.get("category"),
+        )
+        return newsletter
 
     def load_newsletters_by_keys(self, keys: list) -> list[NewsLetter]:
         result = list()
@@ -48,23 +58,38 @@ class NewsLetterRepository:
                 self.session.add(subscribe_model)
             self.session.commit()
 
-    class loadUserIDByNewsletter(MysqlCRUDTemplate):
+    class loadUserChannelsByNewsletter(MysqlCRUDTemplate):
         def __init__(self, newsletter: NewsLetter) -> None:
             self.newsletter = newsletter
             super().__init__()
 
         def execute(self):
-            user_model = (
+            channels = list()
+            subscribe_models = (
                 self.session.query(SubscribeModel)
                 .filter(SubscribeModel.newsletter_id == self.newsletter.id)
                 .all()
             )
-            if not user_model:
+            if not subscribe_models:
                 return None
-            user = User(
-                id=user_model.id,
-                identifier=user_model.identifier,
-                password=user_model.password,
-                name=user_model.name,
-            )
-            return user
+            for subscribe_model in subscribe_models:
+                user_id = subscribe_model.user_id
+                channel_models = (
+                    self.session.query(ChannelModel)
+                    .filter(ChannelModel.user_id == user_id)
+                    .all()
+                )
+                for channel_model in channel_models:
+                    channel = Channel(
+                        id=channel_model.id,
+                        webhook_url=channel_model.webhook_url,
+                        name=channel_model.name,
+                        team_name=channel_model.team_name,
+                        team_icon=channel_model.team_icon,
+                        user_id=channel_model.user_id,
+                    )
+                    channels.append(channel)
+            return channels
+
+        def run(self) -> list[Channel]:
+            return super().run()

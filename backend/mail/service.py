@@ -2,6 +2,7 @@ from backend.channel.domain import Channel
 from backend.channel.repository import ChannelRepository
 from backend.mail.domain import Mail
 from backend.mail.repository import MailRepository
+from backend.newsletter.repository import NewsLetterRepository
 from backend.user.domain import User
 from backend.user.repository import UserRepository
 
@@ -11,17 +12,17 @@ class MailService:
         self.mail_repository = MailRepository()
         self.user_repository = UserRepository()
         self.channel_repository = ChannelRepository()
+        self.newsletter_repository = NewsLetterRepository()
 
     def recv(self, s3_object_key):
         mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
-        user: User = self.user_repository.ReadByIdentifier(mail.to_name).run()
-        if not user:
-            # 메일 수신자 정보가 조회되지않을때 처리로직 추가해야함
-            pass
-        channels: list[Channel] = self.channel_repository.ReadByUserID(user.id).run()
+        newsletter = self.newsletter_repository.load_newsletter_by_id(mail.from_name)
+        channels = self.newsletter_repository.loadUserChannelsByNewsletter(
+            newsletter
+        ).run()
         for channel in channels:
-            channel.send_notification(mail)
+            channel.send_notification(mail, newsletter)
 
     def read(self, s3_object_key):
         mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
