@@ -22,6 +22,7 @@ class MailService:
             newsletter
         ).run()
         for channel in channels:
+            print(channel.__dict__, "======")
             channel.send_notification(mail, newsletter)
 
     def read(self, s3_object_key):
