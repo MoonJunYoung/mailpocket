@@ -10,7 +10,7 @@ const ChannelAddButton = styled.button``
 
 const index = () => {
   const handleChannelAdd = () => {
-    window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6407023086387&scope=chat:write&user_scope="
+    window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope="
   }
 
   return (
