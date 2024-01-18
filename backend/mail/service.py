@@ -18,12 +18,10 @@ class MailService:
         mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
         newsletter = self.newsletter_repository.load_newsletter_by_id(mail.from_name)
-        channels = self.newsletter_repository.loadUserChannelsByNewsletter(
-            newsletter
-        ).run()
+        channels = self.channel_repository.loadChannelsByNewsletter(newsletter).run()
         notified_slack_channel_id_list = list()
         for channel in channels:
-            if channel.webhook_url in notified_slack_channel_id_list:
+            if channel.slack_channel_id in notified_slack_channel_id_list:
                 continue
             channel.send_notification(mail, newsletter)
             notified_slack_channel_id_list.append(channel.slack_channel_id)
