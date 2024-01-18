@@ -22,14 +22,18 @@ class ChannelModel(Base):
     __tablename__ = "channel"
     id = Column("id", Integer, primary_key=True)
     webhook_url = Column(String)
+    slack_channel_id = Column(String)
     name = Column(String)
     team_name = Column(String)
     team_icon = Column(String)
     user_id = Column(Integer)
 
-    def __init__(self, id, webhook_url, name, team_name, team_icon, user_id):
+    def __init__(
+        self, id, webhook_url, slack_channel_id, name, team_name, team_icon, user_id
+    ):
         self.id = id
         self.webhook_url = webhook_url
+        self.slack_channel_id = slack_channel_id
         self.name = name
         self.team_name = team_name
         self.team_icon = team_icon

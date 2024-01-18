@@ -11,6 +11,7 @@ class Channel:
         self,
         id=None,
         webhook_url=None,
+        slack_channel_id=None,
         team_name=None,
         team_icon=None,
         name=None,
@@ -18,6 +19,7 @@ class Channel:
     ) -> None:
         self.id = id
         self.webhook_url = webhook_url
+        self.slack_channel_id = slack_channel_id
         self.team_name = team_name
         self.team_icon = team_icon
         self.name = name

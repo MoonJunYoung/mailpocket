@@ -22,6 +22,7 @@ class ChannelRepository:
                 channel = Channel(
                     id=channel_model.id,
                     webhook_url=channel_model.webhook_url,
+                    slack_channel_id=channel_model.slack_channel_id,
                     name=channel_model.name,
                     team_name=channel_model.team_name,
                     team_icon=channel_model.team_icon,
@@ -39,6 +40,7 @@ class ChannelRepository:
             channel_model = ChannelModel(
                 id=None,
                 webhook_url=self.channel.webhook_url,
+                slack_channel_id=self.channel.slack_channel_id,
                 name=self.channel.name,
                 team_name=self.channel.team_name,
                 team_icon=self.channel.team_icon,

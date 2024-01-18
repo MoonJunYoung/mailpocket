@@ -23,7 +23,7 @@ class ChannelService:
         self.slack_api = SlackAPI()
 
     def add(self, code, user_id):
-        channel = self.slack_api.add(code, user_id)
+        channel = self.slack_api.connect_workspace(code, user_id)
         self.channel_repository.Create(channel).run()
 
     def read(self, user_id):
