@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import { postSlackToken } from "../api/api";
+
 
 
 const RedirectMypage = () => {
@@ -17,9 +17,8 @@ const RedirectMypage = () => {
       const sendAccessToken = async () => {
         try {
           const response = await postSlackToken({ code: accessCode });
-
           if (response.status === 201) {
-            navigate("/mypage");
+            navigate("/");
           } else {
             console.log("API 서버로 전송 중 오류가 발생했습니다.");
           }

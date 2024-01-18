@@ -21,7 +21,11 @@ interface postSignUpDataType {
 }
 
 interface SlackTokenType {
-  code : string
+  code: string
+}
+
+interface postSubscribeType {
+  ids : string[] 
 }
 
 
@@ -35,4 +39,16 @@ export const postSignUpData = (data: postSignUpDataType) => {
 
 export const postSlackToken = (data: SlackTokenType) => {
   return axiosData().post("/api/channel", data);
+};
+
+export const getChannelData = (query: string) => {
+  return axiosData().get(query);
+};
+
+export const getSubscribeData = (query: string) => {
+  return axiosData().get(query);
+};
+
+export const postSubscribe = (data:postSubscribeType) => {
+  return axiosData().post("/api/newsletter/subscribe", data);
 };
