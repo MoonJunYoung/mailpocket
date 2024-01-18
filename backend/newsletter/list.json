@@ -1,0 +1,86 @@
+{
+  "비보드": {
+    "name": "비보드",
+    "icon": "backend/common/newsletter/icons/비보드.png",
+    "category": "정치",
+    "send_date": "매주 화요일",
+    "explanation": "[정치시사뉴스레터] 매주 화요일은 정치, 시사 이슈 챙겨서 똑똑해보이는 시간"
+  },
+  "Daily DevBlog": {
+    "name": "데일리 기술 블로그",
+    "icon": "backend/common/newsletter/icons/Daily DevBlog.png",
+    "category": "IT",
+    "send_date": "매일",
+    "explanation": "IT 기술블로거들의\n뜨거운 열정을 느껴보세요!"
+  },
+  "디그(dig)": {
+    "name": "디그",
+    "icon": "backend/common/newsletter/icons/디그(dig).png",
+    "category": "경제",
+    "send_date": "매주 월요일, 수요일, 금요일",
+    "explanation": "세상 돌아가는 경제 이야기,\n하루 5분 <디그>로 편하게 읽어보세요."
+  },
+  "ilbuntok": {
+    "name": "일분톡",
+    "icon": "backend/common/newsletter/icons/ilbuntok.png",
+    "category": "IT",
+    "send_date": "매주 월요일",
+    "explanation": "세상쉽게 쓰윽보는 글로벌 IT 이야기"
+  },
+  "코주부 레터": {
+    "name": "코주부",
+    "icon": "backend/common/newsletter/icons/코주부 레터.png",
+    "category": "경제",
+    "send_date": "매주 목요일",
+    "explanation": "한 장씩 채우는 재테크 지도, 코주부 레터.\n주식, 부동산, 코인 시장에서 가장 중요한 소식만 모아 보냅니다.\n당신의 투자 길잡이가 되어 드릴게요. "
+  },
+  "애증의 정치클럽": {
+    "name": "애증의 정치 클럽",
+    "icon": "backend/common/newsletter/icons/애증의 정치클럽.png",
+    "category": "정치",
+    "send_date": "매주 목요일, 금요일",
+    "explanation": "애증의 정치클럽은 이런 분들을 위한 매체입니다.\n🖤 용어와 맥락 때문에 정치가 어려운 사람\n🖤 나의 정치적 입장을 충분히 고민해보고 세우고 싶은 사람\n🖤 자극적인 갈등 상황이 아닌 갈등의 원인을 알고 싶은 사람"
+  },
+  "뭐지 뉴스레터": {
+    "name": "뭐지",
+    "icon": "backend/common/newsletter/icons/뭐지 뉴스레터.png",
+    "category": "IT",
+    "send_date": "매주 수요일",
+    "explanation": "주간 IT 소식을 요약해 매주 수요일에 여러분의 메일함으로 찾아가는 뉴스레터!"
+  },
+  "UPPITY": {
+    "name": "머니레터",
+    "icon": "backend/common/newsletter/icons/UPPITY.png",
+    "category": "경제",
+    "send_date": "매주 월요일, 화요일, 수요일, 목요일, 금요일",
+    "explanation": "주간 IT 소식을 요약해 매주 수요일에 여러분의 메일함으로 찾아가는 뉴스레터!"
+  },
+  "NEWNEEK": {
+    "name": "뉴닉",
+    "icon": "backend/common/newsletter/icons/NEWNEEK.png",
+    "category": "정치",
+    "send_date": "매주 월요일, 화요일, 수요일, 목요일, 금요일",
+    "explanation": "세상 돌아가는 소식, 알고는 싶지만 신문 볼 새 없이 바쁜 게 우리 탓은 아니잖아요! \n월/화/수/목/금 아침마다 세상 돌아가는 소식을 메일로 받아보세요."
+  },
+  "순살브리핑": {
+    "name": "순살 브리핑",
+    "icon": "backend/common/newsletter/icons/순살브리핑.png",
+    "category": "경제",
+    "send_date": "매일",
+    "explanation": "월, 화, 수, 목, 금, 매일 아침 10시\n전 세계 금융·경제 뉴스 중 살코기만 발라드립니다!\n순살브리핑과 함께라면 모두 똑똑 👍"
+  },
+  "STARTUP WEEKLY": {
+    "name": "스타트업 위클리",
+    "icon": "backend/common/newsletter/icons/STARTUP WEEKLY.png",
+    "category": "경제",
+    "send_date": "매주 월요일",
+    "explanation": "일주일에 한번, 매주 월요일 새벽에 메일이 발송됩니다."
+  },
+  "trend_lite": {
+    "name": "트렌드 라이트",
+    "icon": "backend/common/newsletter/icons/trend_lite.png",
+    "category": "경제",
+    "send_date": "매주 수요일",
+    "explanation": "'사고파는 모든 것'에 대한 이야기🥤"
+  }
+}

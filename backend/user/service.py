@@ -31,3 +31,6 @@ class UserService:
         user: User = self.user_repository.ReadByID(user_id).run()
         del user.password
         return user
+
+    def subscribe_newsletter(self, user_id, newsletter_key):
+        pass
