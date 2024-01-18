@@ -11,18 +11,20 @@ client_secret = os.environ.get("SLACK_CLIENT_SECRET")
 
 
 class SlackAPI:
-    def add(self, code, user_id):
+    def connect_workspace(self, code, user_id):
         url = "https://slack.com/api/oauth.v2.access"
         data = {"client_id": client_id, "client_secret": client_secret, "code": code}
         response_json = requests.post(url, data=data).json()
         access_token = response_json.get("access_token")
         webhook_url = response_json.get("incoming_webhook").get("url").replace("\\", "")
+        slack_channel_id = response_json.get("incoming_webhook").get("channel_id")
         name = response_json.get("incoming_webhook").get("channel")
         team_name = response_json.get("team").get("name")
         team_icon = self._get_team_icon(access_token)
         channel = Channel(
             id=None,
             webhook_url=webhook_url,
+            slack_channel_id=slack_channel_id,
             team_name=team_name,
             team_icon=team_icon,
             name=name,

@@ -57,39 +57,3 @@ class NewsLetterRepository:
                 )
                 self.session.add(subscribe_model)
             self.session.commit()
-
-    class loadUserChannelsByNewsletter(MysqlCRUDTemplate):
-        def __init__(self, newsletter: NewsLetter) -> None:
-            self.newsletter = newsletter
-            super().__init__()
-
-        def execute(self):
-            channels = list()
-            subscribe_models = (
-                self.session.query(SubscribeModel)
-                .filter(SubscribeModel.newsletter_id == self.newsletter.id)
-                .all()
-            )
-            if not subscribe_models:
-                return None
-            for subscribe_model in subscribe_models:
-                user_id = subscribe_model.user_id
-                channel_models = (
-                    self.session.query(ChannelModel)
-                    .filter(ChannelModel.user_id == user_id)
-                    .all()
-                )
-                for channel_model in channel_models:
-                    channel = Channel(
-                        id=channel_model.id,
-                        webhook_url=channel_model.webhook_url,
-                        name=channel_model.name,
-                        team_name=channel_model.team_name,
-                        team_icon=channel_model.team_icon,
-                        user_id=channel_model.user_id,
-                    )
-                    channels.append(channel)
-            return channels
-
-        def run(self) -> list[Channel]:
-            return super().run()

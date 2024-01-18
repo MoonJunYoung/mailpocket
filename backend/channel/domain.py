@@ -11,6 +11,7 @@ class Channel:
         self,
         id=None,
         webhook_url=None,
+        slack_channel_id=None,
         team_name=None,
         team_icon=None,
         name=None,
@@ -18,6 +19,7 @@ class Channel:
     ) -> None:
         self.id = id
         self.webhook_url = webhook_url
+        self.slack_channel_id = slack_channel_id
         self.team_name = team_name
         self.team_icon = team_icon
         self.name = name
@@ -26,7 +28,6 @@ class Channel:
     def send_notification(self, mail: Mail, newsletter: NewsLetter):
         notification_text = self.__make_notification_text(mail, newsletter)
         data = {"blocks": notification_text}
-        print(data)
         resp = requests.post(url=self.webhook_url, data=json.dumps(data))
         print(resp.text)
 
@@ -34,7 +35,9 @@ class Channel:
         notification_text = [
             {
                 "type": "section",
-                "fields": [{"type": "mrkdwn", "text": "*새로운 메일이 도착했어요.*"}],
+                "fields": [
+                    {"type": "mrkdwn", "text": f"*{newsletter.name}의 새로운 소식이 도착했어요.*"}
+                ],
             },
             {
                 "type": "header",
@@ -43,10 +46,6 @@ class Channel:
                     "text": f"{mail.subject}",
                     "emoji": True,
                 },
-            },
-            {
-                "type": "section",
-                "fields": [{"type": "mrkdwn", "text": f"*{newsletter.name}*"}],
             },
             {
                 "type": "actions",
