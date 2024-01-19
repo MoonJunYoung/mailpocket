@@ -36,29 +36,9 @@ class Channel:
             {
                 "type": "section",
                 "fields": [
-                    {"type": "mrkdwn", "text": f"*{newsletter.name}의 새로운 소식이 도착했어요.*"}
-                ],
-            },
-            {
-                "type": "header",
-                "text": {
-                    "type": "plain_text",
-                    "text": f"{mail.subject}",
-                    "emoji": True,
-                },
-            },
-            {
-                "type": "actions",
-                "elements": [
                     {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "text": "메일 보러가기",
-                        },
-                        "value": "click_me",
-                        "url": f"{mail.read_link}",
-                        "action_id": "button-action",
+                        "type": "mrkdwn",
+                        "text": f"{newsletter.name}: *<{mail.read_link}|{mail.subject}>*",
                     }
                 ],
             },

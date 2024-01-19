@@ -27,6 +27,8 @@ class Mail:
                 )
 
         self.from_name = from_email.split(" <")[0]
+        if '"' in self.from_name:
+            self.from_name = self.from_name.replace('"', "")
         self.from_email = from_email.split(" <")[1].replace(">", "")
         self.subject = subject
         self.html_body = html_body
