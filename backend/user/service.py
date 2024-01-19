@@ -7,10 +7,9 @@ class UserService:
     def __init__(self) -> None:
         self.user_repository = UserRepository()
 
-    def sign_up(self, identifier, password, name):
+    def sign_up(self, identifier, password):
         user = User(
             id=None,
-            name=name,
             identifier=identifier,
             password=password,
         )

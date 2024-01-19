@@ -7,11 +7,10 @@ from backend.common.exceptions import (
 
 
 class User:
-    def __init__(self, id, identifier=None, password=None, name=None) -> None:
+    def __init__(self, id, identifier=None, password=None) -> None:
         self.id = id
         self.identifier = identifier
         self.password = password
-        self.name = name
 
     def password_encryption(self):
         salt = bcrypt.gensalt()

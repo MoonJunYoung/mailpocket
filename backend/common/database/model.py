@@ -9,13 +9,11 @@ class UserModel(Base):
     id = Column("id", Integer, primary_key=True)
     identifier = Column(String)
     password = Column(String)
-    name = Column(String)
 
-    def __init__(self, id, identifier, password, name):
+    def __init__(self, id, identifier, password):
         self.id = id
         self.identifier = identifier
         self.password = password
-        self.name = name
 
 
 class ChannelModel(Base):
