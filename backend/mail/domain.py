@@ -1,6 +1,8 @@
 from email import policy
 from email.parser import BytesParser
 
+from backend.common.summary import mail_summary
+
 
 class Mail:
     def __init__(self, mail_content=None, s3_object_key=None) -> None:
@@ -35,3 +37,6 @@ class Mail:
         # self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         self.read_link = f"https://mailpocket.site/api/mail?mail={self.s3_object_key}"
         del self.mail_content
+
+    def summary_mail(self):
+        mail_summary()
