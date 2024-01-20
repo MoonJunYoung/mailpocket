@@ -29,7 +29,7 @@ class Channel:
         notification_text = self.__make_notification_text(mail, newsletter)
         data = {"blocks": notification_text}
         resp = requests.post(url=self.webhook_url, data=json.dumps(data))
-        print(resp.text)
+        print("notification", resp.text)
 
     def __make_notification_text(self, mail: Mail, newsletter: NewsLetter):
         notification_text = [
