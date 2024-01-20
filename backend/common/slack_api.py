@@ -11,6 +11,7 @@ from backend.newsletter.domain import NewsLetter
 load_dotenv()
 client_id = os.environ.get("SLACK_CLIENT_ID")
 client_secret = os.environ.get("SLACK_CLIENT_SECRET")
+slack_logging_channel_webhook_url = os.environ.get("SLACK_LOGGING_CHANNEL_WEBHOOK_URL")
 
 
 class SlackAPI:
@@ -52,7 +53,7 @@ class SlackAPI:
         notification_text = self.__make_log_notification_text(mail)
         data = {"blocks": notification_text}
         resp = requests.post(
-            url="https://hooks.slack.com/services/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",
+            url=slack_logging_channel_webhook_url,
             data=json.dumps(data),
         )
 
