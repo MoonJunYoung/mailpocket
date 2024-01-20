@@ -1,9 +1,12 @@
+import json
 import os
 
 import requests
 from dotenv import load_dotenv
 
 from backend.channel.domain import Channel
+from backend.mail.domain import Mail
+from backend.newsletter.domain import NewsLetter
 
 load_dotenv()
 client_id = os.environ.get("SLACK_CLIENT_ID")
@@ -41,3 +44,30 @@ class SlackAPI:
             response.json().get("team").get("icon").get("image_230").replace("\\", "")
         )
         return team_icon
+
+    def loging(
+        self,
+        mail: Mail,
+    ):
+        notification_text = self.__make_log_notification_text(mail)
+        data = {"blocks": notification_text}
+        resp = requests.post(
+            url="https://hooks.slack.com/services/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",
+            data=json.dumps(data),
+        )
+        print(resp.text)
+
+    def __make_log_notification_text(self, mail: Mail):
+        notification_text = [
+            {
+                "type": "section",
+                "fields": [
+                    {
+                        "type": "mrkdwn",
+                        "text": f"email : {mail.from_email}\nid : {mail.from_name}\n*<{mail.read_link}|{mail.subject}>*",
+                    }
+                ],
+            },
+        ]
+
+        return notification_text
