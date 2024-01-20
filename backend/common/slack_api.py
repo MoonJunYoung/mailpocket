@@ -52,11 +52,11 @@ class SlackAPI:
         notification_text = self.__make_log_notification_text(mail)
         data = {"blocks": notification_text}
         resp = requests.post(
-            url="https://hooks.slack.com/services/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",
+            url="https://hooks.slack.com/services/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",
             data=json.dumps(data),
         )
 
-        print("def:logging", resp.text)
+        print("notification logging", resp.text)
 
     def __make_log_notification_text(self, mail: Mail):
         notification_text = [
