@@ -24,6 +24,7 @@ class MailService:
         channels = self.channel_repository.loadChannelsByNewsletter(newsletter).run()
         notified_slack_channel_id_list = list()
         if channels:
+            # mail.mail_summary()
             pass
         for channel in channels:
             if channel.slack_channel_id in notified_slack_channel_id_list:
