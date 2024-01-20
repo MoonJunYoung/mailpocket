@@ -43,5 +43,21 @@ class Channel:
                 ],
             },
         ]
-
+        if mail.summary_list:
+            summary_news_slack_notification_text_list = list()
+            for summary in mail.summary_list:
+                for subject, content in summary.items():
+                    summary_news_slack_notification_text_list.append(
+                        {
+                            "type": "header",
+                            "text": {"type": "plain_text", "text": f"{subject}"},
+                        }
+                    )
+                    summary_news_slack_notification_text_list.append(
+                        {
+                            "type": "section",
+                            "text": {"type": "plain_text", "text": f"{content}"},
+                        }
+                    )
+            notification_text += summary_news_slack_notification_text_list
         return notification_text

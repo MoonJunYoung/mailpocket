@@ -71,7 +71,5 @@ class SlackAPI:
                 ],
             },
         ]
-        if mail.slack_notification_text_list:
-            notification_text += mail.slack_notification_text_list
 
         return notification_text
