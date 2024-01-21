@@ -70,3 +70,18 @@ class UserRepository:
                 )
                 self.session.add(subscribe_model)
             self.session.commit()
+
+    class DeleteUserNewslettersMapping(MysqlCRUDTemplate):
+        def __init__(self, user: User) -> None:
+            self.user = user
+            super().__init__()
+
+        def execute(self):
+            subscribe_models = (
+                self.session.query(SubscribeModel)
+                .filter(SubscribeModel.user_id == self.user.id)
+                .all()
+            )
+            for subscribe_model in subscribe_models:
+                self.session.delete(subscribe_model)
+            self.session.commit()
