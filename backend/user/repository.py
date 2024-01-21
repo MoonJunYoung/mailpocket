@@ -1,5 +1,5 @@
 from backend.common.database.connector import MysqlCRUDTemplate
-from backend.common.database.model import UserModel
+from backend.common.database.model import SubscribeModel, UserModel
 from backend.user.domain import User
 
 
@@ -56,3 +56,17 @@ class UserRepository:
                 password=user_model.password,
             )
             return user
+
+    class CreateUserNewslettersMapping(MysqlCRUDTemplate):
+        def __init__(self, user: User, newsletter_ids: list[int]) -> None:
+            self.user = user
+            self.newsletter_ids = newsletter_ids
+            super().__init__()
+
+        def execute(self):
+            for newsletter_id in self.newsletter_ids:
+                subscribe_model = SubscribeModel(
+                    id=None, newsletter_id=newsletter_id, user_id=self.user.id
+                )
+                self.session.add(subscribe_model)
+            self.session.commit()

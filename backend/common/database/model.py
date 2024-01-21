@@ -38,10 +38,26 @@ class ChannelModel(Base):
         self.user_id = user_id
 
 
+class NewsLetterModel(Base):
+    __tablename__ = "newsletter"
+    id = Column("id", Integer, primary_key=True)
+    name = Column(String)
+    from_email = Column(String)
+    category = Column(String)
+    send_date = Column(String)
+
+    def __init__(self, id, name, from_email, category, send_date):
+        self.id = id
+        self.name = name
+        self.from_email = from_email
+        self.category = category
+        self.send_date = send_date
+
+
 class SubscribeModel(Base):
     __tablename__ = "subscribe"
     id = Column("id", Integer, primary_key=True)
-    newsletter_id = Column(String)
+    newsletter_id = Column(Integer)
     user_id = Column(Integer)
 
     def __init__(self, id, newsletter_id, user_id):
