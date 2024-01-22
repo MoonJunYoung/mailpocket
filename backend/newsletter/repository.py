@@ -8,6 +8,7 @@ from backend.common.database.model import (
     SubscribeModel,
     UserModel,
 )
+from backend.common.exceptions import UnknownFromEamilException
 from backend.newsletter.domain import NewsLetter
 from backend.user.domain import User
 
@@ -58,11 +59,11 @@ class NewsLetterRepository:
         def execute(self):
             newsletter_model = (
                 self.session.query(NewsLetterModel)
-                .filter(NewsLetterModel.mail == self.from_email)
+                .filter(NewsLetterModel.from_email == self.from_email)
                 .first()
             )
             if not newsletter_model:
-                return None
+                raise UnknownFromEamilException(self.from_email)
             newsletter = NewsLetter(
                 id=newsletter_model.id,
                 name=newsletter_model.name,
