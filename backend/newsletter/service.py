@@ -34,6 +34,7 @@ class NewsLetterService:
         newsletters = self.newsletter_repository.LoadSubscribeNewsLettersByUser(
             user
         ).run()
-        for newsletter in newsletters:
-            newsletter_list.append(NewsLetterlDTO(newsletter))
+        if newsletters:
+            for newsletter in newsletters:
+                newsletter_list.append(NewsLetterlDTO(newsletter))
         return newsletter_list
