@@ -127,7 +127,7 @@ const Subscribe = () => {
                       )}
                     </label>
                     <div className="flex flex-col items-center">
-                      <img className='w-[40px] h-[40px] border border-1 border-cyan-200 rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                      <img className='w-[40px] h-[40px] border border-5 border-customPurple rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
                       <span className='font-semibold text-xs my-1'>{data.name}</span>
                     </div>
                   </div>
@@ -146,7 +146,7 @@ const Subscribe = () => {
                       )}
                     </label>
                     <div className="flex flex-col items-center">
-                      <img className='w-[40px] h-[40px] border border-1 border-cyan-200 rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                      <img className='w-[40px] h-[40px] border border-5 border-customPurple rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
                       <span className='font-semibold text-xs my-1'>{data.name}</span>
                     </div>
                   </div>
@@ -165,7 +165,7 @@ const Subscribe = () => {
                       )}
                     </label>
                     <div className="flex flex-col items-center">
-                      <img className='w-[40px] h-[40px] border border-1 border-cyan-200 rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                      <img className='w-[40px] h-[40px] border border-5 border-customPurple rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
                       <span className='font-semibold text-xs my-1'>{data.name}</span>
                     </div>
                   </div>
@@ -184,7 +184,7 @@ const Subscribe = () => {
                       )}
                     </label>
                     <div className="flex flex-col items-center">
-                      <img className='w-[40px] h-[40px] border border-1 border-cyan-200 rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                      <img className='w-[40px] h-[40px] border border-5 border-customPurple rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
                       <span className='font-semibold text-xs my-1'>{data.name}</span>
                     </div>
                   </div>
@@ -203,7 +203,7 @@ const Subscribe = () => {
                       )}
                     </label>
                     <div className="flex flex-col items-center">
-                      <img className='w-[40px] h-[40px] border border-1 border-cyan-200 rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                      <img className='w-[40px] h-[40px] border border-5 border-customPurple rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
                       <span className='font-semibold text-xs my-1'>{data.name}</span>
                     </div>
                   </div>
@@ -222,7 +222,7 @@ const Subscribe = () => {
                       )}
                     </label>
                     <div className="flex flex-col items-center">
-                      <img className='w-[40px] h-[40px] border border-1 border-cyan-200 rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                      <img className='w-[40px] h-[40px] border border-5 border-customPurple rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
                       <span className='font-semibold text-xs my-1'>{data.name}</span>
                     </div>
                   </div>
@@ -241,7 +241,7 @@ const Subscribe = () => {
                       )}
                     </label>
                     <div className="flex flex-col items-center">
-                      <img className='w-[40px] h-[40px] border border-1 border-cyan-200 rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                      <img className='w-[40px] h-[40px] border border-5 border-customPurple rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
                       <span className='font-semibold text-xs my-1'>{data.name}</span>
                     </div>
                   </div>
@@ -260,7 +260,7 @@ const Subscribe = () => {
                       )}
                     </label>
                     <div className="flex flex-col items-center">
-                      <img className='w-[40px] h-[40px] border border-1 border-cyan-200 rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                      <img className='w-[40px] h-[40px] border border-5 border-customPurple rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
                       <span className='font-semibold text-xs my-1'>{data.name}</span>
                     </div>
                   </div>
