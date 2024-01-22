@@ -38,7 +38,7 @@ class Channel:
                 "fields": [
                     {
                         "type": "mrkdwn",
-                        "text": f"{newsletter.name}: *<{mail.read_link}|{mail.subject}>*",
+                        "text": f"{newsletter.name}의 새로운 소식이 도착했어요.\n*<{mail.read_link}|{mail.subject}>*",
                     }
                 ],
             },
@@ -49,14 +49,11 @@ class Channel:
                 for subject, content in summary.items():
                     summary_news_slack_notification_text_list.append(
                         {
-                            "type": "header",
-                            "text": {"type": "plain_text", "text": f"{subject}"},
-                        }
-                    )
-                    summary_news_slack_notification_text_list.append(
-                        {
                             "type": "section",
-                            "text": {"type": "plain_text", "text": f"{content}"},
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": f"*{subject}*\n{content}",
+                            },
                         }
                     )
             notification_text += summary_news_slack_notification_text_list
