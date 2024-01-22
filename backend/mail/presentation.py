@@ -17,13 +17,9 @@ class MailPresentation:
 
     @router.post("/recv", status_code=200)
     async def recv_mail(request: Request, s3_email_recv_data: S3MailRecvData):
-        try:
-            mail_service.recv(
-                s3_object_key=s3_email_recv_data.s3_object_key,
-            )
-
-        except Exception as e:
-            catch_exception(e, request)
+        mail_service.recv(
+            s3_object_key=s3_email_recv_data.s3_object_key,
+        )
 
     @router.get("", status_code=200)
     async def read_mail(request: Request, key: str):
