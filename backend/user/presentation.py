@@ -13,7 +13,6 @@ user_service = UserService()
 class LogInData(BaseModel):
     identifier: str
     password: str
-    name: str = None
 
 
 class UserPresentation:
@@ -34,7 +33,6 @@ class UserPresentation:
             user_id = user_service.sign_up(
                 identifier=login_data.identifier,
                 password=login_data.password,
-                name=login_data.name,
             )
             return Token.create_token_by_user_id(user_id)
 

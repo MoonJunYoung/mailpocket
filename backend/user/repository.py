@@ -1,5 +1,5 @@
 from backend.common.database.connector import MysqlCRUDTemplate
-from backend.common.database.model import UserModel
+from backend.common.database.model import SubscribeModel, UserModel
 from backend.user.domain import User
 
 
@@ -14,7 +14,6 @@ class UserRepository:
                 id=None,
                 identifier=self.user.identifier,
                 password=self.user.password,
-                name=self.user.name,
             )
             self.session.add(user_model)
             self.session.commit()
@@ -37,7 +36,6 @@ class UserRepository:
                 id=user_model.id,
                 identifier=user_model.identifier,
                 password=user_model.password,
-                name=user_model.name,
             )
             return user
 
@@ -56,6 +54,34 @@ class UserRepository:
                 id=user_model.id,
                 identifier=user_model.identifier,
                 password=user_model.password,
-                name=user_model.name,
             )
             return user
+
+    class CreateUserNewslettersMapping(MysqlCRUDTemplate):
+        def __init__(self, user: User, newsletter_ids: list[int]) -> None:
+            self.user = user
+            self.newsletter_ids = newsletter_ids
+            super().__init__()
+
+        def execute(self):
+            for newsletter_id in self.newsletter_ids:
+                subscribe_model = SubscribeModel(
+                    id=None, newsletter_id=newsletter_id, user_id=self.user.id
+                )
+                self.session.add(subscribe_model)
+            self.session.commit()
+
+    class DeleteUserNewslettersMapping(MysqlCRUDTemplate):
+        def __init__(self, user: User) -> None:
+            self.user = user
+            super().__init__()
+
+        def execute(self):
+            subscribe_models = (
+                self.session.query(SubscribeModel)
+                .filter(SubscribeModel.user_id == self.user.id)
+                .all()
+            )
+            for subscribe_model in subscribe_models:
+                self.session.delete(subscribe_model)
+            self.session.commit()

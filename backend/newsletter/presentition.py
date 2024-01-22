@@ -10,7 +10,7 @@ newsletter_service = NewsLetterService()
 
 
 class SubscribeData(BaseModel):
-    ids: list[str]
+    ids: list[int]
 
 
 class NewsLetterPresentation:
@@ -24,12 +24,24 @@ class NewsLetterPresentation:
         except Exception as e:
             catch_exception(e, request)
 
-    @router.post("/subscribe", status_code=201)
+    @router.put("/subscribe", status_code=201)
     async def subscribe(
         request: Request, subscribe_data: SubscribeData, Authorization=Header(None)
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
             newsletter_service.subscribe(user_id, subscribe_data.ids)
+
+        except Exception as e:
+            catch_exception(e, request)
+
+    @router.get("/subscribe", status_code=200)
+    async def get_subscribe_newsletters(request: Request, Authorization=Header(None)):
+        try:
+            user_id = Token.get_user_id_by_token(Authorization)
+            subscribe_newsletters = newsletter_service.get_subscribe_newsletters(
+                user_id
+            )
+            return subscribe_newsletters
         except Exception as e:
             catch_exception(e, request)

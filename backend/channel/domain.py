@@ -29,39 +29,32 @@ class Channel:
         notification_text = self.__make_notification_text(mail, newsletter)
         data = {"blocks": notification_text}
         resp = requests.post(url=self.webhook_url, data=json.dumps(data))
-        print(resp.text)
+        print("notification", resp.text)
 
     def __make_notification_text(self, mail: Mail, newsletter: NewsLetter):
         notification_text = [
             {
                 "type": "section",
                 "fields": [
-                    {"type": "mrkdwn", "text": f"*{newsletter.name}의 새로운 소식이 도착했어요.*"}
-                ],
-            },
-            {
-                "type": "header",
-                "text": {
-                    "type": "plain_text",
-                    "text": f"{mail.subject}",
-                    "emoji": True,
-                },
-            },
-            {
-                "type": "actions",
-                "elements": [
                     {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "text": "메일 보러가기",
-                        },
-                        "value": "click_me",
-                        "url": f"{mail.read_link}",
-                        "action_id": "button-action",
+                        "type": "mrkdwn",
+                        "text": f"{newsletter.name}의 새로운 소식이 도착했어요.\n*<{mail.read_link}|{mail.subject}>*",
                     }
                 ],
             },
         ]
-
+        if mail.summary_list:
+            summary_news_slack_notification_text_list = list()
+            for summary in mail.summary_list:
+                for subject, content in summary.items():
+                    summary_news_slack_notification_text_list.append(
+                        {
+                            "type": "section",
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": f"*{subject}*\n{content}",
+                            },
+                        }
+                    )
+            notification_text += summary_news_slack_notification_text_list
         return notification_text

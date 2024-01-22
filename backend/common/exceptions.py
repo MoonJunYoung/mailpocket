@@ -80,3 +80,11 @@ class IdentifierNotFoundException(CustomException):
 
     status_code = 401
     detail = "incorrect identifier or password."
+
+
+class UnknownFromEamilException(CustomException):
+    def __init__(self, from_email) -> None:
+        super().__init__(f"{from_email} is unknown.")
+
+    status_code = 401
+    detail = "unknown email recv"
