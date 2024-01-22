@@ -45,16 +45,15 @@ class Channel:
         ]
         if mail.summary_list:
             summary_news_slack_notification_text_list = list()
-            for summary in mail.summary_list:
-                for subject, content in summary.items():
-                    summary_news_slack_notification_text_list.append(
-                        {
-                            "type": "section",
-                            "text": {
-                                "type": "mrkdwn",
-                                "text": f"*{subject}*\n{content}",
-                            },
-                        }
-                    )
+            for subject, content in mail.summary_list.items():
+                summary_news_slack_notification_text_list.append(
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*{subject}*\n{content}",
+                        },
+                    }
+                )
             notification_text += summary_news_slack_notification_text_list
         return notification_text

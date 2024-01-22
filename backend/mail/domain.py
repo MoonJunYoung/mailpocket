@@ -42,4 +42,4 @@ class Mail:
         self.summary_list = mail_summary(self.html_body)
 
     def mail_fail_summary(self):
-        self.summary_list = [{"요약을 실패했습니다.": "본문을 확인해주세요."}]
+        self.summary_list = {"요약을 실패했습니다.": "본문을 확인해주세요."}

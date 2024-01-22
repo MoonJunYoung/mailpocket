@@ -57,7 +57,7 @@ class SlackAPI:
             data=json.dumps(data),
         )
 
-        print("notification logging", resp.text)
+        print("log notification", resp.text)
 
     def __make_log_notification_text(self, mail: Mail):
         notification_text = [

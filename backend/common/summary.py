@@ -22,7 +22,7 @@ PRE_USER_INPUT_MSG = """
 4. 요약된 내용이 영어면 한글로 번역하세요.
 5. 답변은 아래 json에 포맷하여 제출 해야합니다.
 6. 중복된 내용을 출력하지마세요.
-json = [{"{제목}":"{내용}"},{"{제목}":"{내용}"},]
+json = {"{제목}":"{내용}","{제목}":"{내용}",... (반복)}
 """
 PRE_ASSISTANT_OUTPUT_MSG = """
 뉴스를 제공해주시면 해당 뉴스 기사를 기반으로 요약을 해드릴 수 있습니다. 뉴스를 첨부해주시면 각 주제에 대한 요약을 위한 정보를 얻을 수 있습니다. 뉴스를 첨부해주시면 즉시 도움을 드리겠습니다.
@@ -51,6 +51,5 @@ def mail_summary(html):
     )
     print(f"logging:\n{response}")
     content = response["choices"][0]["message"]["content"]
-    content = content.split("```json")[1].split("```")[0]
     summary_list = json.loads(content)
     return summary_list
