@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { getChannelData, Token } from '../../api/api';
 import Nav from '../../components/Nav'
@@ -47,7 +48,9 @@ const MyPage = () => {
         <Symbol />
         <div className='basecontainer-submitcontainer channel-container p-7'>
           <div className='flex flex-col items-start font-bold mb-3'>
-            <h2>내 이메일의 소식을</h2>
+            <div className='flex'>
+              <Link className="underline text-customPurple" to='/subscribe'>뉴스레터</Link><h2>의 소식을</h2>
+            </div>
             <h2>{channel.length}개의 채널에 전달하고 있어요.</h2>
           </div>
           <div className='h-[232px] overflow-auto'>
