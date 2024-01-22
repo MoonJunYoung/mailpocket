@@ -10,7 +10,7 @@ newsletter_service = NewsLetterService()
 
 
 class SubscribeData(BaseModel):
-    ids: list[str]
+    ids: list[int]
 
 
 class NewsLetterPresentation:
