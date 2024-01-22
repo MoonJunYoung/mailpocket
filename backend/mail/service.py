@@ -19,7 +19,6 @@ class MailService:
     def recv(self, s3_object_key):
         mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
-        print(mail.html_body)
         # self.slack_api.loging(mail)
         newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(
             mail.from_email
