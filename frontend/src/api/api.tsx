@@ -57,7 +57,7 @@ export const getNewsletterData = (query: string) => {
   return axiosData().get(query);
 };
 
-export const postSubscribe = (data: postSubscribeType) => {
+export const putSubscribe = (data: postSubscribeType) => {
   return axiosData().put("/api/newsletter/subscribe", data);
 };
 

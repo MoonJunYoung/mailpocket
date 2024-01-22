@@ -40,7 +40,7 @@ const SignUp = () => {
       Cookies.set("authToken", response.data, {
         expires: 30,
       });
-      navigate("/Subscribe");
+      navigate("/");
     } catch (error) {
       alert("실패했습니다. 다시 시도하세요.");
     }

@@ -9,7 +9,6 @@ import Symbol from '../Symbol'
 
 
 const SignIn = () => {
-
   const [formData, setFormData] = useState({
     identifier: "",
     password: ""
@@ -36,7 +35,7 @@ const SignIn = () => {
         Cookies.set("authToken", response.data, {
           expires: 30,
         });
-        navigate("/Subscribe");
+        navigate("/");
       } else {
         alert("아이디 및 비밀번호를 확인해주세요.")
       }

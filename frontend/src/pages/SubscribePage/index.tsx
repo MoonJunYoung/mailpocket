@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getNewsletterData, getSubscribeData, postSubscribe, Token } from '../../api/api';
+import { getNewsletterData, getSubscribeData, putSubscribe, Token } from '../../api/api';
 import Nav from '../../components/Nav';
 import Symbol from '../../components/Symbol';
 
@@ -14,7 +14,6 @@ interface NewsLetterDataType {
 const Subscribe = () => {
   const [newsletter, setNewsLetter] = useState<NewsLetterDataType[]>([])
   const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([])
-  console.log(newslettersubscribe)
   const [newslettertechnologydata, setNewsLetterTechnologyData] = useState<NewsLetterDataType[]>([])
   const [newsletterlifedata, setNewsLetterLifeData] = useState<NewsLetterDataType[]>([])
   const [newsletterdesigndata, setNewsLetterDesignData] = useState<NewsLetterDataType[]>([])
@@ -24,7 +23,6 @@ const Subscribe = () => {
   const [newslettersocietydata, setNewsLetterSocietyData] = useState<NewsLetterDataType[]>([])
   const [newsletterfooddata, setNewsLetterFoodData] = useState<NewsLetterDataType[]>([])
   const [newsletterchecked, setNewsLetterChecked] = useState<string[]>([])
-  console.log(newsletterchecked)
   const navigate = useNavigate();
   const authToken = Token();
 
@@ -70,8 +68,8 @@ const Subscribe = () => {
       if (newsletterchecked.length <= 0) {
         alert("뉴스레터를 구독해주세요")
       } else {
-        const responesPost = await postSubscribe({ ids: newsletterchecked })
-        if (responesPost.status === 201) {
+        const responesPut = await putSubscribe({ ids: newsletterchecked })
+        if (responesPut.status === 201) {
           navigate("/");
         }
       }
@@ -114,14 +112,14 @@ const Subscribe = () => {
           <div className='flex items-start justify-center font-bold mb-3'>
             <h2>소식을 받고싶은 뉴스레터가 있나요?</h2>
           </div>
-          <form onSubmit={handlePostNewsLetterData} className='mb-6 relative'>
+          <form onSubmit={handlePostNewsLetterData} className='relative'>
             <div className='flex flex-col items-start'>
               <p className='text-medium  font-bold my-3 ml-2'># IT/테크</p>
               <div className='grid grid-cols-4 items-start'>
                 {newslettertechnologydata.map((data) =>
                   <div className='m-1 relative' key={data.id}>
                     <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[11px] top-0 checked:bg-subscribecolor" />
                       {newsletterchecked.includes(data.id) && (
                         <img className='w-5 h-5 absolute left-[19px] md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
                       )}
@@ -140,7 +138,7 @@ const Subscribe = () => {
                 {newsletterlifedata.map((data) =>
                   <div className='m-1 relative' key={data.id}>
                     <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[11px] top-0 checked:bg-subscribecolor" />
                       {newsletterchecked.includes(data.id) && (
                         <img className='w-5 h-5 absolute left-[19px] md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
                       )}
@@ -159,7 +157,7 @@ const Subscribe = () => {
                 {newsletterdesigndata.map((data) =>
                   <div className='m-1 relative' key={data.id}>
                     <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[11px] top-0 checked:bg-subscribecolor" />
                       {newsletterchecked.includes(data.id) && (
                         <img className='w-5 h-5 absolute left-[19px] md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
                       )}
@@ -178,7 +176,7 @@ const Subscribe = () => {
                 {newsletterhealthdata.map((data) =>
                   <div className='m-1 relative' key={data.id}>
                     <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[11px] top-0 checked:bg-subscribecolor" />
                       {newsletterchecked.includes(data.id) && (
                         <img className='w-5 h-5 absolute left-[19px] md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
                       )}
@@ -197,7 +195,7 @@ const Subscribe = () => {
                 {newsletterentertainmentdata.map((data) =>
                   <div className='m-1 relative' key={data.id}>
                     <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[11px] top-0 checked:bg-subscribecolor" />
                       {newsletterchecked.includes(data.id) && (
                         <img className='w-5 h-5 absolute left-[19px] md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
                       )}
@@ -216,7 +214,7 @@ const Subscribe = () => {
                 {newsletterzetechdata.map((data) =>
                   <div className='m-1 relative' key={data.id}>
                     <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[11px] top-0 checked:bg-subscribecolor" />
                       {newsletterchecked.includes(data.id) && (
                         <img className='w-5 h-5 absolute left-[19px] md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
                       )}
@@ -235,7 +233,7 @@ const Subscribe = () => {
                 {newslettersocietydata.map((data) =>
                   <div className='m-1 relative' key={data.id}>
                     <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[11px] top-0 checked:bg-subscribecolor" />
                       {newsletterchecked.includes(data.id) && (
                         <img className='w-5 h-5 absolute left-[19px] md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
                       )}
@@ -254,7 +252,7 @@ const Subscribe = () => {
                 {newsletterfooddata.map((data) =>
                   <div className='m-1 relative' key={data.id}>
                     <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] h-[40px] rounded-3xl absolute left-[9px] md:left-[11px] top-0 checked:bg-subscribecolor" />
                       {newsletterchecked.includes(data.id) && (
                         <img className='w-5 h-5 absolute left-[19px] md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
                       )}
@@ -267,7 +265,7 @@ const Subscribe = () => {
                 )}
               </div>
             </div>
-            <div className='fixed top-[665px] md:sticky md:top-0 md:z-[1]'>
+            <div className='sticky top-0 z-[1]'>
               <button className='mt-8 h-[40px] rounded-lg border-none bg-customPurple text-white text-base font-bold w-[275px] md:w-[285px]' type="submit">구독하기</button>
             </div>
           </form>
