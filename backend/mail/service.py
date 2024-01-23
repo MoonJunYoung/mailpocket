@@ -19,7 +19,7 @@ class MailService:
     def recv(self, s3_object_key):
         mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
-        self.slack_api.loging(mail)
+        # self.slack_api.loging(mail)
         newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(
             mail.from_email
         ).run()
@@ -33,7 +33,7 @@ class MailService:
             for channel in channels:
                 if channel.slack_channel_id in notified_slack_channel_id_list:
                     continue
-                channel.send_notification(mail, newsletter)
+                # channel.send_notification(mail, newsletter)
                 notified_slack_channel_id_list.append(channel.slack_channel_id)
 
     def read(self, s3_object_key):
