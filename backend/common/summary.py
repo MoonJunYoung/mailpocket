@@ -12,10 +12,10 @@ openai.organization = organization
 openai.api_key = api_key
 
 MODEL = "gpt-3.5-turbo-1106"
-PRE_USER_INPUT_MSG = """
+PROMPT = """
 - 다음 뉴스 기사를 요약하세요.
 - 여러 주제를 션별하고, 각 주제마다 내용은 3~4 문장으로 요약하세요.
-- 영어 기사는 한글로 요약하세요.
+- 무조건 한국어로 요약해야합니다.
 - 요약한 내용으로 사람들에게 소식을 전달하는 말투를 사용하세요.
 - 답변은 아래 json에 포맷하여 제출 해야합니다.
 - 중복된 내용을 출력하지마세요.
@@ -36,7 +36,7 @@ def mail_summary(from_email, subject, html):
     response = openai.ChatCompletion.create(
         model=MODEL,
         messages=[
-            {"role": "system", "content": PRE_USER_INPUT_MSG},
+            {"role": "system", "content": PROMPT},
             {"role": "user", "content": f"뉴스:{html_text}"},
         ],
         temperature=0,
