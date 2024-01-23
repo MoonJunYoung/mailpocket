@@ -37,7 +37,7 @@ def parsing_html_text(html):
     return replace_text
 
 
-def mail_summary(html):
+def mail_summary(from_email, subject, html):
     html_text = parsing_html_text(html)
     response = openai.ChatCompletion.create(
         model=MODEL,
@@ -49,7 +49,9 @@ def mail_summary(html):
         ],
         temperature=0,
     )
-    print(f"logging:\n{response}")
+    print(f"summary logging: {from_email} {subject}\n{response}")
     content = response["choices"][0]["message"]["content"]
+    if "```json" in content:
+        content = content.split("```json")[1].split("```")[0]
     summary_list = json.loads(content)
     return summary_list

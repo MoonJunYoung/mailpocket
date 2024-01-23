@@ -18,14 +18,16 @@ def catch_exception(exce, request: Request):
     request_path = request.url.path
 
     if issubclass(exce.__class__, CustomException):
-        # logging.error(f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nA custom error occurred. : {exce}\n===")
+        logging.error(
+            f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nA custom error occurred. : {exce}\n==="
+        )
         print(
             f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nA custom error occurred. : {exce}\n==="
         )
         raise HTTPException(status_code=exce.status_code, detail=exce.detail)
-    # logging.error(
-    #     f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nA custom error occurred. : {exce}\n===""
-    # )
+    logging.error(
+        f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nAn unexpected error occurred. : {exce}\ndetail : {traceback.format_exc()}==="
+    )
     print(
         f"\n===\ndate:{date}, ip:{client_ip}, request path:{request_path}\nAn unexpected error occurred. : {exce}\ndetail : {traceback.format_exc()}==="
     )
