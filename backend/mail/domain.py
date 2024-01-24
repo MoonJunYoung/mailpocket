@@ -35,9 +35,11 @@ class Mail:
         self.from_email = from_email.split(" <")[1].replace(">", "")
         self.subject = subject
         self.html_body = html_body
-        # self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
-        self.read_link = f"https://mailpocket.site/api/mail?mail={self.s3_object_key}"
+        self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         del self.mail_content
 
     def mail_summary(self):
-        self.summary_list = mail_summary(self.html_body)
+        self.summary_list = mail_summary(self.from_email, self.subject, self.html_body)
+
+    def mail_fail_summary(self):
+        self.summary_list = {"요약을 실패했습니다.": "본문을 확인해주세요."}
