@@ -48,7 +48,7 @@ const MyPage = () => {
 
   const handleLogOut = () => {
     Cookies.remove("authToken");
-    navigate("/signd");
+    navigate("/sign-in");
   };
 
   return (
