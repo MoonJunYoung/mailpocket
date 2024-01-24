@@ -57,13 +57,7 @@ const MyPage = () => {
         <Nav />
         <div className="cursor-pointer" onClick={handleLogOut}>
           <div className="flex items-center font-bold" onClick={handleLogOut}>
-            <span>로그아웃</span>
-            <img
-              className="w-10 h-10"
-              alt="logOut"
-              src="/images/Logout.png"
-              onClick={() => (window.location.href = "/")}
-            />
+            <span className='mr-4 underline'>로그아웃</span>
           </div>
         </div>
       </div>
