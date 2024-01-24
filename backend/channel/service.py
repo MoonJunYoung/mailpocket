@@ -25,6 +25,8 @@ class ChannelService:
     def add(self, code, user_id):
         channel = self.slack_api.connect_workspace(code, user_id)
         self.channel_repository.Create(channel).run()
+        if channel.id:
+            channel.welcome_message_sending()
 
     def read(self, user_id):
         channel_list = list()

@@ -36,7 +36,7 @@ class Channel:
             }
         ]
         data = {"blocks": welcome_message}
-        resp = requests.post(url=self.webhook_url, data=json.dumps(data))
+        requests.post(url=self.webhook_url, data=json.dumps(data))
 
     def send_notification(self, mail: Mail, newsletter: NewsLetter):
         notification_text = self.__make_notification_text(mail, newsletter)
