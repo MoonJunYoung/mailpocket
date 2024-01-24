@@ -1,6 +1,8 @@
+import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { getChannelData, Token } from '../../api/api';
+import { getChannelData, getSubscribeData, Token } from '../../api/api';
 import Nav from '../../components/Nav'
 import Symbol from '../../components/Symbol'
 
@@ -11,8 +13,9 @@ interface ChannelDataType {
   name: string;
 }
 
+
 const MyPage = () => {
-  const [channel, setChannel] = useState<ChannelDataType[]>([])
+  const [channel, setChannel] = useState<ChannelDataType[]>([]);
   const navigate = useNavigate();
   const authToken = Token();
 
@@ -23,13 +26,17 @@ const MyPage = () => {
   }, [authToken, navigate]);
 
   const handleChannelAdd = () => {
-    window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope="
+    window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
   }
 
   const handleGetChannel = async () => {
     try {
       const response = await getChannelData("/api/channel")
       setChannel(response.data)
+      const responesSubscribe = await getSubscribeData("/api/newsletter/subscribe")
+      if (responesSubscribe.data.length === 0) {
+        navigate("/subscribe");
+      }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패")
     }
@@ -39,15 +46,28 @@ const MyPage = () => {
     handleGetChannel()
   }, [])
 
+  const handleLogOut = () => {
+    Cookies.remove("authToken");
+    navigate("/signd");
+  };
 
   return (
     <div>
-      <Nav />
+      <div className='flex items-center justify-between'>
+        <Nav />
+        <div className="cursor-pointer" onClick={handleLogOut}>
+          <div className="flex items-center font-bold" onClick={handleLogOut}>
+            <span className='mr-4 underline'>로그아웃</span>
+          </div>
+        </div>
+      </div>
       <div className='basecontainer'>
         <Symbol />
         <div className='basecontainer-submitcontainer channel-container p-7'>
           <div className='flex flex-col items-start font-bold mb-3'>
-            <h2>내 이메일의 소식을</h2>
+            <div className='flex'>
+              <Link className="underline text-customPurple" to='/subscribe'>뉴스레터</Link><h2>의 소식을</h2>
+            </div>
             <h2>{channel.length}개의 채널에 전달하고 있어요.</h2>
           </div>
           <div className='h-[232px] overflow-auto'>

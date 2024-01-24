@@ -10,30 +10,34 @@ const axiosData = () =>
     },
   });
 
-interface postSignInDataType {
+interface postAuthDataType {
   identifier: string,
   password: string
 }
-interface postSignUpDataType {
-  identifier: string,
-  password: string
-  name: string
-}
+
 
 interface SlackTokenType {
   code: string
 }
 
 interface postSubscribeType {
-  ids : string[] 
+  ids: string[]
 }
 
 
-export const postSignInData = (data: postSignInDataType) => {
+// Read
+
+export const getReadMailData = (data: string | null) => {
+  return axiosData().get(`/api/mail?key=${data}`);
+};
+
+// Auth
+
+export const postSignInData = (data: postAuthDataType) => {
   return axiosData().post("/api/user/sign-in", data);
 };
 
-export const postSignUpData = (data: postSignUpDataType) => {
+export const postSignUpData = (data: postAuthDataType) => {
   return axiosData().post("/api/user/sign-up", data);
 };
 
@@ -41,14 +45,23 @@ export const postSlackToken = (data: SlackTokenType) => {
   return axiosData().post("/api/channel", data);
 };
 
+// Channle
+
 export const getChannelData = (query: string) => {
   return axiosData().get(query);
+};
+
+// Subscribe
+
+export const getNewsletterData = (query: string) => {
+  return axiosData().get(query);
+};
+
+export const putSubscribe = (data: postSubscribeType) => {
+  return axiosData().put("/api/newsletter/subscribe", data);
 };
 
 export const getSubscribeData = (query: string) => {
   return axiosData().get(query);
 };
 
-export const postSubscribe = (data:postSubscribeType) => {
-  return axiosData().post("/api/newsletter/subscribe", data);
-};
