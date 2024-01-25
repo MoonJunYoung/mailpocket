@@ -20,31 +20,63 @@ code {
 /* symbolanimate */
 
 .animate-bounce {
-  animation: bounceAnimation 900ms;
+  animation: bounceAnimation 1500ms;
 }
 
 @keyframes bounceAnimation {
-
-  0%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0) rotate(0deg);
+  0% {
+    transform: translate(180px, 0px) rotate(300deg);
   }
-
   40% {
+    transform: translateY(0px)
+  }
+  60% {
     transform: translateY(-50px) rotate(30deg);
   }
-
-  60% {
-    transform: translateY(-15px) rotate(-15deg);
+  80% {
+    transform: translateY(0px);
   }
-
+  
 }
+
+.animate-greetings {
+  animation: greetingsAnimation 1800ms;
+}
+
+@keyframes 
+greetingsAnimation {
+  0% {
+    transform: translate(0px) rotate(0deg);
+  }
+  20% {
+    transform: translate(0px) rotate(-70deg);
+  }
+  40% {
+    transform: translate(0px)
+  }
+  
+}
+
+.animate-scrollFadeIn {
+  animation: scrollFadeIn 3.0s ease-out;
+}
+
+@keyframes scrollFadeIn {
+  0% {
+    transform: translate(200px, 0px);
+    opacity: 0;
+  }
+  40% {
+    transform: translate(0px);
+    opacity: 1;
+  }
+}
+
+
 
  /* base */
 .basecontainer {
-  @apply flex flex-col justify-center items-center;
+  @apply flex flex-col justify-center items-center; 
 }
 
 .basecontainer-submitcontainer {
@@ -82,7 +114,7 @@ code {
 }
 
 .authcontainer-submit_coment {
-  @apply mt-4 mb-2 text-lg font-extrabold md:text-lg
+  @apply mt-4 mb-2 text-base font-extrabold md:text-lg
 }
 
 

@@ -18,7 +18,7 @@ const RedirectMypage = () => {
         try {
           const response = await postSlackToken({ code: accessCode });
           if (response.status === 201) {
-            navigate("/");
+            navigate("/mypage");
           } else {
             console.log("API 서버로 전송 중 오류가 발생했습니다.");
           }

@@ -71,7 +71,7 @@ const Subscribe = () => {
       } else {
         const responesPut = await putSubscribe({ ids: newsletterchecked })
         if (responesPut.status === 201) {
-          navigate("/");
+          navigate("/mypage");
         }
       }
     } catch (error) {

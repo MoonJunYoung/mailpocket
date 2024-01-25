@@ -40,7 +40,7 @@ const SignUp = () => {
       Cookies.set("authToken", response.data, {
         expires: 30,
       });
-      navigate("/");
+      navigate("/mypage");
     } catch (error) {
       alert("실패했습니다. 다시 시도하세요.");
     }
@@ -87,7 +87,7 @@ const SignUp = () => {
               />
             </div>
             {!isPasswordValid && formData.password.length > 0 && (
-              <div className='mt-2 text-customPurple font-bold h-9 text-sm md:text-sm'>
+              <div className='mt-2 text-customPurple font-bold h-9  text-[13px] md:text-sm'>
                 비밀번호는 소문자, 숫자, 특수문자를 포함 하고 최소 8자 이상 이어야
                 합니다.
               </div>

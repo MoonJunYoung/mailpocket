@@ -10,6 +10,9 @@ module.exports = {
         darkgray: '#a9a9a9',
         lightgrey : '#d3d3d3',
         subscribecolor: '#8f20ffb5',
+        mainsubtitle: '#9B9A97',
+        maintitle: '#37352F'
+
       },
     },
     screens: {
