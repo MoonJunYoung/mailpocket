@@ -105,11 +105,11 @@ const Subscribe = () => {
 
 
   return (
-    <div>
+    <div className='text-center mx-auto max-w-900 h-auto'>
       <Nav />
       <div className='basecontainer'>
         <Symbol />
-        <div className='border-white border rounded-lg mt-10 mb-10 bg-white h-[530px] overflow-auto w-[330px] md:w-[350px] p-7'>
+        <div className='border border-solid border-gray-100 mt-10 mb-10 bg-white h-[530px] overflow-auto w-[330px] md:w-[350px] p-7  shadow-xl'>
           <div className='flex items-start justify-center font-bold mb-3'>
             <h2>소식을 받고싶은 뉴스레터가 있나요?</h2>
           </div>

@@ -55,33 +55,35 @@ const SignUp = () => {
   }, [isPasswordValid]);
 
   return (
-    <div>
+    <div className='text-center mx-auto max-w-900 h-auto'>
       <Nav />
       <div className='basecontainer'>
         <Symbol />
         <div className='basecontainer-submitcontainer signup-container'>
           <form className='authcontainer-submit' onSubmit={handleSubmit}>
             <p className='authcontainer-submit_title'>
-              회원가입
+            SingUp
             </p>
-            <p className='authcontainer-submit_coment'>
+            {/* <p className='authcontainer-submit_coment'>
               아이디
-            </p>
-            <div className='authcontainer-submit_box'>
+            </p> */}
+            <div className='authcontainer-submit_box my-4'>
               <input className='authcontainer-submit_data'
                 type="text"
                 name="identifier"
+                placeholder=' Id'
                 value={formData.identifier}
                 onChange={handleInputChange}
               />
             </div>
-            <p className='authcontainer-submit_coment'>
+            {/* <p className='authcontainer-submit_coment'>
               비밀번호
-            </p>
+            </p> */}
             <div className='authcontainer-submit_box'>
               <input className='authcontainer-submit_data'
                 type="password"
                 name="password"
+                placeholder=' Password'
                 value={formData.password}
                 onChange={handleInputChange}
               />
@@ -96,7 +98,7 @@ const SignUp = () => {
               시작하기
             </button>
           </form>
-          <div>
+          <div className='mt-6'>
             <span className='auth-guidecoment'>이미 아이디가 있으신가요?</span>
             <Link className='auth-link' to="/sign-in">로그인 하기</Link>
           </div>

@@ -31,7 +31,7 @@ code {
     transform: translateY(0px)
   }
   60% {
-    transform: translateY(-50px) rotate(30deg);
+    transform: translateY(-30px) rotate(30deg);
   }
   80% {
     transform: translateY(0px);
@@ -40,35 +40,43 @@ code {
 }
 
 .animate-greetings {
-  animation: greetingsAnimation 1800ms;
+  animation: greetingsAnimation 1500ms;
 }
 
 @keyframes 
 greetingsAnimation {
   0% {
-    transform: translate(0px) rotate(0deg);
-  }
-  20% {
-    transform: translate(0px) rotate(-70deg);
+    transform: translateY(0px);
   }
   40% {
-    transform: translate(0px)
+    transform: translateY(-30px)
   }
-  
+  60% {
+    transform: translateY(-30px) rotate(-70deg);
+  }
+  80% {
+    transform: translateY(0px);
+  }
 }
 
-.animate-scrollFadeIn {
-  animation: scrollFadeIn 3.0s ease-out;
+.animate-fadeIn {
+  animation: fadeIn 1.5s;
 }
 
-@keyframes scrollFadeIn {
+
+@keyframes fadeIn {
   0% {
-    transform: translate(250px, 0px);
+    transform: translate(0,30px);
+    opacity: 0;
   }
-  40% {
-    transform: translate(0px);
+
+  100% {
+    transform: translate(0,0);
+    opacity: 1;
   }
+
 }
+
 
 
 
@@ -82,33 +90,33 @@ greetingsAnimation {
 }
 
 .basecontainer-submitdata  {
-  @apply w-full mt-8 h-[40px] rounded-lg border-none bg-customPurple text-white text-base font-bold
+  @apply w-full mt-8 h-[40px]  border-none bg-customPurple text-white text-base font-bold
 }
 
 /* auth style */
 
 .signin-container {
-  @apply h-[410px] w-[330px] md:w-[350px] md:h-[420px] 
+  @apply h-[410px] w-[300px] md:w-[350px] md:h-[420px] 
 }
 
 .signup-container {
-  @apply h-[430px] w-[330px] md:w-[350px] md:h-[430px]
+  @apply h-[430px] w-[300px] md:w-[350px] md:h-[430px]
 }
 
 .authcontainer-submit {
-  @apply flex flex-col items-start p-6 md:p-5
+  @apply flex flex-col items-start md:p-5
 }
 
 .authcontainer-submit_box {
-  @apply flex justify-center items-center w-full h-10 rounded-lg bg-gray-100 md:h-11
+  @apply flex justify-center items-center w-full h-10 bg-gray-100 md:h-11
 }
 
 .authcontainer-submit_data {
-  @apply w-[250px] h-7 border-none text-sm bg-gray-100 md:w-[280px] md:h-6 md:text-base
+  @apply w-[270px] h-7 border-none text-sm bg-gray-100 md:w-[280px] md:h-6 md:text-base
 }
 
 .authcontainer-submit_title {
-  @apply my-2 text-2xl font-extrabold md:text-2xl
+  @apply my-2 text-2xl font-extrabold md:text-2xl text-customPurple
 }
 
 .authcontainer-submit_coment {

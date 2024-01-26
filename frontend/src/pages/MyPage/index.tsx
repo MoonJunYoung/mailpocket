@@ -52,18 +52,18 @@ const MyPage = () => {
   };
 
   return (
-    <div>
+    <div className='text-center mx-auto max-w-900 h-auto'>
       <div className='flex items-center justify-between'>
         <Nav />
         <div className="cursor-pointer" onClick={handleLogOut}>
           <div className="flex items-center font-bold" onClick={handleLogOut}>
-            <span className='mr-4 underline'>로그아웃</span>
+            <span className='mr-4 underline text-customPurple'>LogOut</span>
           </div>
         </div>
       </div>
       <div className='basecontainer'>
         <Symbol />
-        <div className='basecontainer-submitcontainer channel-container p-7'>
+        <div className='mt-10 bg-white relative channel-container p-7 border border-solid border-gray-100' style={{ boxShadow: '5px 5px 1px whitesmoke' }}>
           <div className='flex flex-col items-start font-bold mb-3'>
             <div className='flex'>
               <Link className="underline text-customPurple" to='/subscribe'>뉴스레터</Link><h2>의 소식을</h2>

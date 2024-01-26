@@ -53,33 +53,35 @@ const SignIn = () => {
   }, [formData]);
 
   return (
-    <div>
+    <div className='text-center mx-auto max-w-900 h-auto'>
       <Nav />
       <div className='basecontainer'>
         <Symbol />
         <div className='basecontainer-submitcontainer signin-container'>
           <form className='authcontainer-submit' onSubmit={handleSubmit}>
             <p className='authcontainer-submit_title'>
-              로그인
+              SignIn
             </p>
-            <p className='authcontainer-submit_coment '>
+            {/* <p className='authcontainer-submit_coment '>
               아이디
-            </p>
-            <div className='authcontainer-submit_box'>
+            </p> */}
+            <div className='authcontainer-submit_box my-4'>
               <input className='authcontainer-submit_data'
                 type="text"
                 name="identifier"
                 value={formData.identifier}
+                placeholder=' Id'
                 onChange={handleInputChange}
               />
             </div>
-            <p className='authcontainer-submit_coment '>
+            {/* <p className='authcontainer-submit_coment '>
               비밀번호
-            </p>
+            </p> */}
             <div className='authcontainer-submit_box'>
               <input className='authcontainer-submit_data'
                 type="password"
                 name="password"
+                placeholder=' Password'
                 value={formData.password}
                 onChange={handleInputChange}
               />
@@ -88,7 +90,7 @@ const SignIn = () => {
               완료
             </button>
           </form>
-          <div>
+          <div className='mt-6'>
             <span className='auth-guidecoment'>아이디가 없으신가요?</span>
             <Link className='auth-link' to="/sign-up">10초만에 가입하기</Link>
           </div>
