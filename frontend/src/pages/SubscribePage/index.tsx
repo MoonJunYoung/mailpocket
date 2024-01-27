@@ -63,7 +63,7 @@ const Subscribe = () => {
     }
   }
 
-  const handlePostNewsLetterData = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePostNewsLetterData = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     try {
       if (newsletterchecked.length <= 0) {
@@ -71,7 +71,7 @@ const Subscribe = () => {
       } else {
         const responesPut = await putSubscribe({ ids: newsletterchecked })
         if (responesPut.status === 201) {
-          navigate("/mypage");
+          navigate("/");
         }
       }
     } catch (error) {
@@ -109,173 +109,173 @@ const Subscribe = () => {
       <Nav />
       <div className='basecontainer'>
         <Symbol />
-        <div className='border border-solid border-gray-100 mt-10 mb-10 bg-white h-[530px] overflow-auto w-[330px] md:w-[350px] p-7  shadow-xl'>
-          <div className='flex items-start justify-center font-bold mb-3'>
-            <h2>소식을 받고싶은 뉴스레터가 있나요?</h2>
+        <div className='flex flex-col border border-solid border-gray-100 mt-10 mb-10 bg-white h-[530px] overflow-hidden w-[330px] md:w-[350px] p-7  shadow-xl'>
+          <div className='flex-1 overflow-y-auto'>
+            <div className='flex items-start justify-center font-bold mb-3'>
+              <h2>소식을 받고싶은 뉴스레터가 있나요?</h2>
+            </div>
+            <div className='relative'>
+              <div className='flex flex-col items-start'>
+                <div className='flex items-center gap-1'>
+                  <p className='text-medium  font-bold my-3 ml-2'># IT/테크</p>
+                </div>
+                <div className='grid grid-cols-4 items-start'>
+                  {newslettertechnologydata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='flex flex-col items-start'>
+                <p className='text-medium  font-bold my-3 ml-2'># 트렌드/라이프</p>
+                <div className='grid grid-cols-4'>
+                  {newsletterlifedata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='flex flex-col items-start'>
+                <p className='text-medium  font-bold my-3 ml-2'># 디자인</p>
+                <div className='grid grid-cols-4'>
+                  {newsletterdesigndata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='flex flex-col items-start'>
+                <p className='text-medium  font-bold my-3 ml-2'># 건강/의학</p>
+                <div className='grid grid-cols-4'>
+                  {newsletterhealthdata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='flex flex-col items-start'>
+                <p className='text-medium  font-bold my-3 ml-2'># 엔터테이먼트</p>
+                <div className='grid grid-cols-4'>
+                  {newsletterentertainmentdata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='flex flex-col items-start'>
+                <p className='text-medium  font-bold my-3 ml-2'># 비즈/제테크</p>
+                <div className='grid grid-cols-4'>
+                  {newsletterzetechdata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='flex flex-col items-start'>
+                <p className='text-medium  font-bold my-3 ml-2'># 시사/사회</p>
+                <div className='grid grid-cols-4'>
+                  {newslettersocietydata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='flex flex-col items-start'>
+                <p className='text-medium  font-bold my-3 ml-2'># 푸드</p>
+                <div className='grid grid-cols-4'>
+                  {newsletterfooddata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-          <form onSubmit={handlePostNewsLetterData} className='relative'>
-            <div className='flex flex-col items-start'>
-              <div className='flex items-center gap-1'>
-                <p className='text-medium  font-bold my-3 ml-2'># IT/테크</p>
-              </div>
-              <div className='grid grid-cols-4 items-start'>
-                {newslettertechnologydata.map((data) =>
-                  <div className='m-1 relative' key={data.id}>
-                    <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                      {newsletterchecked.includes(data.id) && (
-                        <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                      )}
-                      <div className="flex flex-col items-center">
-                        <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                        <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                      </div>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className='flex flex-col items-start'>
-              <p className='text-medium  font-bold my-3 ml-2'># 트렌드/라이프</p>
-              <div className='grid grid-cols-4'>
-                {newsletterlifedata.map((data) =>
-                  <div className='m-1 relative' key={data.id}>
-                    <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                      {newsletterchecked.includes(data.id) && (
-                        <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                      )}
-                      <div className="flex flex-col items-center">
-                        <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                        <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                      </div>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className='flex flex-col items-start'>
-              <p className='text-medium  font-bold my-3 ml-2'># 디자인</p>
-              <div className='grid grid-cols-4'>
-                {newsletterdesigndata.map((data) =>
-                  <div className='m-1 relative' key={data.id}>
-                    <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                      {newsletterchecked.includes(data.id) && (
-                        <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                      )}
-                      <div className="flex flex-col items-center">
-                        <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                        <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                      </div>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className='flex flex-col items-start'>
-              <p className='text-medium  font-bold my-3 ml-2'># 건강/의학</p>
-              <div className='grid grid-cols-4'>
-                {newsletterhealthdata.map((data) =>
-                  <div className='m-1 relative' key={data.id}>
-                    <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                      {newsletterchecked.includes(data.id) && (
-                        <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                      )}
-                      <div className="flex flex-col items-center">
-                        <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                        <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                      </div>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className='flex flex-col items-start'>
-              <p className='text-medium  font-bold my-3 ml-2'># 엔터테이먼트</p>
-              <div className='grid grid-cols-4'>
-                {newsletterentertainmentdata.map((data) =>
-                  <div className='m-1 relative' key={data.id}>
-                    <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                      {newsletterchecked.includes(data.id) && (
-                        <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                      )}
-                      <div className="flex flex-col items-center">
-                        <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                        <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                      </div>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className='flex flex-col items-start'>
-              <p className='text-medium  font-bold my-3 ml-2'># 비즈/제테크</p>
-              <div className='grid grid-cols-4'>
-                {newsletterzetechdata.map((data) =>
-                  <div className='m-1 relative' key={data.id}>
-                    <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                      {newsletterchecked.includes(data.id) && (
-                        <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                      )}
-                      <div className="flex flex-col items-center">
-                        <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                        <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                      </div>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className='flex flex-col items-start'>
-              <p className='text-medium  font-bold my-3 ml-2'># 시사/사회</p>
-              <div className='grid grid-cols-4'>
-                {newslettersocietydata.map((data) =>
-                  <div className='m-1 relative' key={data.id}>
-                    <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                      {newsletterchecked.includes(data.id) && (
-                        <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                      )}
-                      <div className="flex flex-col items-center">
-                        <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                        <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                      </div>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className='flex flex-col items-start'>
-              <p className='text-medium  font-bold my-3 ml-2'># 푸드</p>
-              <div className='grid grid-cols-4'>
-                {newsletterfooddata.map((data) =>
-                  <div className='m-1 relative' key={data.id}>
-                    <label>
-                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                      {newsletterchecked.includes(data.id) && (
-                        <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                      )}
-                      <div className="flex flex-col items-center">
-                        <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                        <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                      </div>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className='sticky top-0 z-[1]'>
-              <button className='mt-8 h-[40px] rounded-lg border-none bg-customPurple text-white text-base font-bold w-[275px] md:w-[285px]' type="submit">구독하기</button>
-            </div>
-          </form>
+          <button className='mt-8 h-[40px] rounded-lg border-none bg-customPurple text-white text-base font-bold w-[275px] md:w-[285px]' onClick={handlePostNewsLetterData}>구독하기</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Subscribe
+export default Subscribe  
