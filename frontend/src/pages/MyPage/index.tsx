@@ -21,7 +21,7 @@ const MyPage = () => {
 
   useEffect(() => {
     if (!authToken) {
-      navigate("/sign-in");
+      navigate("/landingpage");
     }
   }, [authToken, navigate]);
 
@@ -48,7 +48,7 @@ const MyPage = () => {
 
   const handleLogOut = () => {
     Cookies.remove("authToken");
-    navigate("/sign-in");
+    navigate("/sing-in");
   };
 
   return (

@@ -48,7 +48,7 @@ const Subscribe = () => {
 
   useEffect(() => {
     if (!authToken) {
-      navigate("/sign-in");
+      navigate("/landingpage");
     }
   }, [authToken, navigate]);
 

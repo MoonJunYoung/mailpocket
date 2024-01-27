@@ -8,6 +8,8 @@ import Symbol from '../Symbol'
 
 
 
+
+
 const SignIn = () => {
   const [formData, setFormData] = useState({
     identifier: "",
@@ -35,7 +37,7 @@ const SignIn = () => {
         Cookies.set("authToken", response.data, {
           expires: 30,
         });
-        navigate("/mypage");
+        navigate("/");
       } else {
         alert("아이디 및 비밀번호를 확인해주세요.")
       }
@@ -43,6 +45,7 @@ const SignIn = () => {
       alert("실패했습니다. 다시 시도하세요.");
     }
   };
+
 
   useEffect(() => {
     if (formData.identifier.length > 0 && formData.password.length > 0) {
@@ -60,11 +63,9 @@ const SignIn = () => {
         <div className='basecontainer-submitcontainer signin-container'>
           <form className='authcontainer-submit' onSubmit={handleSubmit}>
             <p className='authcontainer-submit_title'>
-              SignIn
+              Sign In
             </p>
-            {/* <p className='authcontainer-submit_coment '>
-              아이디
-            </p> */}
+
             <div className='authcontainer-submit_box my-4'>
               <input className='authcontainer-submit_data'
                 type="text"
@@ -74,9 +75,7 @@ const SignIn = () => {
                 onChange={handleInputChange}
               />
             </div>
-            {/* <p className='authcontainer-submit_coment '>
-              비밀번호
-            </p> */}
+
             <div className='authcontainer-submit_box'>
               <input className='authcontainer-submit_data'
                 type="password"

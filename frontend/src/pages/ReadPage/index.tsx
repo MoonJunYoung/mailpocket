@@ -29,7 +29,7 @@ const ReadPage = () => {
         <Nav />
         <div className="flex md:flex-col md:items-end md:mr-2">
           <span className="text-sm font-semibold">뉴스레터 요약을 슬랙으로 받아보실래요?</span>
-          <Link className="text-sm underline ml-2 text-customPurple" to="/sign-in">메일포켓 알아보기</Link>
+          <Link className="text-sm underline ml-2 text-customPurple" to="/landingpage">메일포켓 알아보기</Link>
         </div>
       </div>
       {readmaildata !== null ? (

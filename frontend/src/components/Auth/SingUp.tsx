@@ -40,7 +40,7 @@ const SignUp = () => {
       Cookies.set("authToken", response.data, {
         expires: 30,
       });
-      navigate("/mypage");
+      navigate("/");
     } catch (error) {
       alert("실패했습니다. 다시 시도하세요.");
     }
@@ -62,7 +62,7 @@ const SignUp = () => {
         <div className='basecontainer-submitcontainer signup-container'>
           <form className='authcontainer-submit' onSubmit={handleSubmit}>
             <p className='authcontainer-submit_title'>
-            SingUp
+            Sing Up
             </p>
             {/* <p className='authcontainer-submit_coment'>
               아이디
