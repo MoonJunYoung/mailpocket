@@ -51,13 +51,14 @@ class Channel:
         print("notification", resp.text)
 
     def __make_notification_text(self, mail: Mail, newsletter: NewsLetter):
+        utm_source = f"&utm_source=slack&utm_medium=bot&utm_campaign={self.team_name}"
         notification_text = [
             {
                 "type": "section",
                 "fields": [
                     {
                         "type": "mrkdwn",
-                        "text": f"{newsletter.name}의 새로운 소식이 도착했어요.\n*<{mail.read_link}|{mail.subject}>*",
+                        "text": f"{newsletter.name}의 새로운 소식이 도착했어요.\n*<{mail.read_link}{utm_source}|{mail.subject}>*",
                     }
                 ],
             },

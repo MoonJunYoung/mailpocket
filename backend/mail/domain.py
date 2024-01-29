@@ -8,7 +8,6 @@ class Mail:
     def __init__(self, mail_content=None, s3_object_key=None) -> None:
         self.mail_content = mail_content
         self.s3_object_key = s3_object_key
-        self.summary_list = None
 
     def parser_eamil(self):
         parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)
@@ -38,8 +37,8 @@ class Mail:
         self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         del self.mail_content
 
-    def mail_summary(self):
+    def summary(self):
         self.summary_list = mail_summary(self.from_email, self.subject, self.html_body)
 
-    def mail_fail_summary(self):
+    def fail_summary(self):
         self.summary_list = {"요약을 실패했습니다.": "본문을 확인해주세요."}

@@ -43,4 +43,4 @@ class ChannelService:
     def remove_channel(self, user_id, channel_id):
         channel = self.channel_repository.ReadChannelByID(channel_id).run()
         channel.is_user_of_channel(user_id)
-        self.channel_repository.Delete(channel)
+        self.channel_repository.Delete(channel).run()
