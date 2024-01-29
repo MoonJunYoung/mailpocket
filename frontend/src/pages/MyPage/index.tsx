@@ -86,7 +86,7 @@ const MyPage = () => {
           </div>
           <div className='h-[232px] overflow-auto'>
             {channel.map((channeldata =>
-              <div className='flex items-center gap-[75px] ' key={channeldata.id}>
+              <div className='flex items-center justify-between ' key={channeldata.id}>
                 <div className='flex items-center gap-6'>
                   <img className="w-7 h-7 rounded-md" src={channeldata.team_icon} alt="icon" />
                   <div className='flex flex-col items-start my-2'>
@@ -94,7 +94,7 @@ const MyPage = () => {
                     <span className='text-sm  text-darkgray font-semibold'>{channeldata.team_name} 워크스페이스</span>
                   </div>
                 </div>
-                <div className='cursor-pointer  font-bold' onClick={() => handleDeleteChannel(channeldata.id)}>
+                <div className='cursor-pointer mr-7 font-bold' onClick={() => handleDeleteChannel(channeldata.id)}>
                   <span>X</span>
                 </div>
               </div>
