@@ -23,7 +23,7 @@ class MailService:
         newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(
             mail.from_email
         ).run()
-        channels = self.channel_repository.loadChannelsByNewsletter(newsletter).run()
+        channels = self.channel_repository.ReadChannelsByNewsletter(newsletter).run()
         notified_slack_channel_id_list = list()
         if channels:
             try:

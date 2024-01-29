@@ -6,7 +6,7 @@ from backend.newsletter.domain import NewsLetter
 
 
 class ChannelRepository:
-    class ReadByUserID(MysqlCRUDTemplate):
+    class ReadChannelsByUserID(MysqlCRUDTemplate):
         def __init__(self, user_id) -> None:
             self.user_id = user_id
             super().__init__()
@@ -33,6 +33,31 @@ class ChannelRepository:
                 channels.append(channel)
             return channels
 
+    class ReadChannelByID(MysqlCRUDTemplate):
+        def __init__(self, id) -> None:
+            self.id = id
+            super().__init__()
+
+        def execute(self):
+            channel_model = (
+                self.session.query(ChannelModel)
+                .filter(ChannelModel.id == self.id)
+                .first()
+            )
+            channel = Channel(
+                id=channel_model.id,
+                webhook_url=channel_model.webhook_url,
+                slack_channel_id=channel_model.slack_channel_id,
+                name=channel_model.name,
+                team_name=channel_model.team_name,
+                team_icon=channel_model.team_icon,
+                user_id=channel_model.user_id,
+            )
+            return channel
+
+        def run(self) -> Channel:
+            return super().run()
+
     class Create(MysqlCRUDTemplate):
         def __init__(self, channel: Channel) -> None:
             self.channel = channel
@@ -52,7 +77,7 @@ class ChannelRepository:
             self.session.commit()
             self.channel.id = channel_model.id
 
-    class loadChannelsByNewsletter(MysqlCRUDTemplate):
+    class ReadChannelsByNewsletter(MysqlCRUDTemplate):
         def __init__(self, newsletter: NewsLetter) -> None:
             self.newsletter = newsletter
             super().__init__()
@@ -88,3 +113,17 @@ class ChannelRepository:
 
         def run(self) -> list[Channel]:
             return super().run()
+
+    class Delete(MysqlCRUDTemplate):
+        def __init__(self, channel: Channel) -> None:
+            self.channel = channel
+            super().__init__()
+
+        def execute(self):
+            channel_model = (
+                self.session.query(ChannelModel)
+                .filter(ChannelModel.id == self.channel.id)
+                .first()
+            )
+            self.session.delete(channel_model)
+            self.session.commit()

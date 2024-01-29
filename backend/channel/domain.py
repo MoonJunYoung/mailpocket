@@ -2,6 +2,7 @@ import json
 
 import requests
 
+from backend.common.exceptions import ChannelUserMismatchException
 from backend.mail.domain import Mail
 from backend.newsletter.domain import NewsLetter
 
@@ -24,6 +25,10 @@ class Channel:
         self.team_icon = team_icon
         self.name = name
         self.user_id = user_id
+
+    def is_user_of_channel(self, user_id):
+        if not self.user_id == user_id:
+            raise ChannelUserMismatchException(self.id, user_id)
 
     def welcome_message_sending(self):
         welcome_message = [

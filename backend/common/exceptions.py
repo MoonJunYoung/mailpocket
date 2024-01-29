@@ -90,3 +90,11 @@ class UnknownFromEamilException(CustomException):
 
     status_code = 401
     detail = "unknown email recv"
+
+
+class ChannelUserMismatchException(CustomException):
+    def __init__(self, channel_id, user_id) -> None:
+        super().__init__(f"this user:{user_id} does not own the meeting:{channel_id}.")
+
+    status_code = 401
+    detail = "unknown email recv"

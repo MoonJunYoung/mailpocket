@@ -22,15 +22,25 @@ class ChannelService:
         self.channel_repository = ChannelRepository()
         self.slack_api = SlackAPI()
 
-    def add(self, code, user_id):
+    def add_channel(self, code, user_id):
         channel = self.slack_api.connect_workspace(code, user_id)
         self.channel_repository.Create(channel).run()
         if channel.id:
             channel.welcome_message_sending()
+            return channel.id
 
-    def read(self, user_id):
+    def get_channels(self, user_id):
         channel_list = list()
-        channels = self.channel_repository.ReadByUserID(user_id).run()
+        channels = self.channel_repository.ReadChannelsByUserID(user_id).run()
         for channel in channels:
             channel_list.append(ChannelDTO(channel))
         return channel_list
+
+    def get_channel(self, user_id, channel_id):
+        channel = self.channel_repository.ReadChannelByID(channel_id).run()
+        return ChannelDTO(channel)
+
+    def remove_channel(self, user_id, channel_id):
+        channel = self.channel_repository.ReadChannelByID(channel_id).run()
+        channel.is_user_of_channel(user_id)
+        self.channel_repository.Delete(channel)
