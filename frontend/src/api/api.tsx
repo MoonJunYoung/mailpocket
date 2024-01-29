@@ -48,7 +48,7 @@ export const postSlackToken = (data: SlackTokenType) => {
 };
 
 export const getSlackToken = (data: any) => {
-  return axiosData().post(`/api/${data}`);
+  return axiosData().get(`/api/${data}`);
 };
 
 
