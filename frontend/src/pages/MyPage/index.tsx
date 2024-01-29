@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { getChannelData, getSubscribeData, Token } from '../../api/api';
+import { sendEventToAmplitude } from '../../components/Amplitude';
 import Nav from '../../components/Nav'
 import Symbol from '../../components/Symbol'
 
@@ -22,11 +23,15 @@ const MyPage = () => {
   useEffect(() => {
     if (!authToken) {
       navigate("/landingpage");
+    } else {
+      sendEventToAmplitude('view my page', '');
     }
   }, [authToken, navigate]);
 
   const handleChannelAdd = () => {
+    sendEventToAmplitude("click add destination", '')
     window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
+
   }
 
   const handleGetChannel = async () => {
@@ -48,7 +53,7 @@ const MyPage = () => {
 
   const handleLogOut = () => {
     Cookies.remove("authToken");
-    navigate("/sing-in");
+    navigate("/sign-in");
   };
 
   return (
@@ -57,7 +62,7 @@ const MyPage = () => {
         <Nav />
         <div className="cursor-pointer" onClick={handleLogOut}>
           <div className="flex items-center font-bold" onClick={handleLogOut}>
-            <span className='mr-4 underline text-customPurple'>LogOut</span>
+            <span className='mr-4 underline text-customPurple'>로그아웃</span>
           </div>
         </div>
       </div>

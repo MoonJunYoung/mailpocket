@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getNewsletterData, getSubscribeData, putSubscribe, Token } from '../../api/api';
+import { sendEventToAmplitude } from '../../components/Amplitude';
 import Nav from '../../components/Nav';
 import Symbol from '../../components/Symbol';
 
@@ -24,6 +25,22 @@ const Subscribe = () => {
   const [newslettersocietydata, setNewsLetterSocietyData] = useState<NewsLetterDataType[]>([])
   const [newsletterfooddata, setNewsLetterFoodData] = useState<NewsLetterDataType[]>([])
   const [newsletterchecked, setNewsLetterChecked] = useState<string[]>([])
+  const [newsletterselect, setNewsLetterSelect] = useState<string>('')
+
+
+  useEffect(() => {
+    const newsletterSelectArticle = () => {
+      const newsletterss = newsletter.find(item => item.id === newsletterselect);
+      if (newsletterss) {
+        sendEventToAmplitude("select article", { "article name": newsletterss.name })
+      }
+    }
+    newsletterSelectArticle()
+  }, [newsletterselect])
+
+
+
+
   const navigate = useNavigate();
   const authToken = Token();
 
@@ -49,8 +66,12 @@ const Subscribe = () => {
   useEffect(() => {
     if (!authToken) {
       navigate("/landingpage");
+    } else {
+      sendEventToAmplitude('view select article', '');
     }
   }, [authToken, navigate]);
+
+
 
   const handleGetNewsLetterData = async () => {
     try {
@@ -71,6 +92,7 @@ const Subscribe = () => {
       } else {
         const responesPut = await putSubscribe({ ids: newsletterchecked })
         if (responesPut.status === 201) {
+          sendEventToAmplitude("complete to select article", '')
           navigate("/");
         }
       }
@@ -101,7 +123,10 @@ const Subscribe = () => {
         return [...prevChecked, newsletterid];
       }
     });
+    setNewsLetterSelect(newsletterid)
   };
+
+
 
 
   return (

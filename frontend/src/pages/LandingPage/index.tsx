@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-
-
+import { sendEventToAmplitude } from '../../components/Amplitude';
 
 const LandingPage = () => {
   const [scrollPercentage, setScrollPercentage] = useState(0);
+
+
+  useEffect(() => {
+    sendEventToAmplitude('view landing page', '');
+  }, []);
+
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY || window.pageYOffset;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
-
-
       const percentage = (scrollY / (documentHeight - windowHeight)) * 100;
-
       setScrollPercentage(percentage);
     };
 
@@ -25,6 +26,11 @@ const LandingPage = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const handleAmplitudeData = () => {
+    sendEventToAmplitude("click start in landing page", '');
+  }
+
 
   return (
     <div className='bg-white flex flex-col items-center justify-center'>
@@ -47,7 +53,6 @@ const LandingPage = () => {
           }}
         ></div>
       </div>
-
       <div className='flex items-center justify-center w-[700px] px-[50px]  md:w-full md:px-[10px] h-full'>
         <div className='w-full mt-10'>
           <img className='w-[70px] animate-bounce' src="/images/MailpocketSymbol.png" alt="MailpocketSymbol" />
@@ -58,11 +63,11 @@ const LandingPage = () => {
               <div className='w-5 h-5 md:w-4 md:h-4 bg-customPurple flex items-center justify-center rounded-full'>
                 <span className='text-white font-bold'>1</span>
               </div>
-              <p className='text-xl md:text-base font-extrabold'>매일 쏟아지는 뉴스레터를 다 소화하지 않으셔도 돼요.</p>
+              <p className='text-xl md:text-base font-extrabold'>매일 쏟아지는 뉴스레터를 3줄 요약해서 슬랙에 보내드려요.</p>
             </div>
             <div className='mt-4 font-bold text-base md:text-sm'>
-              <p>주제별로 핵심만 최대 3줄로 요약해서 보내드릴게요.</p>
-              <p>재미 있는 메일이라면 자세히 보고, save item 을 사용하면 나중에 읽을 수도 있어요.</p>
+              <p>눈으로만 훑어보세요. 재미 있는 뉴스라면 조금 더 자세히 보고,</p>
+              <p>슬랙의 save item 을 사용하면 나중에 읽을 수도 있어요</p>
             </div>
           </div>
           <div>
@@ -70,11 +75,11 @@ const LandingPage = () => {
               <div className='w-5 h-5 md:w-4 md:h-4 bg-customPurple flex items-center justify-center rounded-xl'>
                 <span className='text-white font-bold'>2</span>
               </div>
-              <p className='text-xl md:text-base font-extrabold'>메일함에 일회성 메일이 쌓이는걸 방지해드릴게요.</p>
+              <p className='text-xl md:text-base font-extrabold'>메일함에 일회성 메일이 쌓이는걸 방지할 수 있어요.</p>
             </div>
             <div className='mt-4 font-bold text-base md:text-sm'>
-              <p>뉴스레터 때문에 999+ 개 이상 메일이 쌓여 있어서 중요 메일 놓친적 많으시죠?</p>
-              <p>일회성 메일은 메일 포켓이 받고, 슬랙으로 요약해서 슝-🚀 보내드릴게요</p>
+              <p>뉴스레터 때문에 메일함이 항상 999+ 개 이상 쌓여 있고, 중요 메일 놓쳐본적 많으시죠?</p>
+              <p>뉴스레터는 메일 포켓이 받고 , 슬랙으로 요약해서 슝-🚀 보내 드릴게요.</p>
             </div>
           </div>
           <div className='font-semibold mt-14 border border-1 border-white w-full p-2 rounded-lg bg-whitesmoke'>메일포켓을 미리 알아볼까요?</div>
@@ -106,11 +111,11 @@ const LandingPage = () => {
                 <p>부담 없이 다양한 주제의 뉴스레터를 추가해주세요!</p>
               </div>
             </div>
-
           </div>
         </div>
       </div>
-      <Link className="flex items-center justify-center fixed bottom-5 cursor-pointer left-0 right-0 mx-auto bg-customPurple w-[88%] max-w-[630px] h-[48px] rounded-md animate-fadeIn z-1  shadow-2xl text-base text-white font-bold" to="/sign-in">메일포켓 이용하기</Link>
+      <Link className="flex items-center justify-center fixed bottom-5 cursor-pointer left-0 right-0 mx-auto bg-customPurple w-[88%] max-w-[630px] h-[48px] rounded-md animate-fadeIn z-1  shadow-2xl text-base text-white font-bold" onClick={handleAmplitudeData} to="/sign-in">메일포켓 이용하기</Link>
+
     </div>
   );
 }

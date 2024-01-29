@@ -3,16 +3,29 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MyPage from "./pages/MyPage";
 import Subscribe from "./pages/SubscribePage";
 import SignIn from './components/Auth/SignIn';
-import SingUp from './components/Auth/SingUp';
+import SingUp from './components/Auth/SignUp';
 import RedirectMypage from './components/RedirectMypage';
 import ReadPage from "./pages/ReadPage";
 import LandingPage from './pages/LandingPage';
+import { useEffect, useState } from 'react';
+import { initializeAmplitude } from './components/Amplitude';
+import PageLoding from './components/PageLoding';
 
 
 function App() {
+  const [amplitudeinitialized, setAmplitudeInitialized] = useState(false)
+
+
+  useEffect(() => {
+    initializeAmplitude().then(() => {
+      setAmplitudeInitialized(true);
+    })
+  }, []);
+
+
   return (
-    <div>
-      <Router>
+    <div className={amplitudeinitialized ? '' : 'flex justify-center'}>
+      {amplitudeinitialized ? <Router>
         <Routes>
           <Route index element={<MyPage />} />
           <Route path="/sign-in" element={<SignIn />} />
@@ -22,7 +35,7 @@ function App() {
           <Route path="/subscribe" element={<Subscribe />} />
           <Route path="/landingpage" element={<LandingPage />} />
         </Routes>
-      </Router>
+      </Router> : <PageLoding />}
     </div>
   );
 }

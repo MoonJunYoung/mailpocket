@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { postSignUpData } from '../../api/api'
+import { sendEventToAmplitude } from '../Amplitude'
 import Nav from '../Nav'
 import Symbol from '../Symbol'
 
@@ -37,10 +38,15 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await postSignUpData(formData);
-      Cookies.set("authToken", response.data, {
-        expires: 30,
-      });
-      navigate("/");
+      console.log(response.status)
+      if (response.status === 201) {
+        sendEventToAmplitude("complete sign up", "")
+        Cookies.set("authToken", response.data, {
+          expires: 30,
+        });
+        navigate("/subscribe");
+      }
+
     } catch (error) {
       alert("실패했습니다. 다시 시도하세요.");
     }
@@ -54,6 +60,12 @@ const SignUp = () => {
     setNotAllow(true);
   }, [isPasswordValid]);
 
+
+  useEffect(() => {
+    sendEventToAmplitude('view sign up', '');
+  }, []);
+
+
   return (
     <div className='text-center mx-auto max-w-900 h-auto'>
       <Nav />
@@ -62,11 +74,8 @@ const SignUp = () => {
         <div className='basecontainer-submitcontainer signup-container'>
           <form className='authcontainer-submit' onSubmit={handleSubmit}>
             <p className='authcontainer-submit_title'>
-            Sing Up
+              Sign Up
             </p>
-            {/* <p className='authcontainer-submit_coment'>
-              아이디
-            </p> */}
             <div className='authcontainer-submit_box my-4'>
               <input className='authcontainer-submit_data'
                 type="text"
@@ -76,9 +85,6 @@ const SignUp = () => {
                 onChange={handleInputChange}
               />
             </div>
-            {/* <p className='authcontainer-submit_coment'>
-              비밀번호
-            </p> */}
             <div className='authcontainer-submit_box'>
               <input className='authcontainer-submit_data'
                 type="password"
@@ -93,8 +99,8 @@ const SignUp = () => {
                 비밀번호는 소문자, 숫자, 특수문자를 포함 하고 최소 8자 이상 이어야
                 합니다.
               </div>
-            )}  
-            <button className='basecontainer-submitdata'  type="submit" disabled={notAllow}>
+            )}
+            <button className='basecontainer-submitdata' type="submit" disabled={notAllow}>
               시작하기
             </button>
           </form>

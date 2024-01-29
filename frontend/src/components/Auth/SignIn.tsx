@@ -2,12 +2,10 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { postSignInData } from '../../api/api'
+import { getSubscribeData, postSignInData } from '../../api/api'
+import { sendEventToAmplitude } from '../Amplitude'
 import Nav from '../Nav'
 import Symbol from '../Symbol'
-
-
-
 
 
 const SignIn = () => {
@@ -26,14 +24,17 @@ const SignIn = () => {
       ...formData,
       [name]: value
     })
-
   };
+
+  
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await postSignInData(formData);
       if (response.status === 201) {
+        sendEventToAmplitude("complete sign in", "")
         Cookies.set("authToken", response.data, {
           expires: 30,
         });
@@ -54,6 +55,10 @@ const SignIn = () => {
     }
     setNotAllow(true);
   }, [formData]);
+
+  useEffect(() => {
+    sendEventToAmplitude('view sign in', '');
+  }, []);
 
   return (
     <div className='text-center mx-auto max-w-900 h-auto'>
