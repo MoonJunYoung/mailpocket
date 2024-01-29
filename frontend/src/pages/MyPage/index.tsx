@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { getChannelData, getSubscribeData, Token } from '../../api/api';
+import { deleteChannelData, getChannelData, getSubscribeData, Token } from '../../api/api';
 import { sendEventToAmplitude } from '../../components/Amplitude';
 import Nav from '../../components/Nav'
 import Symbol from '../../components/Symbol'
@@ -47,6 +47,15 @@ const MyPage = () => {
     }
   }
 
+  const handleDeleteChannel = async (channelId: number) => {
+    try {
+      await deleteChannelData(channelId);
+      setChannel(channel.filter((data) => data.id !== channelId));
+    } catch (error) {
+      console.log("Api 데이터 삭제 실패");
+    }
+  };
+
   useEffect(() => {
     handleGetChannel()
   }, [])
@@ -77,11 +86,16 @@ const MyPage = () => {
           </div>
           <div className='h-[232px] overflow-auto'>
             {channel.map((channeldata =>
-              <div className='flex items-center gap-6' key={channeldata.id}>
-                <img className="w-7 h-7 rounded-md" src={channeldata.team_icon} alt="icon" />
-                <div className='flex flex-col items-start my-2'>
-                  <span className='font-semibold'>{channeldata.name}</span>
-                  <span className='text-sm  text-darkgray font-semibold'>{channeldata.team_name} 워크스페이스</span>
+              <div className='flex items-center gap-[75px] ' key={channeldata.id}>
+                <div className='flex items-center gap-6'>
+                  <img className="w-7 h-7 rounded-md" src={channeldata.team_icon} alt="icon" />
+                  <div className='flex flex-col items-start my-2'>
+                    <span className='font-semibold'>{channeldata.name}</span>
+                    <span className='text-sm  text-darkgray font-semibold'>{channeldata.team_name} 워크스페이스</span>
+                  </div>
+                </div>
+                <div className='cursor-pointer  font-bold' onClick={() => handleDeleteChannel(channeldata.id)}>
+                  <span>X</span>
                 </div>
               </div>
             ))}
