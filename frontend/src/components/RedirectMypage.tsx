@@ -1,6 +1,8 @@
+import { AxiosHeaders } from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { postSlackToken } from "../api/api";
+import { getSlackToken, postSlackToken } from "../api/api";
+import { sendEventToAmplitude } from "./Amplitude";
 
 
 
@@ -17,7 +19,10 @@ const RedirectMypage = () => {
       const sendAccessToken = async () => {
         try {
           const response = await postSlackToken({ code: accessCode });
+          const responseHeaders = (response.headers as AxiosHeaders).get?.("Location");
           if (response.status === 201) {
+            const responseAmplitudeData = await getSlackToken(responseHeaders)
+            sendEventToAmplitude("complete to add destination", {"workspace" : responseAmplitudeData.data.team_name , "channel" : responseAmplitudeData.data.name})
             navigate("/");
           } else {
             console.log("API 서버로 전송 중 오류가 발생했습니다.");

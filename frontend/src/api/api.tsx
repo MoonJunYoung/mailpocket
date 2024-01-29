@@ -41,14 +41,24 @@ export const postSignUpData = (data: postAuthDataType) => {
   return axiosData().post("/api/user/sign-up", data);
 };
 
+//slack
+
 export const postSlackToken = (data: SlackTokenType) => {
   return axiosData().post("/api/channel", data);
 };
+
+export const getSlackToken = (data: any) => {
+  return axiosData().get(`/api/${data}`);
+};
+
 
 // Channle
 
 export const getChannelData = (query: string) => {
   return axiosData().get(query);
+};
+export const deleteChannelData = (data:number) => {
+  return axiosData().delete(`/api/channel/${data}`);
 };
 
 // Subscribe

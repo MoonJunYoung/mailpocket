@@ -2,10 +2,10 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { postSignInData } from '../../api/api'
+import { getSubscribeData, postSignInData } from '../../api/api'
+import { sendEventToAmplitude } from '../Amplitude'
 import Nav from '../Nav'
 import Symbol from '../Symbol'
-
 
 
 const SignIn = () => {
@@ -24,14 +24,17 @@ const SignIn = () => {
       ...formData,
       [name]: value
     })
-
   };
+
+  
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await postSignInData(formData);
       if (response.status === 201) {
+        sendEventToAmplitude("complete sign in", "")
         Cookies.set("authToken", response.data, {
           expires: 30,
         });
@@ -44,6 +47,7 @@ const SignIn = () => {
     }
   };
 
+
   useEffect(() => {
     if (formData.identifier.length > 0 && formData.password.length > 0) {
       setNotAllow(false);
@@ -52,34 +56,36 @@ const SignIn = () => {
     setNotAllow(true);
   }, [formData]);
 
+  useEffect(() => {
+    sendEventToAmplitude('view sign in', '');
+  }, []);
+
   return (
-    <div>
+    <div className='text-center mx-auto max-w-900 h-auto'>
       <Nav />
       <div className='basecontainer'>
         <Symbol />
         <div className='basecontainer-submitcontainer signin-container'>
           <form className='authcontainer-submit' onSubmit={handleSubmit}>
             <p className='authcontainer-submit_title'>
-              로그인
+              Sign In
             </p>
-            <p className='authcontainer-submit_coment '>
-              아이디
-            </p>
-            <div className='authcontainer-submit_box'>
+
+            <div className='authcontainer-submit_box my-4'>
               <input className='authcontainer-submit_data'
                 type="text"
                 name="identifier"
                 value={formData.identifier}
+                placeholder=' Id'
                 onChange={handleInputChange}
               />
             </div>
-            <p className='authcontainer-submit_coment '>
-              비밀번호
-            </p>
+
             <div className='authcontainer-submit_box'>
               <input className='authcontainer-submit_data'
                 type="password"
                 name="password"
+                placeholder=' Password'
                 value={formData.password}
                 onChange={handleInputChange}
               />
@@ -88,7 +94,7 @@ const SignIn = () => {
               완료
             </button>
           </form>
-          <div>
+          <div className='mt-6'>
             <span className='auth-guidecoment'>아이디가 없으신가요?</span>
             <Link className='auth-link' to="/sign-up">10초만에 가입하기</Link>
           </div>

@@ -2,7 +2,8 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { getChannelData, getSubscribeData, Token } from '../../api/api';
+import { deleteChannelData, getChannelData, getSubscribeData, Token } from '../../api/api';
+import { sendEventToAmplitude } from '../../components/Amplitude';
 import Nav from '../../components/Nav'
 import Symbol from '../../components/Symbol'
 
@@ -21,12 +22,16 @@ const MyPage = () => {
 
   useEffect(() => {
     if (!authToken) {
-      navigate("/sign-in");
+      navigate("/landingpage");
+    } else {
+      sendEventToAmplitude('view my page', '');
     }
   }, [authToken, navigate]);
 
   const handleChannelAdd = () => {
+    sendEventToAmplitude("click add destination", '')
     window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
+
   }
 
   const handleGetChannel = async () => {
@@ -42,28 +47,37 @@ const MyPage = () => {
     }
   }
 
+  const handleDeleteChannel = async (channelId: number) => {
+    try {
+      await deleteChannelData(channelId);
+      setChannel(channel.filter((data) => data.id !== channelId));
+    } catch (error) {
+      console.log("Api 데이터 삭제 실패");
+    }
+  };
+
   useEffect(() => {
     handleGetChannel()
   }, [])
 
   const handleLogOut = () => {
     Cookies.remove("authToken");
-    navigate("/signd");
+    navigate("/sign-in");
   };
 
   return (
-    <div>
+    <div className='text-center mx-auto max-w-900 h-auto'>
       <div className='flex items-center justify-between'>
         <Nav />
         <div className="cursor-pointer" onClick={handleLogOut}>
           <div className="flex items-center font-bold" onClick={handleLogOut}>
-            <span className='mr-4 underline'>로그아웃</span>
+            <span className='mr-4 underline text-customPurple'>로그아웃</span>
           </div>
         </div>
       </div>
       <div className='basecontainer'>
         <Symbol />
-        <div className='basecontainer-submitcontainer channel-container p-7'>
+        <div className='mt-10 bg-white relative channel-container p-7 border border-solid border-gray-100' style={{ boxShadow: '5px 5px 1px whitesmoke' }}>
           <div className='flex flex-col items-start font-bold mb-3'>
             <div className='flex'>
               <Link className="underline text-customPurple" to='/subscribe'>뉴스레터</Link><h2>의 소식을</h2>
@@ -72,11 +86,16 @@ const MyPage = () => {
           </div>
           <div className='h-[232px] overflow-auto'>
             {channel.map((channeldata =>
-              <div className='flex items-center gap-6' key={channeldata.id}>
-                <img className="w-7 h-7 rounded-md" src={channeldata.team_icon} alt="icon" />
-                <div className='flex flex-col items-start my-2'>
-                  <span className='font-semibold'>{channeldata.name}</span>
-                  <span className='text-sm  text-darkgray font-semibold'>{channeldata.team_name} 워크스페이스</span>
+              <div className='flex items-center justify-between ' key={channeldata.id}>
+                <div className='flex items-center gap-6'>
+                  <img className="w-7 h-7 rounded-md" src={channeldata.team_icon} alt="icon" />
+                  <div className='flex flex-col items-start my-2'>
+                    <span className='font-semibold'>{channeldata.name}</span>
+                    <span className='text-sm  text-darkgray font-semibold'>{channeldata.team_name} 워크스페이스</span>
+                  </div>
+                </div>
+                <div className='cursor-pointer mr-7 font-bold' onClick={() => handleDeleteChannel(channeldata.id)}>
+                  <span>X</span>
                 </div>
               </div>
             ))}
