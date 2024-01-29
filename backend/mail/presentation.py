@@ -35,9 +35,9 @@ class MailPresentation:
     @router.get("", status_code=200)
     async def read_mail(request: Request, key: str):
         try:
-            mail_html = mail_service.read(
+            mail = mail_service.read(
                 s3_object_key=key,
             )
-            return HTMLResponse(content=mail_html)
+            return mail
         except Exception as e:
             catch_exception(e, request)
