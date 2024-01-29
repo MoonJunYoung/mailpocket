@@ -39,4 +39,4 @@ class MailService:
     def read(self, s3_object_key):
         mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
-        return mail.html_body
+        return mail
