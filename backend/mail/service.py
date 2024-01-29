@@ -23,13 +23,13 @@ class MailService:
         newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(
             mail.from_email
         ).run()
-        channels = self.channel_repository.loadChannelsByNewsletter(newsletter).run()
+        channels = self.channel_repository.ReadChannelsByNewsletter(newsletter).run()
         notified_slack_channel_id_list = list()
         if channels:
             try:
-                mail.mail_summary()
+                mail.summary()
             except:
-                mail.mail_fail_summary()
+                mail.fail_summary()
             for channel in channels:
                 if channel.slack_channel_id in notified_slack_channel_id_list:
                     continue
@@ -39,4 +39,4 @@ class MailService:
     def read(self, s3_object_key):
         mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
-        return mail.html_body
+        return mail
