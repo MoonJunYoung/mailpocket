@@ -38,7 +38,6 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await postSignUpData(formData);
-      console.log(response.status)
       if (response.status === 201) {
         sendEventToAmplitude("complete sign up", "")
         Cookies.set("authToken", response.data, {
