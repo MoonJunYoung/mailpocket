@@ -13,6 +13,17 @@ export const initializeAmplitude = async () => {
   amplitude.getInstance().init(amplitudeApiKey);
 };
 
+export const AmplitudeSetUserId = async () => {
+  const authToken = Token();
+  try {
+    if (authToken) {
+      const userInfo = await getUserData();
+      amplitude.getInstance().setUserId(userInfo.data.identifier);
+    }
+  } catch (error) {
+    console.error('Amplitude 초기화 중 오류 발생:', error);
+  }
+};
 
 export const AmplitudeResetUserId = async () => {
   try {

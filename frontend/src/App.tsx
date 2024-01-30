@@ -15,34 +15,28 @@ import amplitude from 'amplitude-js';
 
 
 
-
 function App() {
   const [amplitudeInitialized, setAmplitudeInitialized] = useState(false);
-  const token = Token();
 
   useEffect(() => {
-    initializeAmplitude().then(() => {
-      setAmplitudeInitialized(true);
-    })
-  }, [amplitudeInitialized]);
+    const initializeAndSetUserId = async () => {
+      try {
+        await initializeAmplitude();
+        setAmplitudeInitialized(true);
 
+        const authToken = Token();
 
-  useEffect(() => {
-    const setUserIdWithEmail = async () => {
-      if (token) {
-        try {
+        if (authToken) {
           const userInfo = await getUserData();
-          if (userInfo.data && userInfo.data.identifier) {
-            amplitude.getInstance().setUserId(userInfo.data.identifier);
-          }
-        } catch (error) {
-          console.error('사용자 정보 가져오기 중 오류 발생:', error);
+          amplitude.getInstance().setUserId(userInfo.data.identifier);
         }
+      } catch (error) {
+        console.error('Error in initialization:', error);
       }
     };
-    setUserIdWithEmail();
-  }, [token]);
 
+    initializeAndSetUserId();
+  }, []);
 
   return (
     <div className={amplitudeInitialized ? '' : 'flex justify-center'}>
