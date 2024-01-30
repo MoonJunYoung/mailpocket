@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { deleteChannelData, getChannelData, getSubscribeData, Token } from '../../api/api';
-import { sendEventToAmplitude } from '../../components/Amplitude';
+import Inquiry from '../../components/ Inquiry';
+import { AmplitudeResetUserId, sendEventToAmplitude } from '../../components/Amplitude';
 import Nav from '../../components/Nav'
 import Symbol from '../../components/Symbol'
 
@@ -20,6 +21,7 @@ const MyPage = () => {
   const navigate = useNavigate();
   const authToken = Token();
 
+
   useEffect(() => {
     if (!authToken) {
       navigate("/landingpage");
@@ -31,7 +33,6 @@ const MyPage = () => {
   const handleChannelAdd = () => {
     sendEventToAmplitude("click add destination", '')
     window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
-
   }
 
   const handleGetChannel = async () => {
@@ -60,9 +61,10 @@ const MyPage = () => {
     handleGetChannel()
   }, [])
 
-  const handleLogOut = () => {
-    Cookies.remove("authToken");
-    navigate("/sign-in");
+  const handleLogOut = async () => {
+    Cookies.remove('authToken');
+    await AmplitudeResetUserId()
+    navigate('/sign-in');
   };
 
   return (
@@ -102,8 +104,8 @@ const MyPage = () => {
           </div>
           <button className='basecontainer-submitdata' onClick={handleChannelAdd}>채널 추가하기</button>
         </div>
+        <Inquiry />
       </div>
-
     </div>
   )
 }

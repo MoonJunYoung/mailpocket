@@ -67,7 +67,7 @@ const LandingPage = () => {
             </div>
             <div className='mt-4 font-bold text-base md:text-sm'>
               <p>눈으로만 훑어보세요. 재미 있는 뉴스라면 조금 더 자세히 보고,</p>
-              <p>슬랙의 save item 을 사용하면 나중에 읽을 수도 있어요</p>
+              <p>슬랙의 save item을 사용하면 나중에 읽을 수도 있어요.</p>
             </div>
           </div>
           <div>
@@ -79,7 +79,7 @@ const LandingPage = () => {
             </div>
             <div className='mt-4 font-bold text-base md:text-sm'>
               <p>뉴스레터 때문에 메일함이 항상 999+ 개 이상 쌓여 있고, 중요 메일 놓쳐본적 많으시죠?</p>
-              <p>뉴스레터는 메일 포켓이 받고 , 슬랙으로 요약해서 슝-🚀 보내 드릴게요.</p>
+              <p>뉴스레터는 메일 포켓이 받고, 슬랙으로 요약해서 슝-🚀 보내 드릴게요.</p>
             </div>
           </div>
           <div className='font-semibold mt-14 border border-1 border-white w-full p-2 rounded-lg bg-whitesmoke'>메일포켓을 미리 알아볼까요?</div>
@@ -90,7 +90,7 @@ const LandingPage = () => {
             <div>
               <h1 className='font-extrabold text-xl'>다양한 뉴스레터가 여러분을 기다리고 있어요!</h1>
               <div className='mt-8 font-bold text-base'>
-                <p>메일포켓은 IT, 시사, 제테크를 비롯한 다양한 분야의 뉴스레터를 품고 있어요.</p>
+                <p>메일포켓은 IT, 시사, 재테크를 비롯한 다양한 분야의 뉴스레터를 품고 있어요.</p>
                 <p className='mt-4'>여러 주제에서 벌어지고 있는 흥미로운 이야기와 혁신적인 소식들을 하나둘씩</p>
                 <p>열어보면 어떨까요?</p>
                 <p className='mt-4'>여러분의 궁금증을 해소할 최신 소식과 유용한 정보들이 여기 기다리고 있어요!</p>

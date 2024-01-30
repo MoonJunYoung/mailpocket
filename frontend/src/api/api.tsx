@@ -31,6 +31,11 @@ export const getReadMailData = (data: string | null) => {
   return axiosData().get(`/api/mail?key=${data}`);
 };
 
+export const getUserData = () => {
+  return axiosData().get("/api/user");
+};
+
+
 // Auth
 
 export const postSignInData = (data: postAuthDataType) => {
@@ -57,7 +62,7 @@ export const getSlackToken = (data: any) => {
 export const getChannelData = (query: string) => {
   return axiosData().get(query);
 };
-export const deleteChannelData = (data:number) => {
+export const deleteChannelData = (data: number) => {
   return axiosData().delete(`/api/channel/${data}`);
 };
 

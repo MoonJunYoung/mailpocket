@@ -10,22 +10,37 @@ import LandingPage from './pages/LandingPage';
 import { useEffect, useState } from 'react';
 import { initializeAmplitude } from './components/Amplitude';
 import PageLoding from './components/PageLoding';
+import { Token, getUserData } from './api/api';
+import amplitude from 'amplitude-js';
+
 
 
 function App() {
-  const [amplitudeinitialized, setAmplitudeInitialized] = useState(false)
-
+  const [amplitudeInitialized, setAmplitudeInitialized] = useState(false);
 
   useEffect(() => {
-    initializeAmplitude().then(() => {
-      setAmplitudeInitialized(true);
-    })
+    const initializeAndSetUserId = async () => {
+      try {
+        await initializeAmplitude();
+        setAmplitudeInitialized(true);
+
+        const authToken = Token();
+
+        if (authToken) {
+          const userInfo = await getUserData();
+          amplitude.getInstance().setUserId(userInfo.data.identifier);
+        }
+      } catch (error) {
+        console.error('Error in initialization:', error);
+      }
+    };
+
+    initializeAndSetUserId();
   }, []);
 
-
   return (
-    <div className={amplitudeinitialized ? '' : 'flex justify-center'}>
-      {amplitudeinitialized ? <Router>
+    <div className={amplitudeInitialized ? '' : 'flex justify-center'}>
+      {amplitudeInitialized ? <Router>
         <Routes>
           <Route index element={<MyPage />} />
           <Route path="/sign-in" element={<SignIn />} />
