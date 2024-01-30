@@ -104,8 +104,8 @@ const MyPage = () => {
           </div>
           <button className='basecontainer-submitdata' onClick={handleChannelAdd}>채널 추가하기</button>
         </div>
+        <Inquiry />
       </div>
-      <Inquiry />
     </div>
   )
 }
