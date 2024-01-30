@@ -62,7 +62,7 @@ export const getSlackToken = (data: any) => {
 export const getChannelData = (query: string) => {
   return axiosData().get(query);
 };
-export const deleteChannelData = (data:number) => {
+export const deleteChannelData = (data: number) => {
   return axiosData().delete(`/api/channel/${data}`);
 };
 

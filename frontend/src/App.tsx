@@ -10,23 +10,43 @@ import LandingPage from './pages/LandingPage';
 import { useEffect, useState } from 'react';
 import { initializeAmplitude } from './components/Amplitude';
 import PageLoding from './components/PageLoding';
+import { Token, getUserData } from './api/api';
+import amplitude from 'amplitude-js';
+
 
 
 
 function App() {
-  const [amplitudeinitialized, setAmplitudeInitialized] = useState(false)
-
+  const [amplitudeInitialized, setAmplitudeInitialized] = useState(false);
+  const token = Token();
 
   useEffect(() => {
     initializeAmplitude().then(() => {
       setAmplitudeInitialized(true);
     })
-  }, []);
+  }, [amplitudeInitialized]);
+
+
+  useEffect(() => {
+    const setUserIdWithEmail = async () => {
+      if (token) {
+        try {
+          const userInfo = await getUserData();
+          if (userInfo.data && userInfo.data.identifier) {
+            amplitude.getInstance().setUserId(userInfo.data.identifier);
+          }
+        } catch (error) {
+          console.error('사용자 정보 가져오기 중 오류 발생:', error);
+        }
+      }
+    };
+    setUserIdWithEmail();
+  }, [token]);
 
 
   return (
-    <div className={amplitudeinitialized ? '' : 'flex justify-center'}>
-      {amplitudeinitialized ? <Router>
+    <div className={amplitudeInitialized ? '' : 'flex justify-center'}>
+      {amplitudeInitialized ? <Router>
         <Routes>
           <Route index element={<MyPage />} />
           <Route path="/sign-in" element={<SignIn />} />

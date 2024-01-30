@@ -21,6 +21,7 @@ const MyPage = () => {
   const navigate = useNavigate();
   const authToken = Token();
 
+
   useEffect(() => {
     if (!authToken) {
       navigate("/landingpage");

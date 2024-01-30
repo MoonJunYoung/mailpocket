@@ -14,41 +14,14 @@ export const initializeAmplitude = async () => {
 };
 
 
-export const AmplitudeSetUserId = async () => {
-  const authToken = Token();
-  try {
-    if (authToken) {
-      const userInfo = await fetchUserInfoFromServer();
-      amplitude.getInstance().setUserId(userInfo.identifier);
-    }
-  } catch (error) {
-    console.error('Amplitude 초기화 중 오류 발생:', error);
-  }
-};
-
 export const AmplitudeResetUserId = async () => {
   try {
-    amplitude.getInstance().regenerateDeviceId();
+    amplitude.getInstance().setUserId(null);
   } catch (error) {
     console.error('Amplitude 초기화 중 오류 발생:', error);
   }
 };
 
-
-
-const fetchUserInfoFromServer = async () => {
-  try {
-    const response = await getUserData();
-    if (response.status === 200) {
-      const userInfo = response.data;
-      return userInfo;
-    } else {
-      throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
-    }
-  } catch (error) {
-    console.error('사용자 정보를 가져오는 동안 오류 발생:', error);
-  }
-};
 
 
 export const sendEventToAmplitude = async (eventName: string, properties: any) => {
