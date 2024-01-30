@@ -67,7 +67,7 @@ const LandingPage = () => {
             </div>
             <div className='mt-4 font-bold text-base md:text-sm'>
               <p>눈으로만 훑어보세요. 재미 있는 뉴스라면 조금 더 자세히 보고,</p>
-              <p>슬랙의 save item 을 사용하면 나중에 읽을 수도 있어요</p>
+              <p>슬랙의 save item 을 사용하면 나중에 읽을 수도 있어요.</p>
             </div>
           </div>
           <div>

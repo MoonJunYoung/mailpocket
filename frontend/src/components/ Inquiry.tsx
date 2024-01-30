@@ -7,7 +7,7 @@ const Inquiry = () => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        문의하기 가기
+        문의하러 가기
       </a>
     </div>
   );
