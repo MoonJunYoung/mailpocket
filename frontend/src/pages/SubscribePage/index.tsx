@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getNewsletterData, getSubscribeData, putSubscribe, Token } from '../../api/api';
+import Inquiry from '../../components/ Inquiry';
 import { sendEventToAmplitude } from '../../components/Amplitude';
 import Nav from '../../components/Nav';
 import Symbol from '../../components/Symbol';
@@ -27,16 +28,6 @@ const Subscribe = () => {
   const [newsletterchecked, setNewsLetterChecked] = useState<string[]>([])
   const [newsletterselect, setNewsLetterSelect] = useState<string>('')
 
-
-  useEffect(() => {
-    const newsletterSelectArticle = () => {
-      const newsletterss = newsletter.find(item => item.id === newsletterselect);
-      if (newsletterss) {
-        sendEventToAmplitude("select article", { "article name": newsletterss.name })
-      }
-    }
-    newsletterSelectArticle()
-  }, [newsletterselect])
 
 
 
@@ -117,13 +108,15 @@ const Subscribe = () => {
 
   const handleNewsLetterSelected = (newsletterid: string) => {
     setNewsLetterChecked((prevChecked) => {
+      const newsletters = newsletter.find(item => item.id === newsletterid);
       if (prevChecked.includes(newsletterid)) {
         return prevChecked.filter((id) => id !== newsletterid);
       } else {
+        sendEventToAmplitude("select article", { "article name": newsletters?.name });
         return [...prevChecked, newsletterid];
       }
     });
-    setNewsLetterSelect(newsletterid)
+    setNewsLetterSelect(newsletterid);
   };
 
 
@@ -134,7 +127,7 @@ const Subscribe = () => {
       <Nav />
       <div className='basecontainer'>
         <Symbol />
-        <div className='flex flex-col border border-solid border-gray-100 mt-10 mb-10 bg-white h-[530px] overflow-hidden w-[330px] md:w-[350px] p-7  shadow-xl'>
+        <div className='flex flex-col border border-solid border-gray-100 mt-10 bg-white h-[530px] overflow-hidden w-[330px] md:w-[350px] p-7  shadow-xl'>
           <div className='flex-1 overflow-y-auto'>
             <div className='flex items-start justify-center font-bold mb-3'>
               <h2>소식을 받고싶은 뉴스레터가 있나요?</h2>
@@ -298,6 +291,7 @@ const Subscribe = () => {
           </div>
           <button className='mt-8 h-[40px] rounded-lg border-none bg-customPurple text-white text-base font-bold w-[275px] md:w-[285px]' onClick={handlePostNewsLetterData}>구독하기</button>
         </div>
+        <Inquiry />
       </div>
     </div>
   );

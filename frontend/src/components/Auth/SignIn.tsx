@@ -2,8 +2,8 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { getSubscribeData, postSignInData } from '../../api/api'
-import { sendEventToAmplitude } from '../Amplitude'
+import { postSignInData } from '../../api/api'
+import { sendEventToAmplitude, AmplitudeSetUserId } from '../Amplitude'
 import Nav from '../Nav'
 import Symbol from '../Symbol'
 
@@ -26,8 +26,8 @@ const SignIn = () => {
     })
   };
 
-  
-  
+
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,6 +38,7 @@ const SignIn = () => {
         Cookies.set("authToken", response.data, {
           expires: 30,
         });
+        AmplitudeSetUserId()
         navigate("/");
       } else {
         alert("아이디 및 비밀번호를 확인해주세요.")

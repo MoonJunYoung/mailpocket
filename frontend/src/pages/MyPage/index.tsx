@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { deleteChannelData, getChannelData, getSubscribeData, Token } from '../../api/api';
+import Inquiry from '../../components/ Inquiry';
 import { sendEventToAmplitude } from '../../components/Amplitude';
 import Nav from '../../components/Nav'
 import Symbol from '../../components/Symbol'
@@ -103,7 +104,7 @@ const MyPage = () => {
           <button className='basecontainer-submitdata' onClick={handleChannelAdd}>채널 추가하기</button>
         </div>
       </div>
-
+      <Inquiry />
     </div>
   )
 }

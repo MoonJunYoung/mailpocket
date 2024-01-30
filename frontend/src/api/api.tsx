@@ -31,6 +31,11 @@ export const getReadMailData = (data: string | null) => {
   return axiosData().get(`/api/mail?key=${data}`);
 };
 
+export const getUserData = () => {
+  return axiosData().get("/api/user");
+};
+
+
 // Auth
 
 export const postSignInData = (data: postAuthDataType) => {

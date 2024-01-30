@@ -12,6 +12,7 @@ import { initializeAmplitude } from './components/Amplitude';
 import PageLoding from './components/PageLoding';
 
 
+
 function App() {
   const [amplitudeinitialized, setAmplitudeInitialized] = useState(false)
 

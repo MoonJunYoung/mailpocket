@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { postSignUpData } from '../../api/api'
-import { sendEventToAmplitude } from '../Amplitude'
+import { sendEventToAmplitude, AmplitudeSetUserId } from '../Amplitude'
 import Nav from '../Nav'
 import Symbol from '../Symbol'
 
@@ -43,6 +43,7 @@ const SignUp = () => {
         Cookies.set("authToken", response.data, {
           expires: 30,
         });
+        AmplitudeSetUserId()
         navigate("/subscribe");
       }
 
