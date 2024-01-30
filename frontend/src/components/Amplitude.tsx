@@ -12,7 +12,6 @@ const ampKey = process.env.NODE_ENV === 'development' ? devAmplitudeApiKey : amp
 
 export const initializeAmplitude = async () => {
   amplitude.getInstance().init(ampKey);
-  console.log(process.env.NODE_ENV)
 };
 
 export const AmplitudeSetUserId = async () => {
