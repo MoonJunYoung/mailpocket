@@ -34,11 +34,11 @@ const SignIn = () => {
     try {
       const response = await postSignInData(formData);
       if (response.status === 201) {
-        sendEventToAmplitude("complete sign in", "")
         Cookies.set("authToken", response.data, {
           expires: 30,
         });
-        AmplitudeSetUserId()
+        await AmplitudeSetUserId()
+        sendEventToAmplitude("complete sign in", "")
         navigate("/");
       } else {
         alert("아이디 및 비밀번호를 확인해주세요.")
