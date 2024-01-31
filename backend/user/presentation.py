@@ -1,9 +1,8 @@
-from typing import Optional
-
 from fastapi import APIRouter, Header, Request
 from pydantic import BaseModel
 
 from backend.common.exceptions import catch_exception
+from backend.common.oauth import Oauth
 from backend.common.token import Token
 from backend.user.service import UserService
 
@@ -13,6 +12,10 @@ user_service = UserService()
 class LogInData(BaseModel):
     identifier: str
     password: str
+
+
+class OauthData(BaseModel):
+    token: str
 
 
 class UserPresentation:
@@ -49,3 +52,36 @@ class UserPresentation:
             return Token.create_token_by_user_id(user_id)
         except Exception as e:
             catch_exception(e, request)
+
+    @router.post("/google-login", status_code=201)
+    async def google_login(oauth: OauthData):
+        try:
+            platform = "google"
+            name, platform_id = Oauth.get_user_platform_id_by_google_oauth(oauth.token)
+            user_id = user_service.oauth_login(name, platform_id, platform)
+            return Token.create_token_by_user_id(user_id)
+
+        except Exception as e:
+            catch_exception(e)
+
+    @router.post("/kakao-login", status_code=201)
+    async def kakao_login(oauth: OauthData):
+        try:
+            platform = "kakao"
+            name, platform_id = Oauth.get_user_platform_id_by_kakao_oauth(oauth.token)
+            user_id = user_service.oauth_login(name, platform_id, platform)
+            return Token.create_token_by_user_id(user_id)
+
+        except Exception as e:
+            catch_exception(e)
+
+    @router.post("/naver-login", status_code=201)
+    async def naver_login(oauth: OauthData):
+        try:
+            platform = "naver"
+            name, platform_id = Oauth.get_user_platform_id_by_naver_oauth(oauth.token)
+            user_id = user_service.oauth_login(name, platform_id, platform)
+            return Token.create_token_by_user_id(user_id)
+
+        except Exception as e:
+            catch_exception(e)

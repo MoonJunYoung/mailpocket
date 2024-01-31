@@ -85,3 +85,25 @@ class UserRepository:
             for subscribe_model in subscribe_models:
                 self.session.delete(subscribe_model)
             self.session.commit()
+
+    class ReadUserByPlatformID(MysqlCRUDTemplate):
+        def __init__(self, platform_id, platform) -> None:
+            self.platform_id = platform_id
+            self.platform = platform
+            super().__init__()
+
+        def execute(self):
+            user_model = (
+                self.session.query(UserModel)
+                .filter(UserModel.platform == self.platform)
+                .filter(UserModel.platform_id == self.platform_id)
+                .first()
+            )
+            if not user_model:
+                return None
+            user = User(
+                id=user_model.id,
+                platform_id=user_model.platform_id,
+                platform=user_model.platform,
+            )
+            return user
