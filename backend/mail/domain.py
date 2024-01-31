@@ -1,7 +1,7 @@
 from email import policy
 from email.parser import BytesParser
 
-from backend.common.summary import mail_summary
+from backend.common.gpt_prompt import mail_summary
 
 
 class Mail:

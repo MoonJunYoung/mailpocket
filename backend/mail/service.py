@@ -1,10 +1,7 @@
-from backend.channel.domain import Channel
 from backend.channel.repository import ChannelRepository
 from backend.common.slack_api import SlackAPI
-from backend.mail.domain import Mail
 from backend.mail.repository import MailRepository
 from backend.newsletter.repository import NewsLetterRepository
-from backend.user.domain import User
 from backend.user.repository import UserRepository
 
 
