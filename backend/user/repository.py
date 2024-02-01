@@ -14,6 +14,8 @@ class UserRepository:
                 id=None,
                 identifier=self.user.identifier,
                 password=self.user.password,
+                platform=self.user.platform,
+                platform_id=self.user.platform_id,
             )
             self.session.add(user_model)
             self.session.commit()
@@ -54,6 +56,8 @@ class UserRepository:
                 id=user_model.id,
                 identifier=user_model.identifier,
                 password=user_model.password,
+                platform_id=user_model.platform_id,
+                platform=user_model.platform,
             )
             return user
 
