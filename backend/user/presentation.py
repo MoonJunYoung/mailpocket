@@ -19,7 +19,7 @@ class OauthData(BaseModel):
 
 
 class UserPresentation:
-    router = APIRouter(prefix="/api/user")
+    router = APIRouter(prefix="/testapi/user")
 
     @router.get("", status_code=200)
     async def read(request: Request, Authorization: str = Header(None)):
