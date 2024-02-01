@@ -15,6 +15,8 @@ import amplitude from 'amplitude-js';
 
 
 
+
+
 function App() {
   const [amplitudeInitialized, setAmplitudeInitialized] = useState(false);
 

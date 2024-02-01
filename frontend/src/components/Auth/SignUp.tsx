@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { postSignUpData } from '../../api/api'
+import { postSignUpData, Token } from '../../api/api'
 import { AmplitudeSetUserId, sendEventToAmplitude } from '../Amplitude'
 import Nav from '../Nav'
 import Symbol from '../Symbol'
@@ -17,6 +17,7 @@ const SignUp = () => {
   const [notAllow, setNotAllow] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const navigate = useNavigate();
+  const authToken = Token();
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,10 +61,14 @@ const SignUp = () => {
     setNotAllow(true);
   }, [isPasswordValid]);
 
-
   useEffect(() => {
-    sendEventToAmplitude('view sign up', '');
-  }, []);
+    if (authToken) {
+      navigate("/");
+    } else {
+      sendEventToAmplitude('view sign up', '');
+    }
+  }, [authToken, navigate]);
+
 
 
   return (

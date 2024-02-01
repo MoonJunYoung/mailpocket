@@ -37,7 +37,7 @@ export const AmplitudeResetUserId = async () => {
 
 export const sendEventToAmplitude = async (eventName: string, properties: any) => {
   try {
-    // console.log(`${eventName}: ${JSON.stringify(properties || {})}`)
+    console.log(`${eventName}: ${JSON.stringify(properties || {})}`)
     // // if (process.env.NODE_ENV === 'development') {
     // //   console.log(`${eventName}: ${JSON.stringify(properties || {})}`)
     // // }

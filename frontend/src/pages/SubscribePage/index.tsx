@@ -25,6 +25,8 @@ const Subscribe = () => {
   const [newsletterzetechdata, setNewsLetterZetechData] = useState<NewsLetterDataType[]>([])
   const [newslettersocietydata, setNewsLetterSocietyData] = useState<NewsLetterDataType[]>([])
   const [newsletterfooddata, setNewsLetterFoodData] = useState<NewsLetterDataType[]>([])
+  const [newsletterhobbydata, setNewsLetterHobbyData] = useState<NewsLetterDataType[]>([])
+  const [newslettertripata, setNewsLetterTripData] = useState<NewsLetterDataType[]>([])
   const [newsletterchecked, setNewsLetterChecked] = useState<string[]>([])
   const [newsletterselect, setNewsLetterSelect] = useState<string>('')
 
@@ -51,6 +53,8 @@ const Subscribe = () => {
   useFilteredDataEffect("비즈/제테크", setNewsLetterZetechData);
   useFilteredDataEffect("시사/사회", setNewsLetterSocietyData);
   useFilteredDataEffect("푸드", setNewsLetterFoodData);
+  useFilteredDataEffect("취미/자기계발", setNewsLetterHobbyData);
+  useFilteredDataEffect("여행", setNewsLetterTripData);
 
 
 
@@ -130,7 +134,7 @@ const Subscribe = () => {
         <div className='flex flex-col border border-solid border-gray-100 mt-10 bg-white h-[530px] overflow-hidden w-[330px] md:w-[350px] p-7  shadow-xl'>
           <div className='flex-1 overflow-y-auto'>
             <div className='flex items-start justify-center font-bold mb-3'>
-              <h2>소식을 받고싶은 뉴스레터가 있나요?</h2>
+              <h2>소식을 받고싶은 <a className="cursor-pointer text-customPurple underline" href="https://forms.gle/cAF19LrQyWAQ2XnSA" target="_blank" rel="noopener noreferrer">뉴스레터</a>가 있나요?</h2>
             </div>
             <div className='relative'>
               <div className='flex flex-col items-start'>
@@ -272,6 +276,44 @@ const Subscribe = () => {
                 <p className='text-medium  font-bold my-3 ml-2'># 푸드</p>
                 <div className='grid grid-cols-4'>
                   {newsletterfooddata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='flex flex-col items-start'>
+                <p className='text-medium  font-bold my-3 ml-2'># 취미/자기계발</p>
+                <div className='grid grid-cols-4'>
+                  {newsletterhobbydata.map((data) =>
+                    <div className='m-1 relative' key={data.id}>
+                      <label>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
+                        {newsletterchecked.includes(data.id) && (
+                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
+                        )}
+                        <div className="flex flex-col items-center">
+                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='flex flex-col items-start'>
+                <p className='text-medium  font-bold my-3 ml-2'># 여행</p>
+                <div className='grid grid-cols-4'>
+                  {newslettertripata.map((data) =>
                     <div className='m-1 relative' key={data.id}>
                       <label>
                         <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />

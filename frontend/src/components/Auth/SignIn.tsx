@@ -2,9 +2,10 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { postSignInData } from '../../api/api'
+import { postSignInData, Token } from '../../api/api'
 import { AmplitudeSetUserId, sendEventToAmplitude } from '../Amplitude'
 import Nav from '../Nav'
+import { GoogleLogin, KakaoLogin, NaverLogin } from '../Social/SocialPlatformLogin'
 import Symbol from '../Symbol'
 
 
@@ -16,6 +17,7 @@ const SignIn = () => {
   const [notAllow, setNotAllow] = useState(true);
 
   const navigate = useNavigate();
+  const authToken = Token();
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +28,13 @@ const SignIn = () => {
     })
   };
 
+  useEffect(() => {
+    if (authToken) {
+      navigate("/");
+    } else {
+      sendEventToAmplitude('view sign in', '');
+    }
+  }, [authToken, navigate]);
 
 
 
@@ -56,10 +65,6 @@ const SignIn = () => {
     }
     setNotAllow(true);
   }, [formData]);
-
-  useEffect(() => {
-    sendEventToAmplitude('view sign in', '');
-  }, []);
 
   return (
     <div className='text-center mx-auto max-w-900 h-auto'>
@@ -98,6 +103,14 @@ const SignIn = () => {
           <div className='mt-6'>
             <span className='auth-guidecoment'>아이디가 없으신가요?</span>
             <Link className='auth-link' to="/sign-up">10초만에 가입하기</Link>
+          </div>
+          <div className='flex justify-center items-centerf gap-5 mt-8'>
+            {navigator.userAgent.includes("KAKAOTALK") ? null : <GoogleLogin />}
+            <KakaoLogin />
+            <NaverLogin />
+          </div>
+          <div className='mt-5 font-semibold text-xs  text-gray-400'>
+            <p>개인 정보는 저장하지 않고, 식별하기 위한 단순한 값만 저장하고 있어요.</p>
           </div>
         </div>
       </div>

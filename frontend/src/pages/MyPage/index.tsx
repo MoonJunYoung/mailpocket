@@ -32,6 +32,7 @@ const MyPage = () => {
 
   const handleChannelAdd = () => {
     sendEventToAmplitude("click add destination", '')
+    alert("채널 검색 하단에 다이렉트 메시지로도 뉴스레터 소식을 받을 수 있습니다.")
     window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
   }
 
