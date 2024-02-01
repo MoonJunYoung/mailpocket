@@ -57,8 +57,8 @@ class UserPresentation:
     async def google_login(request: Request, oauth: OauthData):
         try:
             platform = "google"
-            name, platform_id = Oauth.get_user_platform_id_by_google_oauth(oauth.token)
-            user_id = user_service.oauth_login(name, platform_id, platform)
+            platform_id = Oauth.get_user_platform_id_by_google_oauth(oauth.token)
+            user_id = user_service.oauth_login(platform_id, platform)
             return Token.create_token_by_user_id(user_id)
 
         except Exception as e:
@@ -68,8 +68,8 @@ class UserPresentation:
     async def kakao_login(request: Request, oauth: OauthData):
         try:
             platform = "kakao"
-            name, platform_id = Oauth.get_user_platform_id_by_kakao_oauth(oauth.token)
-            user_id = user_service.oauth_login(name, platform_id, platform)
+            platform_id = Oauth.get_user_platform_id_by_kakao_oauth(oauth.token)
+            user_id = user_service.oauth_login(platform_id, platform)
             return Token.create_token_by_user_id(user_id)
 
         except Exception as e:
@@ -79,8 +79,8 @@ class UserPresentation:
     async def naver_login(request: Request, oauth: OauthData):
         try:
             platform = "naver"
-            name, platform_id = Oauth.get_user_platform_id_by_naver_oauth(oauth.token)
-            user_id = user_service.oauth_login(name, platform_id, platform)
+            platform_id = Oauth.get_user_platform_id_by_naver_oauth(oauth.token)
+            user_id = user_service.oauth_login(platform_id, platform)
             return Token.create_token_by_user_id(user_id)
 
         except Exception as e:
