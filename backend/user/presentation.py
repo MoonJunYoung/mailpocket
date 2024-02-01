@@ -54,7 +54,7 @@ class UserPresentation:
             catch_exception(e, request)
 
     @router.post("/google-login", status_code=201)
-    async def google_login(oauth: OauthData):
+    async def google_login(request: Request, oauth: OauthData):
         try:
             platform = "google"
             name, platform_id = Oauth.get_user_platform_id_by_google_oauth(oauth.token)
@@ -62,10 +62,10 @@ class UserPresentation:
             return Token.create_token_by_user_id(user_id)
 
         except Exception as e:
-            catch_exception(e)
+            catch_exception(e, request)
 
     @router.post("/kakao-login", status_code=201)
-    async def kakao_login(oauth: OauthData):
+    async def kakao_login(request: Request, oauth: OauthData):
         try:
             platform = "kakao"
             name, platform_id = Oauth.get_user_platform_id_by_kakao_oauth(oauth.token)
@@ -73,10 +73,10 @@ class UserPresentation:
             return Token.create_token_by_user_id(user_id)
 
         except Exception as e:
-            catch_exception(e)
+            catch_exception(e, request)
 
     @router.post("/naver-login", status_code=201)
-    async def naver_login(oauth: OauthData):
+    async def naver_login(request: Request, oauth: OauthData):
         try:
             platform = "naver"
             name, platform_id = Oauth.get_user_platform_id_by_naver_oauth(oauth.token)
@@ -84,4 +84,4 @@ class UserPresentation:
             return Token.create_token_by_user_id(user_id)
 
         except Exception as e:
-            catch_exception(e)
+            catch_exception(e, request)
