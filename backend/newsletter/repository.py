@@ -4,11 +4,13 @@ from backend.channel.domain import Channel
 from backend.common.database.connector import MysqlCRUDTemplate
 from backend.common.database.model import (
     ChannelModel,
+    MailModel,
     NewsLetterModel,
     SubscribeModel,
     UserModel,
 )
 from backend.common.exceptions import UnknownFromEamilException
+from backend.mail.domain import Mail
 from backend.newsletter.domain import NewsLetter
 from backend.user.domain import User
 
@@ -19,12 +21,25 @@ class NewsLetterRepository:
             newsletters = list()
             newsletter_models = self.session.query(NewsLetterModel).all()
             for newsletter_model in newsletter_models:
+                mail = None
+                mail_model = (
+                    self.session.query(MailModel)
+                    .filter(MailModel.newsletter_id == newsletter_model.id)
+                    .first()
+                )
+                if mail_model:
+                    mail = Mail(
+                        id=mail_model.id,
+                        s3_object_key=mail_model.s3_object_key,
+                        summary_list=mail_model.summary_list,
+                    )
                 newsletter = NewsLetter(
                     id=newsletter_model.id,
                     name=newsletter_model.name,
                     from_email=newsletter_model.from_email,
                     category=newsletter_model.category,
                     send_date=newsletter_model.send_date,
+                    mail=mail,
                 )
                 newsletters.append(newsletter)
             return newsletters

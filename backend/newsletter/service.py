@@ -22,8 +22,6 @@ class NewsLetterService:
         newsletter_list = list()
         newsletters = self.newsletter_repository.LoadNewsletters().run()
         for newsletter in newsletters:
-            mail = self.mail_repository.ReadOneMailByNewsletter(newsletter).run()
-            newsletter.load_mail(mail)
             newsletter_list.append(NewsLetterlDTO(newsletter))
         return newsletter_list
 

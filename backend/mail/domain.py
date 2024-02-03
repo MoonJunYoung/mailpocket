@@ -11,8 +11,7 @@ class Mail:
         self.id = id
         self.mail_content = mail_content
         self.s3_object_key = s3_object_key
-        if summary_list:
-            self.summary_list = summary_list
+        self.summary_list = summary_list
 
     def parser_eamil(self):
         parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)
