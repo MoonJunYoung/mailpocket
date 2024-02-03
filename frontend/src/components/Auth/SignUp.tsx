@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { postSignUpData, Token } from '../../api/api'
 import { AmplitudeSetUserId, sendEventToAmplitude } from '../Amplitude'
 import Nav from '../Nav'
+import { GoogleLogin, KakaoLogin, NaverLogin } from '../Social/SocialPlatformLogin'
 import Symbol from '../Symbol'
 
 
@@ -112,6 +113,14 @@ const SignUp = () => {
           <div className='mt-6'>
             <span className='auth-guidecoment'>이미 아이디가 있으신가요?</span>
             <Link className='auth-link' to="/sign-in">로그인 하기</Link>
+          </div>
+          <div className='flex justify-center items-centerf gap-5 mt-8'>
+            {navigator.userAgent.includes("KAKAOTALK") ? null : <GoogleLogin />}
+            <KakaoLogin />
+            <NaverLogin />
+          </div>
+          <div className='mt-5 font-semibold text-xs  text-gray-400'>
+            <p>개인 정보는 저장하지 않고, 식별하기 위한 단순한 값만 저장하고 있어요.</p>
           </div>
         </div>
       </div>

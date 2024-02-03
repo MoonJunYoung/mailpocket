@@ -25,7 +25,6 @@ const NaverRedirect = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const accessToken = queryParams.get("code");
-
     if (accessToken) {
       sendAccessToken(
         accessToken,

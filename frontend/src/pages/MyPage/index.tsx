@@ -1,14 +1,16 @@
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { deleteChannelData, getChannelData, getSubscribeData, Token } from '../../api/api';
 import Inquiry from '../../components/ Inquiry';
 import { AmplitudeResetUserId, sendEventToAmplitude } from '../../components/Amplitude';
+import SlackGuideModal from '../../components/Modal/SlackGuideModal';
 import Nav from '../../components/Nav'
+import NewsletterPrevie from '../../components/NewsletterPrevie';
+import ChannelList from '../../components/ChannelList';
 import Symbol from '../../components/Symbol'
 
-interface ChannelDataType {
+export type ChannelDataType = {
   id: number;
   team_name: string;
   team_icon: string;
@@ -18,6 +20,11 @@ interface ChannelDataType {
 
 const MyPage = () => {
   const [channel, setChannel] = useState<ChannelDataType[]>([]);
+  const [activeTab, setActiveTab] = useState(channel.length);
+  const [openModal, setOpenModal] = useState(false);
+  const handleTabClick = (index: number) => {
+    setActiveTab(index);
+  };
   const navigate = useNavigate();
   const authToken = Token();
 
@@ -32,7 +39,6 @@ const MyPage = () => {
 
   const handleChannelAdd = () => {
     sendEventToAmplitude("click add destination", '')
-    alert("채널 검색 하단에 다이렉트 메시지로도 뉴스레터 소식을 받을 수 있습니다.")
     window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
   }
 
@@ -68,6 +74,10 @@ const MyPage = () => {
     navigate('/sign-in');
   };
 
+  const handleModalOpen = () => {
+    setOpenModal(true);
+  };
+
   return (
     <div className='text-center mx-auto max-w-900 h-auto'>
       <div className='flex items-center justify-between'>
@@ -80,34 +90,42 @@ const MyPage = () => {
       </div>
       <div className='basecontainer'>
         <Symbol />
-        <div className='mt-10 bg-white relative channel-container p-7 border border-solid border-gray-100' style={{ boxShadow: '5px 5px 1px whitesmoke' }}>
-          <div className='flex flex-col items-start font-bold mb-3'>
-            <div className='flex'>
-              <Link className="underline text-customPurple" to='/subscribe'>뉴스레터</Link><h2>의 소식을</h2>
-            </div>
-            <h2>{channel.length}개의 채널에 전달하고 있어요.</h2>
+        <div className='font-semibold text-sm mt-7 flex w-[330px] md:w-[350px]'>
+          <div
+            className={`w-full cursor-pointer p-2 border-b-2 border-solid ${activeTab === 0 ? "border-customPurple" : ''}`}
+            onClick={() => handleTabClick(0)}
+          >
+            뉴스레터 미리보기
           </div>
-          <div className='h-[232px] overflow-auto'>
-            {channel.map((channeldata =>
-              <div className='flex items-center justify-between ' key={channeldata.id}>
-                <div className='flex items-center gap-6'>
-                  <img className="w-7 h-7 rounded-md" src={channeldata.team_icon} alt="icon" />
-                  <div className='flex flex-col items-start my-2'>
-                    <span className='font-semibold'>{channeldata.name}</span>
-                    <span className='text-sm  text-darkgray font-semibold'>{channeldata.team_name} 워크스페이스</span>
-                  </div>
-                </div>
-                <div className='cursor-pointer mr-7 font-bold' onClick={() => handleDeleteChannel(channeldata.id)}>
-                  <span>X</span>
-                </div>
-              </div>
-            ))}
+          <div
+            className={`w-full cursor-pointer p-2 border-b-2 border-solid ${activeTab === 1 ? "border-customPurple" : ''}`}
+            onClick={() => handleTabClick(1)}
+          >
+            채널 확인하기
           </div>
-          <button className='basecontainer-submitdata' onClick={handleChannelAdd}>채널 추가하기</button>
         </div>
+        <div className='bg-white relative channel-container p-7 border border-solid border-gray-100' style={{ boxShadow: '5px 5px 1px whitesmoke' }}>
+          {activeTab === 0 ? (
+            <NewsletterPrevie
+              handleModalOpen={handleModalOpen}
+            />
+          ) : (
+            <ChannelList
+              channel={channel}
+              handleDeleteChannel={handleDeleteChannel}
+              handleChannelAdd={handleChannelAdd}
+            />
+          )}
+        </div>
+        {openModal && (
+          <SlackGuideModal
+            setOpenModal={setOpenModal}
+            handleChannelAdd={handleChannelAdd}
+          />
+        )}
         <Inquiry />
       </div>
-    </div>
+    </div >
   )
 }
 

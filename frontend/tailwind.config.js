@@ -10,7 +10,9 @@ module.exports = {
         darkgray: '#a9a9a9',
         lightgrey : '#d3d3d3',
         subscribecolor: '#8f20ffb5',
-        whitesmoke : '#f5f5f5'
+        whitesmoke : '#f5f5f5',
+        kakaoBgColor : '#ffeb3b',
+        naverBgColor :"#03c75b"
       },
       maxWidth: {
         '900': '900px',

@@ -19,7 +19,7 @@ export const AmplitudeSetUserId = async () => {
   try {
     if (authToken) {
       const userInfo = await getUserData();
-      amplitude.getInstance().setUserId(userInfo.data.identifier);
+      amplitude.getInstance().setUserId(userInfo.data.id);
     }
   } catch (error) {
     console.error('Amplitude 초기화 중 오류 발생:', error);
@@ -37,7 +37,6 @@ export const AmplitudeResetUserId = async () => {
 
 export const sendEventToAmplitude = async (eventName: string, properties: any) => {
   try {
-    console.log(`${eventName}: ${JSON.stringify(properties || {})}`)
     // // if (process.env.NODE_ENV === 'development') {
     // //   console.log(`${eventName}: ${JSON.stringify(properties || {})}`)
     // // }

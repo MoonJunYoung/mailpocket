@@ -28,32 +28,32 @@ interface postSubscribeType {
 // Read
 
 export const getReadMailData = (data: string | null) => {
-  return axiosData().get(`/api/mail?key=${data}`);
+  return axiosData().get(`/testapi/mail?key=${data}`);
 };
 
 export const getUserData = () => {
-  return axiosData().get("/api/user");
+  return axiosData().get("/testapi/user");
 };
 
 
 // Auth
 
 export const postSignInData = (data: postAuthDataType) => {
-  return axiosData().post("/api/user/sign-in", data);
+  return axiosData().post("/testapi/user/sign-in", data);
 };
 
 export const postSignUpData = (data: postAuthDataType) => {
-  return axiosData().post("/api/user/sign-up", data);
+  return axiosData().post("/testapi/user/sign-up", data);
 };
 
 //slack
 
 export const postSlackToken = (data: SlackTokenType) => {
-  return axiosData().post("/api/channel", data);
+  return axiosData().post("/testapi/channel", data);
 };
 
 export const getSlackToken = (data: any) => {
-  return axiosData().get(`/api/${data}`);
+  return axiosData().get(`/testapi/${data}`);
 };
 
 
@@ -63,7 +63,7 @@ export const getChannelData = (query: string) => {
   return axiosData().get(query);
 };
 export const deleteChannelData = (data: number) => {
-  return axiosData().delete(`/api/channel/${data}`);
+  return axiosData().delete(`/testapi/channel/${data}`);
 };
 
 // Subscribe
@@ -73,7 +73,7 @@ export const getNewsletterData = (query: string) => {
 };
 
 export const putSubscribe = (data: postSubscribeType) => {
-  return axiosData().put("/api/newsletter/subscribe", data);
+  return axiosData().put("/testapi/newsletter/subscribe", data);
 };
 
 export const getSubscribeData = (query: string) => {

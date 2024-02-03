@@ -12,6 +12,7 @@ import { initializeAmplitude } from './components/Amplitude';
 import PageLoding from './components/PageLoding';
 import { Token, getUserData } from './api/api';
 import amplitude from 'amplitude-js';
+import { GooglesRedirect, KakaoRedirect, NaverRedirect } from './components/Social/SocialPlatformRedirect';
 
 
 
@@ -30,7 +31,7 @@ function App() {
 
         if (authToken) {
           const userInfo = await getUserData();
-          amplitude.getInstance().setUserId(userInfo.data.identifier);
+          amplitude.getInstance().setUserId(userInfo.data.id);
         }
       } catch (error) {
         console.error('Error in initialization:', error);
@@ -47,6 +48,9 @@ function App() {
           <Route index element={<MyPage />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SingUp />} />
+          <Route path="/kakao-oauth-redirect" element={<KakaoRedirect />} />
+          <Route path="/naver-oauth-redirect" element={<NaverRedirect />} />
+          <Route path="/google-oauth-redirect" element={<GooglesRedirect />} />
           <Route path="/slack-oauth" element={<RedirectMypage />} />
           <Route path="/read" element={<ReadPage />} />
           <Route path="/subscribe" element={<Subscribe />} />

@@ -79,7 +79,7 @@ greetingsAnimation {
 }
 
 .animate-fadeIn {
-  animation: fadeIn 1.5s;
+  animation: fadeIn 0.5s;
 }
 
 
@@ -115,7 +115,7 @@ greetingsAnimation {
 /* auth style */
 
 .signin-container {
-  @apply h-[410px] w-[300px] md:w-[350px] md:h-[420px] 
+  @apply h-[450px] w-[330px] md:w-[350px] md:h-[420px] 
 }
 
 .signup-container {
@@ -123,7 +123,7 @@ greetingsAnimation {
 }
 
 .authcontainer-submit {
-  @apply flex flex-col items-start md:p-5
+  @apply flex flex-col items-center justify-center p-6 md:p-5
 }
 
 .authcontainer-submit_box {
@@ -135,7 +135,7 @@ greetingsAnimation {
 }
 
 .authcontainer-submit_title {
-  @apply my-2 text-2xl font-extrabold md:text-2xl text-customPurple
+  @apply my-2 text-xl font-extrabold md:text-xl
 }
 
 .authcontainer-submit_coment {
