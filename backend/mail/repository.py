@@ -66,6 +66,8 @@ class MailRepository(S3Connector):
                 .filter(MailModel.newsletter_id == self.newsletter.id)
                 .first()
             )
+            if not mail_model:
+                return None
             mail = Mail(
                 id=mail_model.id,
                 s3_object_key=mail_model.s3_object_key,

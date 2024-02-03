@@ -9,8 +9,7 @@ class NewsLetterlDTO:
         self.id = newsletter.id
         self.name = newsletter.name
         self.category = newsletter.category
-        if newsletter.mail:
-            self.mail = newsletter.mail
+        self.mail = newsletter.mail
 
 
 class NewsLetterService:
