@@ -8,6 +8,7 @@ class NewsLetter:
         self.from_email = from_email
         self.category = category
         self.send_date = send_date
+        self.mail = None
 
     def load_mail(self, mail: Mail):
         self.mail = mail
