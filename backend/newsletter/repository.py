@@ -29,6 +29,9 @@ class NewsLetterRepository:
                 newsletters.append(newsletter)
             return newsletters
 
+        def run(self) -> list[NewsLetter]:
+            return super().run()
+
     class LoadNewsLetterByID(MysqlCRUDTemplate):
         def __init__(self, id) -> None:
             self.id = id
@@ -72,6 +75,9 @@ class NewsLetterRepository:
                 send_date=newsletter_model.send_date,
             )
             return newsletter
+
+        def run(self) -> NewsLetter:
+            return super().run()
 
     class LoadSubscribeNewsLettersByUser(MysqlCRUDTemplate):
         def __init__(self, user: User) -> None:

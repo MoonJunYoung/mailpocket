@@ -14,7 +14,7 @@ class SubscribeData(BaseModel):
 
 
 class NewsLetterPresentation:
-    router = APIRouter(prefix="/api/newsletter")
+    router = APIRouter(prefix="/newsletter")
 
     @router.get("", status_code=200)
     async def get_newsletters(request: Request):

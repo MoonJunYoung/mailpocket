@@ -1,6 +1,6 @@
+from backend.mail.repository import MailRepository
 from backend.newsletter.domain import NewsLetter
 from backend.newsletter.repository import NewsLetterRepository
-from backend.user.domain import User
 from backend.user.repository import UserRepository
 
 
@@ -9,17 +9,22 @@ class NewsLetterlDTO:
         self.id = newsletter.id
         self.name = newsletter.name
         self.category = newsletter.category
+        if newsletter.mail:
+            self.mail = newsletter.mail
 
 
 class NewsLetterService:
     def __init__(self) -> None:
         self.newsletter_repository = NewsLetterRepository()
         self.user_repository = UserRepository()
+        self.mail_repository = MailRepository()
 
     def get_all_newsletters(self):
         newsletter_list = list()
         newsletters = self.newsletter_repository.LoadNewsletters().run()
         for newsletter in newsletters:
+            mail = self.mail_repository.ReadOneMailByNewsletter(newsletter).run()
+            newsletter.load_mail(mail)
             newsletter_list.append(NewsLetterlDTO(newsletter))
         return newsletter_list
 

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import JSON, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -68,3 +68,17 @@ class SubscribeModel(Base):
         self.id = id
         self.newsletter_id = newsletter_id
         self.user_id = user_id
+
+
+class MailModel(Base):
+    __tablename__ = "mail"
+    id = Column("id", Integer, primary_key=True)
+    s3_object_key = Column(String)
+    summary_list = Column(JSON)
+    newsletter_id = Column(Integer)
+
+    def __init__(self, id, s3_object_key, summary_list, newsletter_id):
+        self.id = id
+        self.s3_object_key = s3_object_key
+        self.summary_list = summary_list
+        self.newsletter_id = newsletter_id

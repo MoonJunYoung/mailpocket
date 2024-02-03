@@ -5,9 +5,14 @@ from backend.common.gpt_prompt import mail_summary
 
 
 class Mail:
-    def __init__(self, mail_content=None, s3_object_key=None) -> None:
+    def __init__(
+        self, id, mail_content=None, s3_object_key=None, summary_list=None
+    ) -> None:
+        self.id = id
         self.mail_content = mail_content
         self.s3_object_key = s3_object_key
+        if summary_list:
+            self.summary_list = summary_list
 
     def parser_eamil(self):
         parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)
@@ -38,7 +43,13 @@ class Mail:
         del self.mail_content
 
     def summary(self):
-        self.summary_list = mail_summary(self.from_email, self.subject, self.html_body)
+        try:
+            self.summary_list = mail_summary(
+                self.from_email, self.subject, self.html_body
+            )
+        except:
+            self.summary_list = {"요약을 실패했습니다.": "본문을 확인해주세요."}
 
-    def fail_summary(self):
-        self.summary_list = {"요약을 실패했습니다.": "본문을 확인해주세요."}
+    # 리펙토링 필수,, 일단 급해서
+    def set_newsletter_id(self, newsletter_id):
+        self.newsletter_id = newsletter_id

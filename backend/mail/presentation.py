@@ -19,7 +19,7 @@ def recv_background_task(s3_object_key):
 
 
 class MailPresentation:
-    router = APIRouter(prefix="/api/mail")
+    router = APIRouter(prefix="/mail")
 
     @router.post("/recv", status_code=200)
     async def recv_mail(
