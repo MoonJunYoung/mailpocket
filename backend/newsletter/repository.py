@@ -31,6 +31,7 @@ class NewsLetterRepository:
                     mail = Mail(
                         id=mail_model.id,
                         s3_object_key=mail_model.s3_object_key,
+                        subject=mail_model.subject,
                         summary_list=mail_model.summary_list,
                     )
                 newsletter = NewsLetter(

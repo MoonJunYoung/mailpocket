@@ -10,11 +10,13 @@ class Mail:
         id,
         mail_content=None,
         s3_object_key=None,
+        subject=None,
         summary_list=None,
     ) -> None:
         self.id = id
         self.mail_content = mail_content
         self.s3_object_key = s3_object_key
+        self.subject = subject
         self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         self.summary_list = summary_list
         if not self.mail_content:
@@ -45,7 +47,6 @@ class Mail:
         self.from_email = from_email.split(" <")[1].replace(">", "")
         self.subject = subject
         self.html_body = html_body
-        self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         del self.mail_content
 
     def summary(self):

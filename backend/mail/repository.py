@@ -28,6 +28,7 @@ class MailRepository(S3Connector):
             mail_model = MailModel(
                 id=None,
                 s3_object_key=self.mail.s3_object_key,
+                subject=self.mail.subject,
                 summary_list=self.mail.summary_list,
                 newsletter_id=self.mail.newsletter_id,
             )
@@ -50,6 +51,7 @@ class MailRepository(S3Connector):
                 return None
 
             self.mail.id = mail_model.id
+            self.mail.subject = mail_model.subject
             self.mail.summary_list = mail_model.summary_list
             self.mail.newsletter_id = mail_model.newsletter_id
             return True
@@ -71,6 +73,7 @@ class MailRepository(S3Connector):
             mail = Mail(
                 id=mail_model.id,
                 s3_object_key=mail_model.s3_object_key,
+                subject=mail_model.subject,
                 summary_list=mail_model.summary_list,
             )
             return mail
