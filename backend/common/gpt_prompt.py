@@ -47,5 +47,7 @@ def mail_summary(from_email, subject, html):
     content = response["choices"][0]["message"]["content"]
     if "```json" in content:
         content = content.split("```json")[1].split("```")[0]
+    content = content.replace("{", "").replace("}", "")
+    content = "{" + content + "}"
     summary_list = json.loads(content)
     return summary_list

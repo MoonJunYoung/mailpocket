@@ -89,7 +89,7 @@ class UnknownFromEamilException(CustomException):
         super().__init__(f"{from_email} is unknown.")
 
     status_code = 401
-    detail = "unknown email recv"
+    detail = "unknown from email"
 
 
 class ChannelUserMismatchException(CustomException):
