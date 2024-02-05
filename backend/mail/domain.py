@@ -6,12 +6,19 @@ from backend.common.gpt_prompt import mail_summary
 
 class Mail:
     def __init__(
-        self, id, mail_content=None, s3_object_key=None, summary_list=None
+        self,
+        id,
+        mail_content=None,
+        s3_object_key=None,
+        summary_list=None,
     ) -> None:
         self.id = id
         self.mail_content = mail_content
         self.s3_object_key = s3_object_key
+        self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         self.summary_list = summary_list
+        if not self.mail_content:
+            del self.mail_content
 
     def parser_eamil(self):
         parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)
