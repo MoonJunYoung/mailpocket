@@ -12,10 +12,7 @@ const RedirectMypage = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const accessCode = queryParams.get("code");
-
-
     if (accessCode) {
-
       const sendAccessToken = async () => {
         try {
           const response = await postSlackToken({ code: accessCode });

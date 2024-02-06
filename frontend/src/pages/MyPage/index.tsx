@@ -117,12 +117,11 @@ const MyPage = () => {
             />
           )}
         </div>
-        {openModal && (
+        {/* {openModal && (
           <SlackGuideModal
             setOpenModal={setOpenModal}
-            handleChannelAdd={handleChannelAdd}
           />
-        )}
+        )} */}
         <Inquiry />
       </div>
     </div >

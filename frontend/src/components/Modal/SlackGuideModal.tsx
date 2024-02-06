@@ -2,11 +2,12 @@ import React, { useRef } from 'react'
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 interface SlackGuideModalType {
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
-  handleChannelAdd: () => void
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  handlePostNewsLetterData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>;
+  newsletterchecked: string[];
 }
 
-const SlackGuideModal = ({ setOpenModal, handleChannelAdd }: SlackGuideModalType) => {
+const SlackGuideModal = ({ setOpenModal, handlePostNewsLetterData, newsletterchecked }: SlackGuideModalType) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useOnClickOutside(ref, () => {
@@ -16,20 +17,24 @@ const SlackGuideModal = ({ setOpenModal, handleChannelAdd }: SlackGuideModalType
   return (
     <div className='z-10 absolute'>
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div ref={ref} className="relative flex justify-center flex-row-reverse max-h-400 w-250 bg-white transition-all ease-in-out animate-fadeIn">
-          <div className='mt-3 w-full p-4 font-bold flex flex-col items-start'>
-            <p>
-              공개 채널이 부담스럽다면 채널 검색
+        <div ref={ref} className="py-3 px-7 rounded-lg relative flex justify-center flex-col max-h-400 w-250 bg-white transition-all ease-in-out animate-fadeIn">
+          <div className='my-5 w-full flex flex-col items-start gap-2'>
+            <p className='font-extrabold text-xl'>
+              {`${newsletterchecked.length}개 뉴스레터 구독 완료`}
             </p>
-            <p>
-              하단에 다이렉트 메시지를 이용해보세요!
-            </p>
-            <p>
-              설정은 언제든 메일 포켓에서 변경할 수 있어요.
-            </p>
-            <button className='basecontainer-submitdata mb-3' onClick={handleChannelAdd} >Slack 연동하기</button>
+            <span className='font-bold text-gray-500'>
+              슬랙을 연동하면 3줄 요약된 뉴스레터를 편하게 받아보실 수 있어요.
+            </span>
+            <span className='font-bold text-red-600'>
+              DM 으로 연결하면 혼자 보는것도 가능해요
+            </span>
           </div>
-          <div className='cursor-pointer  absolute right-2' onClick={() => setOpenModal(false)}>X</div>
+          <div className='w-full flex items-center justify-end mb-3'>
+            <div className='flex items-center justify-center gap-1'>
+              <button className='cursor-pointer w-[100px] text-base text-customPurple font-extrabold' onClick={() => setOpenModal(false)}>다음에 하기</button>
+              <button className='cursor-pointer w-[100px] rounded-2xl h-[40px]  border-none bg-customPurple text-white text-base font-bold' onClick={handlePostNewsLetterData} >연동하기</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -37,3 +42,5 @@ const SlackGuideModal = ({ setOpenModal, handleChannelAdd }: SlackGuideModalType
 }
 
 export default SlackGuideModal
+
+

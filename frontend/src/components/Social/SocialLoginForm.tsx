@@ -29,10 +29,8 @@ export const SocialLoginForm = ({
   return (
     <div className={style} onClick={handleSocialLogin}>
       <div className="flex  items-center justify-start gap-1">
-        <div className="flex">
-          <img className="w-5 h-5 rounded-3xl" alt={alt} src={src} />
-          <span className={titleStyle}>{title}</span>
-        </div>
+        <img className="w-5 h-5 rounded-3xl" alt={alt} src={src} />
+        <span className={titleStyle}>{title}</span>
       </div>
     </div>
   );

@@ -72,47 +72,47 @@ const SignIn = () => {
       <div className='basecontainer'>
         <Symbol />
         <div className='basecontainer-submitcontainer signin-container' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }}>
-          <form className='authcontainer-submit' onSubmit={handleSubmit}>
-            <p className='authcontainer-submit_title'>
-              뉴스레터 3줄 요약
-            </p>
-            <p className='text-gray-400  text-xs  font-semibold'>
-              긴내용도 지루하지 않도록
-            </p>
-            <div className='flex flex-col justify-center items-centerf gap-5  w-full mt-8'>
+          <form className='authcontainer-submit ' onSubmit={handleSubmit}>
+            <div>
+              <p className='authcontainer-submit_title'>
+                뉴스레터 3줄 요약
+              </p>
+              <p className='text-gray-400  text-xs  font-semibold'>
+                긴 내용도 지루하지 않도록
+              </p>
+            </div>
+            <div className='flex flex-col justify-center items-centerf gap-5  w-full mt-6'>
               <KakaoLogin />
               {navigator.userAgent.includes("KAKAOTALK") ? null : <GoogleLogin />}
               <NaverLogin />
             </div>
+            <div className='mt-4 mb-1 text-gray-400  text-xs  font-semibold'>또는</div>
             <div className='authcontainer-submit_box my-4'>
-              <input className='authcontainer-submit_data'
+              <input className='authcontainer-submit_data  placeholder-gray-500  placeholder:font-bold'
                 type="text"
                 name="identifier"
                 value={formData.identifier}
-                placeholder=' Id'
+                placeholder=' 이메일'
                 onChange={handleInputChange}
               />
             </div>
 
             <div className='authcontainer-submit_box'>
-              <input className='authcontainer-submit_data'
+              <input className='authcontainer-submit_data  placeholder-gray-500  placeholder:font-bold'
                 type="password"
                 name="password"
-                placeholder=' Password'
+                placeholder=' 비밀번호'
                 value={formData.password}
                 onChange={handleInputChange}
               />
             </div>
             <button className='basecontainer-submitdata' type="submit" disabled={notAllow}>
-              완료
+              로그인
             </button>
           </form>
-          <div className='mt-6'>
+          <div className='mb-7'>
             <span className='auth-guidecoment'>아이디가 없으신가요?</span>
             <Link className='auth-link' to="/sign-up">10초만에 가입하기</Link>
-          </div>
-          <div className='mt-5 font-semibold text-xs  text-gray-400'>
-            <p>개인 정보는 저장하지 않고, 식별하기 위한 단순한 값만 저장하고 있어요.</p>
           </div>
         </div>
       </div>

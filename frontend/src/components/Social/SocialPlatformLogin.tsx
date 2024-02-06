@@ -7,7 +7,7 @@ const KakaoLogin = () => {
     socialLoginUrl:
       "https://kauth.kakao.com/oauth/authorize?client_id=f898615d1b15529653e04549bd5203b7&redirect_uri=http://localhost:3001/kakao-oauth-redirect&response_type=code",
     type: "kakao",
-    style :"bg-kakaoBgColor h-10 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center rounded-lg",
+    style :"bg-kakaoBgColor h-11 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center rounded-lg",
     title : "카카오 계정으로 계속하기",
     titleStyle: "text-xs  font-extrabold"
   };
@@ -22,7 +22,7 @@ const NaverLogin = () => {
     socialLoginUrl:
       "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=Q9vH3BUxoFpZea90R2g3&redirect_uri=https://mailpocket.site/naver-oauth-redirect",
     type: "naver",
-    style :"bg-naverBgColor h-10 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center rounded-lg",
+    style :"bg-naverBgColor h-11 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center rounded-lg",
     title : "네이버 계정으로 계속하기",
     titleStyle: "text-xs text-white  font-extrabold"
   
@@ -38,7 +38,7 @@ const GoogleLogin = () => {
     socialLoginUrl:
       "https://accounts.google.com/o/oauth2/v2/auth?response_type=token&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&client_id=398680694432-j5tr9e2uk37g7shjipa1umr40r7gsltg.apps.googleusercontent.com&redirect_uri=http://localhost:3001/google-oauth-redirect",
     type: "google",
-    style :"border border-1 h-10 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center rounded-lg",
+    style :"border border-1 h-11 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center rounded-lg",
     title : "구글 계정으로 계속하기",
     titleStyle: "text-xs  font-extrabold"
   };

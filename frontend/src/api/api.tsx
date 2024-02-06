@@ -73,7 +73,7 @@ export const getNewsletterData = (query: string) => {
 };
 
 export const putSubscribe = (data: postSubscribeType) => {
-  return axiosData().put("/testapi/newsletter/subscribe", data);
+  return axiosData().patch("/testapi/newsletter/subscribe", data);
 };
 
 export const getSubscribeData = (query: string) => {

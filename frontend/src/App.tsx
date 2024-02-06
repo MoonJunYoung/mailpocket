@@ -16,8 +16,6 @@ import { GooglesRedirect, KakaoRedirect, NaverRedirect } from './components/Soci
 
 
 
-
-
 function App() {
   const [amplitudeInitialized, setAmplitudeInitialized] = useState(false);
 

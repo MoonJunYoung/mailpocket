@@ -12,14 +12,15 @@ module.exports = {
         subscribecolor: '#8f20ffb5',
         whitesmoke : '#f5f5f5',
         kakaoBgColor : '#ffeb3b',
-        naverBgColor :"#03c75b"
+        naverBgColor :"#03c75b",
+        subscribebutton : '#f4e9ff'
       },
       maxWidth: {
         '900': '900px',
       },
     },
     screens: {
-      md: { max: '768px' },
+      md: { max: '980px' },
     },
   },
   plugins: [],
