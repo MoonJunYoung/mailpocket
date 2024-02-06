@@ -7,7 +7,6 @@ import Nav from '../../components/Nav';
 import Symbol from '../../components/Symbol';
 import axios from 'axios';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
-import { is } from '@react-spring/shared';
 import { Loader } from '../../components/Loader';
 import SlackGuideModal from '../../components/Modal/SlackGuideModal';
 
@@ -38,7 +37,7 @@ const Subscribe = () => {
   const authToken = Token();
   const ref = useRef<HTMLDivElement | null>(null)
   const pageRef = useIntersectionObserver(ref, {})
-  const isPageEnd = !!pageRef?.isIntersecting;
+  const isPageEnd = pageRef?.isIntersecting;
 
 
 
