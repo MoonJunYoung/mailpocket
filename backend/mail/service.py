@@ -1,8 +1,14 @@
 from backend.channel.repository import ChannelRepository
 from backend.common.slack_api import SlackAPI
+from backend.mail.domain import Mail
 from backend.mail.repository import MailRepository
 from backend.newsletter.repository import NewsLetterRepository
 from backend.user.repository import UserRepository
+
+
+class MailDTO:
+    def __init__(self, mail: Mail) -> None:
+        pass
 
 
 class MailService:

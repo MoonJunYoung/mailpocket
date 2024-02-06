@@ -3,7 +3,14 @@ from backend.mail.domain import Mail
 
 class NewsLetter:
     def __init__(
-        self, id, name, from_email, category, send_date, mail: Mail = None
+        self,
+        id,
+        name,
+        from_email,
+        category,
+        send_date,
+        mail: Mail = None,
+        mails: list[Mail] = None,
     ) -> None:
         self.id = id
         self.name = name
@@ -11,3 +18,4 @@ class NewsLetter:
         self.category = category
         self.send_date = send_date
         self.mail = mail
+        self.mails = mails

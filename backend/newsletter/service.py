@@ -10,6 +10,7 @@ class NewsLetterlDTO:
         self.name = newsletter.name
         self.category = newsletter.category
         self.mail = newsletter.mail
+        self.mails = newsletter.mails
 
 
 class NewsLetterService:
@@ -62,3 +63,12 @@ class NewsLetterService:
             for newsletter in newsletters:
                 newsletter_list.append(NewsLetterlDTO(newsletter))
         return newsletter_list
+
+    def get_newsletter_with_previous_mail_list_by_newsletter_id(
+        self, user_id, newsletter_id
+    ):
+        user = self.user_repository.ReadByID(user_id).run()
+        newsletter = self.newsletter_repository.LoadNewsLetterByIDWithMails(
+            newsletter_id
+        ).run()
+        return NewsLetterlDTO(newsletter)

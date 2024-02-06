@@ -50,3 +50,18 @@ class NewsLetterPresentation:
 
         except Exception as e:
             catch_exception(e, request)
+
+    @router.get("/{newsletter_id}/mails", status_code=201)
+    async def get_newsletter_with_previous_mail_list(
+        request: Request,
+        newsletter_id: int,
+        Authorization=Header(None),
+    ):
+        try:
+            user_id = Token.get_user_id_by_token(Authorization)
+            newsletter_service.get_newsletter_with_previous_mail_list_by_newsletter_id(
+                user_id, newsletter_id
+            )
+
+        except Exception as e:
+            catch_exception(e, request)
