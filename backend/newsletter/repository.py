@@ -172,8 +172,9 @@ class NewsLetterRepository:
             return newsletter_list
 
     class LoadSubscribedNewsLettersByUser(MysqlCRUDTemplate):
-        def __init__(self, user: User) -> None:
+        def __init__(self, user: User, in_mail) -> None:
             self.user = user
+            self.in_mail = in_mail
             super().__init__()
 
         def execute(self):
@@ -193,18 +194,19 @@ class NewsLetterRepository:
             )
             for newsletter_model in newsletter_models:
                 mail = None
-                mail_model = (
-                    self.session.query(MailModel)
-                    .filter(MailModel.newsletter_id == newsletter_model.id)
-                    .first()
-                )
-                if mail_model:
-                    mail = Mail(
-                        id=mail_model.id,
-                        s3_object_key=mail_model.s3_object_key,
-                        subject=mail_model.subject,
-                        summary_list=mail_model.summary_list,
+                if self.in_mail:
+                    mail_model = (
+                        self.session.query(MailModel)
+                        .filter(MailModel.newsletter_id == newsletter_model.id)
+                        .first()
                     )
+                    if mail_model:
+                        mail = Mail(
+                            id=mail_model.id,
+                            s3_object_key=mail_model.s3_object_key,
+                            subject=mail_model.subject,
+                            summary_list=mail_model.summary_list,
+                        )
                 newsletter = NewsLetter(
                     id=newsletter_model.id,
                     name=newsletter_model.name,

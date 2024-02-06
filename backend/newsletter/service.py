@@ -52,11 +52,11 @@ class NewsLetterService:
                 newsletter_list.append(NewsLetterlDTO(newsletter))
         return newsletter_list
 
-    def get_subscribed_newsletters(self, user_id):
+    def get_subscribed_newsletters(self, user_id, in_mail):
         newsletter_list = list()
         user = self.user_repository.ReadByID(user_id).run()
         newsletters = self.newsletter_repository.LoadSubscribedNewsLettersByUser(
-            user
+            user, in_mail
         ).run()
         if newsletters:
             for newsletter in newsletters:

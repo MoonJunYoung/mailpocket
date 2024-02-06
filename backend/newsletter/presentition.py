@@ -28,10 +28,14 @@ class NewsLetterPresentation:
             catch_exception(e, request)
 
     @router.get("/subscribed", status_code=200)
-    async def get_subscribed_newsletters(request: Request, Authorization=Header(None)):
+    async def get_subscribed_newsletters(
+        request: Request, in_mail: bool = False, Authorization=Header(None)
+    ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
-            newsletters = newsletter_service.get_subscribed_newsletters(user_id)
+            newsletters = newsletter_service.get_subscribed_newsletters(
+                user_id, in_mail
+            )
             return newsletters
         except Exception as e:
             catch_exception(e, request)
