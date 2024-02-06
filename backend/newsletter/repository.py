@@ -16,7 +16,7 @@ from backend.user.domain import User
 
 
 class NewsLetterRepository:
-    class LoadNewsletters(MysqlCRUDTemplate):
+    class LoadNewslettersWithFirstMail(MysqlCRUDTemplate):
         def execute(self):
             newsletters = list()
             newsletter_models = self.session.query(NewsLetterModel).all()
@@ -122,6 +122,96 @@ class NewsLetterRepository:
                     from_email=newsletter_model.from_email,
                     category=newsletter_model.category,
                     send_date=newsletter_model.send_date,
+                )
+                newsletter_list.append(newsletter)
+            return newsletter_list
+
+    class LoadSubscribeAbleNewsLettersByUser(MysqlCRUDTemplate):
+        def __init__(self, user: User) -> None:
+            self.user = user
+            super().__init__()
+
+        def execute(self):
+            newsletter_list = list()
+            subscribe_models = (
+                self.session.query(SubscribeModel.newsletter_id)
+                .filter(SubscribeModel.user_id == self.user.id)
+                .all()
+            )
+            newsletter_ids = [
+                subscribe_model[0] for subscribe_model in subscribe_models
+            ]
+            newsletter_models = (
+                self.session.query(NewsLetterModel)
+                .filter(NewsLetterModel.id.not_in(newsletter_ids))
+                .all()
+            )
+            for newsletter_model in newsletter_models:
+                mail = None
+                mail_model = (
+                    self.session.query(MailModel)
+                    .filter(MailModel.newsletter_id == newsletter_model.id)
+                    .first()
+                )
+                if mail_model:
+                    mail = Mail(
+                        id=mail_model.id,
+                        s3_object_key=mail_model.s3_object_key,
+                        subject=mail_model.subject,
+                        summary_list=mail_model.summary_list,
+                    )
+                newsletter = NewsLetter(
+                    id=newsletter_model.id,
+                    name=newsletter_model.name,
+                    from_email=newsletter_model.from_email,
+                    category=newsletter_model.category,
+                    send_date=newsletter_model.send_date,
+                    mail=mail,
+                )
+                newsletter_list.append(newsletter)
+            return newsletter_list
+
+    class LoadSubscribedNewsLettersByUser(MysqlCRUDTemplate):
+        def __init__(self, user: User) -> None:
+            self.user = user
+            super().__init__()
+
+        def execute(self):
+            newsletter_list = list()
+            subscribe_models = (
+                self.session.query(SubscribeModel.newsletter_id)
+                .filter(SubscribeModel.user_id == self.user.id)
+                .all()
+            )
+            newsletter_ids = [
+                subscribe_model[0] for subscribe_model in subscribe_models
+            ]
+            newsletter_models = (
+                self.session.query(NewsLetterModel)
+                .filter(NewsLetterModel.id.in_(newsletter_ids))
+                .all()
+            )
+            for newsletter_model in newsletter_models:
+                mail = None
+                mail_model = (
+                    self.session.query(MailModel)
+                    .filter(MailModel.newsletter_id == newsletter_model.id)
+                    .first()
+                )
+                if mail_model:
+                    mail = Mail(
+                        id=mail_model.id,
+                        s3_object_key=mail_model.s3_object_key,
+                        subject=mail_model.subject,
+                        summary_list=mail_model.summary_list,
+                    )
+                newsletter = NewsLetter(
+                    id=newsletter_model.id,
+                    name=newsletter_model.name,
+                    from_email=newsletter_model.from_email,
+                    category=newsletter_model.category,
+                    send_date=newsletter_model.send_date,
+                    mail=mail,
                 )
                 newsletter_list.append(newsletter)
             return newsletter_list
