@@ -11,7 +11,7 @@ organization = os.environ.get("OPENAI_ORGANIZATION")
 openai.organization = organization
 openai.api_key = api_key
 
-MODEL = "gpt-3.5-turbo-1106"
+MODEL = "gpt-3.5-turbo-0125"
 PROMPT = """
 - 당신은 긴 뉴스 기사를 요약하여 사람들에게 전달하는 기자이자 아나운서의 역할을 맡고 있습니다. 제시되는 뉴스 기사들의 핵심 내용을 요약하여 주세요. 각 기사의 요약은 주요 사건, 그 사건의 영향 및 결과, 그리고 그 사건의 장기적 중요성을 포함해야 합니다.
 - 요약은 각 기사별로 3 ~ 4문장으로 구성되어야 하며, 서론, 본론, 결론의 구조로 명확히 구분되어야 합니다. 각 내용은 기사의 주제를 분명하게 전달해야하며, 주제에 맞는 내용만 다루어야합니다.
@@ -47,5 +47,7 @@ def mail_summary(from_email, subject, html):
     content = response["choices"][0]["message"]["content"]
     if "```json" in content:
         content = content.split("```json")[1].split("```")[0]
+    content = content.replace("{", "").replace("}", "")
+    content = "{" + content + "}"
     summary_list = json.loads(content)
     return summary_list

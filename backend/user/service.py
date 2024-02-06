@@ -30,3 +30,18 @@ class UserService:
         user: User = self.user_repository.ReadByID(user_id).run()
         del user.password
         return user
+
+    def oauth_login(self, platform_id, platform):
+        user = User(
+            id=None,
+            platform_id=platform_id,
+            platform=platform,
+        )
+        existing_user: User = self.user_repository.ReadUserByPlatformID(
+            platform_id=user.platform_id,
+            platform=user.platform,
+        ).run()
+        if existing_user:
+            return existing_user.id
+        self.user_repository.Create(user).run()
+        return user.id

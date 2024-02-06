@@ -13,7 +13,7 @@ class SlackOauthData(BaseModel):
 
 
 class ChannelPresentation:
-    router = APIRouter(prefix="/api/channel")
+    router = APIRouter(prefix="/channel")
 
     @router.get("", status_code=200)
     async def read_channels(request: Request, Authorization=Header(None)):
