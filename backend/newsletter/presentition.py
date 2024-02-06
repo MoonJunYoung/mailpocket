@@ -35,7 +35,7 @@ class NewsLetterPresentation:
         except Exception as e:
             catch_exception(e, request)
 
-    @router.get("/subscribed", status_code=200)
+    @router.get("/subscribe", status_code=200)
     async def get_subscribe_newsletters(request: Request, Authorization=Header(None)):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
