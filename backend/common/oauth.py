@@ -4,6 +4,8 @@ import os
 import requests
 from dotenv import load_dotenv
 
+from backend.common.exceptions import InvalidOauthException
+
 load_dotenv()
 kakao_cilent_id = os.environ.get("KAKAO_CLIENT_ID")
 kakao_redirect_url = os.environ.get("KAKAO_REDIRECT_URL")
@@ -20,7 +22,10 @@ class Oauth:
             ).text
         )
         platform_id = google_user_data.get("id")
-        return platform_id
+        if platform_id:
+            return platform_id
+        else:
+            raise InvalidOauthException
 
     def get_user_platform_id_by_kakao_oauth(token):
         def _get_user_access_token_by_kakao_oauth(token):
@@ -44,7 +49,10 @@ class Oauth:
             requests.get(url="https://kapi.kakao.com/v2/user/me", headers=headers).text
         )
         platform_id = kakao_user_data.get("id")
-        return platform_id
+        if platform_id:
+            return platform_id
+        else:
+            raise InvalidOauthException
 
     def get_user_platform_id_by_naver_oauth(token):
         def _get_user_access_token_by_naver_oauth(token):
@@ -64,4 +72,7 @@ class Oauth:
             ).text
         )
         platform_id = naver_user_data.get("response").get("id")
-        return platform_id
+        if platform_id:
+            return platform_id
+        else:
+            raise InvalidOauthException
