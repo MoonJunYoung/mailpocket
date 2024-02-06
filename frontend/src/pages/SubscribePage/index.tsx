@@ -1,58 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getNewsletterData, getSubscribeData, putSubscribe, Token } from '../../api/api';
-import Inquiry from '../../components/ Inquiry';
 import { sendEventToAmplitude } from '../../components/Amplitude';
+import { useInfiniteQuery } from 'react-query';
 import Nav from '../../components/Nav';
 import Symbol from '../../components/Symbol';
+import axios from 'axios';
+import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+import { is } from '@react-spring/shared';
+import { Loader } from '../../components/Loader';
+import SlackGuideModal from '../../components/Modal/SlackGuideModal';
 
+type SummaryItem = {
+  [key: string]: string;
+};
 
 interface NewsLetterDataType {
-  id: string
-  name: string
-  category: string
+  id: string;
+  name: string;
+  category: string;
+  mail: {
+    id: number;
+    subject: string;
+    summary_list: SummaryItem;
+    s3_object_key: string;
+  }
 }
 
 
 const Subscribe = () => {
   const [newsletter, setNewsLetter] = useState<NewsLetterDataType[]>([])
   const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([])
-  const [newslettertechnologydata, setNewsLetterTechnologyData] = useState<NewsLetterDataType[]>([])
-  const [newsletterlifedata, setNewsLetterLifeData] = useState<NewsLetterDataType[]>([])
-  const [newsletterdesigndata, setNewsLetterDesignData] = useState<NewsLetterDataType[]>([])
-  const [newsletterhealthdata, setNewsLetterHealthData] = useState<NewsLetterDataType[]>([])
-  const [newsletterentertainmentdata, setNewsLetterEntertainmentData] = useState<NewsLetterDataType[]>([])
-  const [newsletterzetechdata, setNewsLetterZetechData] = useState<NewsLetterDataType[]>([])
-  const [newslettersocietydata, setNewsLetterSocietyData] = useState<NewsLetterDataType[]>([])
-  const [newsletterfooddata, setNewsLetterFoodData] = useState<NewsLetterDataType[]>([])
   const [newsletterchecked, setNewsLetterChecked] = useState<string[]>([])
-  const [newsletterselect, setNewsLetterSelect] = useState<string>('')
-
-
-
-
-
+  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: string]: boolean }>({});
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
   const authToken = Token();
+  const ref = useRef<HTMLDivElement | null>(null)
+  const pageRef = useIntersectionObserver(ref, {})
+  const isPageEnd = !!pageRef?.isIntersecting;
 
 
-  const useFilteredDataEffect = (category: string, setData: React.Dispatch<React.SetStateAction<NewsLetterDataType[]>>) => {
-    useEffect(() => {
-      const filteredItems = newsletter.filter((item) => item.category === category);
-      setData(filteredItems);
-    }, [newsletter, category, setData]);
-  };
 
-  useFilteredDataEffect("IT/테크", setNewsLetterTechnologyData);
-  useFilteredDataEffect("트렌드/라이프", setNewsLetterLifeData);
-  useFilteredDataEffect("디자인", setNewsLetterDesignData);
-  useFilteredDataEffect("건강/의학", setNewsLetterHealthData);
-  useFilteredDataEffect("엔터테이먼트", setNewsLetterEntertainmentData);
-  useFilteredDataEffect("비즈/제테크", setNewsLetterZetechData);
-  useFilteredDataEffect("시사/사회", setNewsLetterSocietyData);
-  useFilteredDataEffect("푸드", setNewsLetterFoodData);
-
-
+  const handleNewsLetterSeeMoreSelect = (newsletterid: string) => {
+    setSeeMoreStates((prevStates) => ({
+      ...prevStates,
+      [newsletterid]: !prevStates[newsletterid],
+    }));
+  }
 
   useEffect(() => {
     if (!authToken) {
@@ -62,13 +57,46 @@ const Subscribe = () => {
     }
   }, [authToken, navigate]);
 
+  // const fetchNewsletter = async ({ pageParam = 1 }) => {
+  //   const { data } = await axios("/testapi/newsletter?page=" + pageParam, {
+  //     params: {
+  //       limit: 0,
+  //       page: pageParam,
+  //     },
+  //   })
+  // }
+
+  // const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
+  //   useInfiniteQuery("newsletter", fetchNewsletter, {
+  //     getNextPageParam: (lastPage: any) =>
+  //       lastPage.data.length > 0 ? lastPage.page + 1 : undefined
+  //   })
+
+  // const fetchNext = useCallback(async () => {
+  //   const res = await fetchNextPage();
+  //   if (res.isError) {
+  //     console.log(res.error)
+  //   }
+  // }, [fetchNextPage])
+
+  // useEffect(() => {
+  //   let timerId: NodeJS.Timeout | undefined
+  //   if (isPageEnd && hasNextPage) {
+  //     timerId = setTimeout(() => {
+  //       fetchNext()
+  //     }, 500)
+  //   }
+
+  //   return () => clearTimeout(timerId)
+
+  // }, [fetchNext, isPageEnd, hasNextPage])
 
 
   const handleGetNewsLetterData = async () => {
     try {
-      const responesNewsletter = await getNewsletterData("/api/newsletter")
+      const responesNewsletter = await getNewsletterData("/testapi/newsletter")
       setNewsLetter(responesNewsletter.data)
-      const responesSubscribe = await getSubscribeData("/api/newsletter/subscribe")
+      const responesSubscribe = await getSubscribeData("/testapi/newsletter/subscribe")
       setNewsLettersubscribe(responesSubscribe.data)
     } catch (error) {
       console.log("Api 데이터 불러오기 실패")
@@ -84,7 +112,7 @@ const Subscribe = () => {
         const responesPut = await putSubscribe({ ids: newsletterchecked })
         if (responesPut.status === 201) {
           sendEventToAmplitude("complete to select article", '')
-          navigate("/");
+          window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
         }
       }
     } catch (error) {
@@ -99,6 +127,11 @@ const Subscribe = () => {
   useEffect(() => {
     handleNewsLetterSubcribeDataRenewal()
   }, [newslettersubscribe])
+
+
+  const handleModalOpen = () => {
+    setOpenModal(true);
+  };
 
 
   const handleNewsLetterSubcribeDataRenewal = () => {
@@ -116,183 +149,96 @@ const Subscribe = () => {
         return [...prevChecked, newsletterid];
       }
     });
-    setNewsLetterSelect(newsletterid);
   };
 
+  const handleChannelAdd = () => {
+    sendEventToAmplitude("click add destination", '')
+    window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
+  }
 
+  const truncate = (str: string, n: number) => {
+    return str?.length > n ? str.substring(0, n) + "..." : str;
+  }
 
 
   return (
-    <div className='text-center mx-auto max-w-900 h-auto'>
+    <div className=' mx-auto h-auto'>
       <Nav />
-      <div className='basecontainer'>
-        <Symbol />
-        <div className='flex flex-col border border-solid border-gray-100 mt-10 bg-white h-[530px] overflow-hidden w-[330px] md:w-[350px] p-7  shadow-xl'>
-          <div className='flex-1 overflow-y-auto'>
-            <div className='flex items-start justify-center font-bold mb-3'>
-              <h2>소식을 받고싶은 뉴스레터가 있나요?</h2>
-            </div>
-            <div className='relative'>
-              <div className='flex flex-col items-start'>
-                <div className='flex items-center gap-1'>
-                  <p className='text-medium  font-bold my-3 ml-2'># IT/테크</p>
-                </div>
-                <div className='grid grid-cols-4 items-start'>
-                  {newslettertechnologydata.map((data) =>
-                    <div className='m-1 relative' key={data.id}>
-                      <label>
-                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                        {newsletterchecked.includes(data.id) && (
-                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                        )}
-                        <div className="flex flex-col items-center">
-                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                        </div>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='flex flex-col items-start'>
-                <p className='text-medium  font-bold my-3 ml-2'># 트렌드/라이프</p>
-                <div className='grid grid-cols-4'>
-                  {newsletterlifedata.map((data) =>
-                    <div className='m-1 relative' key={data.id}>
-                      <label>
-                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                        {newsletterchecked.includes(data.id) && (
-                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                        )}
-                        <div className="flex flex-col items-center">
-                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                        </div>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='flex flex-col items-start'>
-                <p className='text-medium  font-bold my-3 ml-2'># 디자인</p>
-                <div className='grid grid-cols-4'>
-                  {newsletterdesigndata.map((data) =>
-                    <div className='m-1 relative' key={data.id}>
-                      <label>
-                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                        {newsletterchecked.includes(data.id) && (
-                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                        )}
-                        <div className="flex flex-col items-center">
-                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                        </div>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='flex flex-col items-start'>
-                <p className='text-medium  font-bold my-3 ml-2'># 건강/의학</p>
-                <div className='grid grid-cols-4'>
-                  {newsletterhealthdata.map((data) =>
-                    <div className='m-1 relative' key={data.id}>
-                      <label>
-                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                        {newsletterchecked.includes(data.id) && (
-                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                        )}
-                        <div className="flex flex-col items-center">
-                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                        </div>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='flex flex-col items-start'>
-                <p className='text-medium  font-bold my-3 ml-2'># 엔터테이먼트</p>
-                <div className='grid grid-cols-4'>
-                  {newsletterentertainmentdata.map((data) =>
-                    <div className='m-1 relative' key={data.id}>
-                      <label>
-                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                        {newsletterchecked.includes(data.id) && (
-                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                        )}
-                        <div className="flex flex-col items-center">
-                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                        </div>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='flex flex-col items-start'>
-                <p className='text-medium  font-bold my-3 ml-2'># 비즈/제테크</p>
-                <div className='grid grid-cols-4'>
-                  {newsletterzetechdata.map((data) =>
-                    <div className='m-1 relative' key={data.id}>
-                      <label>
-                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                        {newsletterchecked.includes(data.id) && (
-                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                        )}
-                        <div className="flex flex-col items-center">
-                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                        </div>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='flex flex-col items-start'>
-                <p className='text-medium  font-bold my-3 ml-2'># 시사/사회</p>
-                <div className='grid grid-cols-4'>
-                  {newslettersocietydata.map((data) =>
-                    <div className='m-1 relative' key={data.id}>
-                      <label>
-                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                        {newsletterchecked.includes(data.id) && (
-                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                        )}
-                        <div className="flex flex-col items-center">
-                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                        </div>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className='flex flex-col items-start'>
-                <p className='text-medium  font-bold my-3 ml-2'># 푸드</p>
-                <div className='grid grid-cols-4'>
-                  {newsletterfooddata.map((data) =>
-                    <div className='m-1 relative' key={data.id}>
-                      <label>
-                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none w-[40px] cursor-pointer h-[40px] rounded-3xl absolute left-[9px] md:left-[12px] top-0 checked:bg-subscribecolor" />
-                        {newsletterchecked.includes(data.id) && (
-                          <img className='w-5 h-5 absolute left-[19px] cursor-pointer md:left-[22px] top-2' src="/images/checked.png" alt="checked" />
-                        )}
-                        <div className="flex flex-col items-center">
-                          <img className='w-[40px] h-[40px] border border-5 border-lightgrey rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                          <span className='font-semibold text-xs my-1 cursor-pointer'>{data.name}</span>
-                        </div>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              </div>
+      <div className='mx-auto max-w-[1200px] mt-10 mb-10'>
+        <div className='flex justify-between md:gap-8'>
+          <div className='flex gap-2 justify-center'>
+            <Symbol />
+            <div className='flex flex-col gap-2 text-left border p-4 bg-white rounded-lg' style={{ boxShadow: "1px 2px lightgrey" }}>
+              <p className='text-xs font-semibold text-gray-400'>최근 요약 확인하고, 뉴스레터 구독하기</p>
+              <p className='text-sm font-semibold'>어떤 뉴스레터를 좋아하시나요?</p>
             </div>
           </div>
-          <button className='mt-8 h-[40px] rounded-lg border-none bg-customPurple text-white text-base font-bold w-[275px] md:w-[285px]' onClick={handlePostNewsLetterData}>구독하기</button>
+          <div>
+            <button className='h-[45px]  rounded-3xl border-none bg-customPurple text-white text-base font-bold w-[150px] md:w-[90px] hover:scale-110 transition-transform' style={{ boxShadow: "0px 1px black" }} onClick={handlePostNewsLetterData}>선택 완료</button>
+          </div>
         </div>
-        <Inquiry />
+        <div className='mt-6'>
+          <div className='overflow-y-auto'>
+            <div className='grid grid-cols-4 gap-5 items-start md:grid-cols-1 md:m-3'>
+              {newsletter.map((data) =>
+                <div className='flex flex-col justify-between w-full border rounded-md bg-white' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }} key={data.id}>
+                  <div>
+                    <div className='border-b h-[70px]'>
+                      <p className='font-extrabold p-4'>{data.mail
+                        ? truncate(data.mail.subject, 38) : "해당 뉴스레터의 새 소식을 기다리고 있어요."}</p>
+                    </div>
+                    <div className={`h-[250px] ${seeMoreStates[data.id] ? "overflow-auto" : "overflow-hidden"} text-ellipsis relative custom-scrollbar px-5`}>
+                      {data.mail && data.mail.summary_list
+                        ? Object.entries(data.mail.summary_list).map(([key, value]) => (
+                          <div className='mt-2' key={key}>
+                            <div className='flex flex-col'>
+                              <p className=' font-extrabold'>{key}</p>
+                              <div className='mt-1'>
+                                <span className='text-sm text-gray-500 font-semibold'>{value}</span>
+                              </div>
+                            </div>
+                            {seeMoreStates[data.id] ?
+                              <span className='text-customPurple text-sm cursor-pointer absolute right-0 bottom-0' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>닫기</span>
+                              :
+                              <span className='text-customPurple text-sm cursor-pointer absolute right-0 bottom-0' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>더보기</span>
+                            }
+                          </div>
+                        ))
+                        : <p className='text-sm text-gray-500 font-semibold p-3'>소식이 생기면 메일포켓이 빠르게 요약해서 전달해드릴게요.</p>
+                      }
+                    </div>
+                  </div>
+                  <div className='flex  justify-between items-center p-3 border-t'>
+                    <div className='flex items-center gap-2'>
+                      <img className='w-[30px] h-[30px] rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                      <span className='font-bold text-sm my-1 md:w-[55px]'>{data.name}</span>
+                    </div>
+                    <label className='relative border-t cursor-pointer'>
+                      <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none" />
+                      {newsletterchecked.includes(data.id) && (
+                        <span className='p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold'>구독해제</span>
+                      )}
+                      <span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton'>구독하기</span>
+                    </label>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="fixed  bottom-[25px] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <button className='h-[45px]  rounded-3xl border-2 bg-customPurple text-white text-base font-bold w-[150px] md:w-[90px] hover:scale-110 transition-transform' onClick={handleModalOpen}>선택 완료</button>
+          </div>
+        </div>
       </div>
+      {openModal && (
+        <SlackGuideModal
+          setOpenModal={setOpenModal}
+          handlePostNewsLetterData={handlePostNewsLetterData}
+          newsletterchecked={newsletterchecked}
+        />
+      )}
+      {/* {isFetching && hasNextPage && <Loader />} */}
+      <div className='w-full  touch-none h-10 mb-10' ref={ref}></div>
     </div>
   );
 }

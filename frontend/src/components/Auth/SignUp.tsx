@@ -2,9 +2,10 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { postSignUpData } from '../../api/api'
+import { postSignUpData, Token } from '../../api/api'
 import { AmplitudeSetUserId, sendEventToAmplitude } from '../Amplitude'
 import Nav from '../Nav'
+import { GoogleLogin, KakaoLogin, NaverLogin } from '../Social/SocialPlatformLogin'
 import Symbol from '../Symbol'
 
 
@@ -17,6 +18,7 @@ const SignUp = () => {
   const [notAllow, setNotAllow] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const navigate = useNavigate();
+  const authToken = Token();
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,10 +62,14 @@ const SignUp = () => {
     setNotAllow(true);
   }, [isPasswordValid]);
 
-
   useEffect(() => {
-    sendEventToAmplitude('view sign up', '');
-  }, []);
+    if (authToken) {
+      navigate("/");
+    } else {
+      sendEventToAmplitude('view sign up', '');
+    }
+  }, [authToken, navigate]);
+
 
 
   return (
@@ -71,25 +77,36 @@ const SignUp = () => {
       <Nav />
       <div className='basecontainer'>
         <Symbol />
-        <div className='basecontainer-submitcontainer signup-container'>
+        <div className='basecontainer-submitcontainer signin-container' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }}>
           <form className='authcontainer-submit' onSubmit={handleSubmit}>
-            <p className='authcontainer-submit_title'>
-              Sign Up
-            </p>
+            <div>
+              <p className='authcontainer-submit_title'>
+                뉴스레터 3줄 요약
+              </p>
+              <p className='text-gray-400  text-xs  font-semibold'>
+                긴 내용도 지루하지 않도록
+              </p>
+            </div>
+            <div className='flex flex-col justify-center items-centerf gap-5  w-full mt-6'>
+              <KakaoLogin />
+              {navigator.userAgent.includes("KAKAOTALK") ? null : <GoogleLogin />}
+              <NaverLogin />
+            </div>
+            <div className='mt-4 mb-1 text-gray-400  text-xs  font-semibold'>또는</div>
             <div className='authcontainer-submit_box my-4'>
-              <input className='authcontainer-submit_data'
+              <input className='authcontainer-submit_data placeholder-gray-500  placeholder:font-bold'
                 type="text"
                 name="identifier"
-                placeholder=' Id'
+                placeholder=' 이메일'
                 value={formData.identifier}
                 onChange={handleInputChange}
               />
             </div>
             <div className='authcontainer-submit_box'>
-              <input className='authcontainer-submit_data'
+              <input className='authcontainer-submit_data placeholder-gray-500  placeholder:font-bold'
                 type="password"
                 name="password"
-                placeholder=' Password'
+                placeholder=' 비밀번호'
                 value={formData.password}
                 onChange={handleInputChange}
               />
@@ -101,10 +118,10 @@ const SignUp = () => {
               </div>
             )}
             <button className='basecontainer-submitdata' type="submit" disabled={notAllow}>
-              시작하기
+              회원가입
             </button>
           </form>
-          <div className='mt-6'>
+          <div className='mb-7'>
             <span className='auth-guidecoment'>이미 아이디가 있으신가요?</span>
             <Link className='auth-link' to="/sign-in">로그인 하기</Link>
           </div>
