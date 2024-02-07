@@ -18,9 +18,9 @@ class NewsLetterService:
         self.user_repository = UserRepository()
         self.mail_repository = MailRepository()
 
-    def get_all_newsletters(self):
+    def get_all_newsletters_with_first_mail(self):
         newsletter_list = list()
-        newsletters = self.newsletter_repository.LoadNewsletters().run()
+        newsletters = self.newsletter_repository.LoadNewslettersWithFirstMail().run()
         for newsletter in newsletters:
             newsletter_list.append(NewsLetterlDTO(newsletter))
         return newsletter_list
@@ -35,6 +35,28 @@ class NewsLetterService:
         user = self.user_repository.ReadByID(user_id).run()
         newsletters = self.newsletter_repository.LoadSubscribeNewsLettersByUser(
             user
+        ).run()
+        if newsletters:
+            for newsletter in newsletters:
+                newsletter_list.append(NewsLetterlDTO(newsletter))
+        return newsletter_list
+
+    def get_subscribeable_newsletters(self, user_id):
+        newsletter_list = list()
+        user = self.user_repository.ReadByID(user_id).run()
+        newsletters = self.newsletter_repository.LoadSubscribeAbleNewsLettersByUser(
+            user
+        ).run()
+        if newsletters:
+            for newsletter in newsletters:
+                newsletter_list.append(NewsLetterlDTO(newsletter))
+        return newsletter_list
+
+    def get_subscribed_newsletters(self, user_id, in_mail):
+        newsletter_list = list()
+        user = self.user_repository.ReadByID(user_id).run()
+        newsletters = self.newsletter_repository.LoadSubscribedNewsLettersByUser(
+            user, in_mail
         ).run()
         if newsletters:
             for newsletter in newsletters:
