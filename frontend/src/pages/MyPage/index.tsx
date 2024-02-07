@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { deleteChannelData, getChannelData, getSubscribeData, Token } from '../../api/api';
 import { AmplitudeResetUserId, sendEventToAmplitude } from '../../components/Amplitude';
+import Summary from '../../components/Summary';
 
 
 export type ChannelDataType = {
@@ -73,7 +74,7 @@ const MyPage = () => {
   return (
     <div className='text-center mx-auto max-w-900 h-auto'>
 
-        {/* {openModal && (
+      {/* {openModal && (
           <SlackGuideModal
             setOpenModal={setOpenModal}
           />

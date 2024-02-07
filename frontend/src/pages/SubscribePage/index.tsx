@@ -161,7 +161,7 @@ const Subscribe = () => {
 
 
   return (
-    <div className=' mx-auto h-auto'>
+    <div className='mx-auto h-auto'>
       <Nav />
       <div className='mx-auto max-w-[1200px] mt-10 mb-10'>
         <div className='flex justify-between md:gap-8'>
@@ -177,21 +177,18 @@ const Subscribe = () => {
           </div>
         </div>
         <div className='mt-6'>
-          <div>
-
-          </div>
           <div className='overflow-y-auto'>
             <div>
-              <h1>구독중인 뉴스레터</h1>
-              <div className='flex overflow-x-auto'>
+              <h1 className='mb-5 text-lg font-extrabold'>구독중인 뉴스레터</h1>
+              <div className='flex overflow-x-auto subscribe-scrollbar gap-4'>
                 {newslettersubscribe.map((data) =>
-                  <div className='w-[200px] flex flex-col border rounded-md bg-white h-[330px]' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }} key={data.id}>
+                  <div className='w-full flex flex-col border rounded-md bg-white h-full' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }} key={data.id}>
                     <div>
                       <div className='border-b h-[70px]'>
                         <p className='font-extrabold p-4'>{data.mail
                           ? truncate(data.mail.subject, 38) : "해당 뉴스레터의 새 소식을 기다리고 있어요."}</p>
                       </div>
-                      <div className={`h-[250px] ${seeMoreStates[data.id] ? "overflow-auto" : "overflow-hidden"} text-ellipsis relative custom-scrollbar px-5`}>
+                      <div className={`h-[250px] w-[285px] ${seeMoreStates[data.id] ? "overflow-auto" : "overflow-hidden"} text-ellipsis relative custom-scrollbar px-5`}>
                         {data.mail && data.mail.summary_list
                           ? Object.entries(data.mail.summary_list).map(([key, value]) => (
                             <div className='mt-2' key={key}>
@@ -229,7 +226,7 @@ const Subscribe = () => {
                 )}
               </div>
             </div>
-            <h1>구독 가능한 뉴스레터</h1>
+            <h1 className='my-5 text-lg font-extrabold'>구독 가능한 뉴스레터</h1>
             <div className='grid grid-cols-4 gap-5 items-start md:grid-cols-1 md:m-3'>
               {subscribeable.map((data) =>
                 <div className='flex flex-col justify-between w-full border rounded-md bg-white' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }} key={data.id}>

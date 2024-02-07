@@ -170,3 +170,18 @@ greetingsAnimation {
 .custom-scrollbar::-webkit-scrollbar-track {
   background-color: #f0f0f0; 
 }
+
+
+.subscribe-scrollbar {}
+
+.subscribe-scrollbar::-webkit-scrollbar {
+  height: 3px; 
+}
+
+.subscribe-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #8F20FF; 
+}
+
+.subscribe-scrollbar::-webkit-scrollbar-track {
+  background-color: #f0f0f0; 
+}

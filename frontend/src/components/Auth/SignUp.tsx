@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { postSignUpData, Token } from '../../api/api'
 import { AmplitudeSetUserId, sendEventToAmplitude } from '../Amplitude'
 import Nav from '../Nav'
-import { GoogleLogin, KakaoLogin, NaverLogin } from '../Social/SocialPlatformLogin'
+import { GoogleLogin, KakaoLogin, NaverLogin } from '../Oauth/SocialPlatformLogin'
 import Symbol from '../Symbol'
 
 
