@@ -28,7 +28,7 @@ interface NewsLetterDataType {
 
 
 const Subscribe = () => {
-  const [newsletter, setNewsLetter] = useState<NewsLetterDataType[]>([])
+  const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([])
   const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([])
   const [newsletterchecked, setNewsLetterChecked] = useState<string[]>([])
   const [seeMoreStates, setSeeMoreStates] = useState<{ [id: string]: boolean }>({});
@@ -93,9 +93,9 @@ const Subscribe = () => {
 
   const handleGetNewsLetterData = async () => {
     try {
-      const responesNewsletter = await getNewsletterData("/testapi/newsletter")
-      setNewsLetter(responesNewsletter.data)
-      const responesSubscribe = await getSubscribeData("/testapi/newsletter/subscribe")
+      const responesNewsletter = await getNewsletterData("/testapi/newsletter/subscribeable")
+      setSubscribeable(responesNewsletter.data)
+      const responesSubscribe = await getSubscribeData("/testapi/newsletter/subscribed")
       setNewsLettersubscribe(responesSubscribe.data)
     } catch (error) {
       console.log("Api 데이터 불러오기 실패")
@@ -140,7 +140,7 @@ const Subscribe = () => {
 
   const handleNewsLetterSelected = (newsletterid: string) => {
     setNewsLetterChecked((prevChecked) => {
-      const newsletters = newsletter.find(item => item.id === newsletterid);
+      const newsletters = subscribeable.find(item => item.id === newsletterid);
       if (prevChecked.includes(newsletterid)) {
         return prevChecked.filter((id) => id !== newsletterid);
       } else {
@@ -161,7 +161,7 @@ const Subscribe = () => {
 
 
   return (
-    <div className=' mx-auto h-auto'>
+    <div className='mx-auto h-auto'>
       <Nav />
       <div className='mx-auto max-w-[1200px] mt-10 mb-10'>
         <div className='flex justify-between md:gap-8'>
@@ -178,8 +178,57 @@ const Subscribe = () => {
         </div>
         <div className='mt-6'>
           <div className='overflow-y-auto'>
+            <div>
+              <h1 className='mb-5 text-lg font-extrabold'>구독중인 뉴스레터</h1>
+              <div className='flex overflow-x-auto subscribe-scrollbar gap-4'>
+                {newslettersubscribe.map((data) =>
+                  <div className='w-full flex flex-col border rounded-md bg-white h-full' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }} key={data.id}>
+                    <div>
+                      <div className='border-b h-[70px]'>
+                        <p className='font-extrabold p-4'>{data.mail
+                          ? truncate(data.mail.subject, 38) : "해당 뉴스레터의 새 소식을 기다리고 있어요."}</p>
+                      </div>
+                      <div className={`h-[250px] w-[285px] ${seeMoreStates[data.id] ? "overflow-auto" : "overflow-hidden"} text-ellipsis relative custom-scrollbar px-5`}>
+                        {data.mail && data.mail.summary_list
+                          ? Object.entries(data.mail.summary_list).map(([key, value]) => (
+                            <div className='mt-2' key={key}>
+                              <div className='flex flex-col'>
+                                <p className=' font-extrabold'>{key}</p>
+                                <div className='mt-1'>
+                                  <span className='text-sm text-gray-500 font-semibold'>{value}</span>
+                                </div>
+                              </div>
+                              {seeMoreStates[data.id] ?
+                                <span className='text-customPurple text-sm cursor-pointer absolute right-0 bottom-0' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>닫기</span>
+                                :
+                                <span className='text-customPurple text-sm cursor-pointer absolute right-0 bottom-0' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>더보기</span>
+                              }
+                            </div>
+                          ))
+                          : <p className='text-sm text-gray-500 font-semibold p-3'>소식이 생기면 메일포켓이 빠르게 요약해서 전달해드릴게요.</p>
+                        }
+                      </div>
+                    </div>
+                    <div className='flex  justify-between items-center p-3 border-t'>
+                      <div className='flex items-center gap-2'>
+                        <img className='w-[30px] h-[30px] rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                        <span className='font-bold text-sm my-1 md:w-[55px]'>{data.name}</span>
+                      </div>
+                      <label className='relative border-t cursor-pointer'>
+                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none" />
+                        {newsletterchecked.includes(data.id) && (
+                          <span className='p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold'>구독해제</span>
+                        )}
+                        <span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton'>구독하기</span>
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <h1 className='my-5 text-lg font-extrabold'>구독 가능한 뉴스레터</h1>
             <div className='grid grid-cols-4 gap-5 items-start md:grid-cols-1 md:m-3'>
-              {newsletter.map((data) =>
+              {subscribeable.map((data) =>
                 <div className='flex flex-col justify-between w-full border rounded-md bg-white' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }} key={data.id}>
                   <div>
                     <div className='border-b h-[70px]'>

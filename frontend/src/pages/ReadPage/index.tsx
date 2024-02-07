@@ -5,6 +5,7 @@ import { getReadMailData } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import Nav from "../../components/Nav";
 import PageLoding from "../../components/PageLoding";
+import Summary from "../../components/Summary";
 
 const ReadPage = () => {
   const [readmaildata, setReadMailData] = useState(null);
@@ -27,20 +28,32 @@ const ReadPage = () => {
   }, [location]);
 
   return (
-    <div>
-      <div className="flex  items-center justify-between">
-        <Nav />
+    <div className="bg-white">
+      <div className="flex  items-center justify-between border-b p-4">
+        <img className="h-6 md:w-[90px] md:mt-[10px] md:ml-[10px] md:h-[20px]"
+          src="/images/MailpocketLogo.png"
+          alt="Logo"
+          onClick={() => (window.location.href = "/landingpage")}
+        />
         <div className="flex md:flex-col md:items-end md:mr-2">
-          <span className="text-sm font-semibold">뉴스레터 요약을 슬랙으로 받아보실래요?</span>
-          <Link className="text-sm underline ml-2 text-customPurple" to="/landingpage">메일포켓 알아보기</Link>
+          <span className=" text-base font-extrabold">뉴스레터 요약을 슬랙으로 받아보실래요?</span>
+          <Link className="font-extrabold text-base underline ml-2 text-customPurple" to="/landingpage">알아보기</Link>
         </div>
+        <Link className="font-extrabold mr-4 text-base text-customPurple" to="/sign-in">로그인하기</Link>
       </div>
-      <div className="flex  items-center justify-center">
-        {readmaildata !== null ? (
+      <div className="flex flex-col items-center justify-center">
+        <Summary />
+        <div>
+          <div className="border-b mt-[80px]" >
+            <p className="text-lg text-gray-500 font-bold mb-3">본문</p>
+          </div>
+   
+        </div>
+        {/* {readmaildata !== null ? (
           <div dangerouslySetInnerHTML={{ __html: readmaildata }} />
         ) : (
           <PageLoding />
-        )}
+        )} */}
       </div>
 
     </div>

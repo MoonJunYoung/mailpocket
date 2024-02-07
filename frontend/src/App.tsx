@@ -12,7 +12,7 @@ import { initializeAmplitude } from './components/Amplitude';
 import PageLoding from './components/PageLoding';
 import { Token, getUserData } from './api/api';
 import amplitude from 'amplitude-js';
-import { GooglesRedirect, KakaoRedirect, NaverRedirect } from './components/Social/SocialPlatformRedirect';
+import { GooglesRedirect, KakaoRedirect, NaverRedirect } from './components/Oauth/SocialPlatformRedirect';
 
 
 
