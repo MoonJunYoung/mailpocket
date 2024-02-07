@@ -56,24 +56,26 @@ class MailRepository(S3Connector):
             self.mail.newsletter_id = mail_model.newsletter_id
             return True
 
-    # 이론상 쿼리를 뉴스레터만큼 81번 보내는건데.. 리펙토링 생각해보기
-    class ReadOneMailByNewsletter(MysqlCRUDTemplate):
+    class ReadMailListFromNewsletter(MysqlCRUDTemplate):
         def __init__(self, newsletter: NewsLetter) -> None:
             self.newsletter = newsletter
             super().__init__()
 
         def execute(self):
-            mail_model = (
+            mail_list = list()
+            mail_models = (
                 self.session.query(MailModel)
                 .filter(MailModel.newsletter_id == self.newsletter.id)
-                .first()
+                .all()
             )
-            if not mail_model:
+            if not mail_models:
                 return None
-            mail = Mail(
-                id=mail_model.id,
-                s3_object_key=mail_model.s3_object_key,
-                subject=mail_model.subject,
-                summary_list=mail_model.summary_list,
-            )
-            return mail
+            for mail_model in mail_models:
+                mail = Mail(
+                    id=mail_model.id,
+                    s3_object_key=mail_model.s3_object_key,
+                    subject=mail_model.subject,
+                    summary_list=mail_model.summary_list,
+                )
+                mail_list.append(mail)
+            return mail_list

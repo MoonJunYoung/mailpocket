@@ -194,6 +194,7 @@ class NewsLetterRepository:
             )
             for newsletter_model in newsletter_models:
                 mail = None
+                # 이론상 쿼리를 뉴스레터만큼 81번 보내는건데.. 리펙토링 생각해보기
                 if self.in_mail:
                     mail_model = (
                         self.session.query(MailModel)
@@ -217,3 +218,39 @@ class NewsLetterRepository:
                 )
                 newsletter_list.append(newsletter)
             return newsletter_list
+
+    class LoadNewsLetterByIDWithMails(MysqlCRUDTemplate):
+        def __init__(self, id) -> None:
+            self.id = id
+            super().__init__()
+
+        def execute(self):
+            newsletter_model = (
+                self.session.query(NewsLetterModel)
+                .filter(NewsLetterModel.id == self.id)
+                .first()
+            )
+            if not newsletter_model:
+                return None
+            mail_list = list()
+            mail_models = (
+                self.session.query(MailModel)
+                .filter(MailModel.newsletter_id == newsletter_model.id)
+                .all()
+            )
+            for mail_model in mail_models:
+                mail = Mail(
+                    id=mail_model.id,
+                    s3_object_key=mail_model.s3_object_key,
+                    subject=mail_model.subject,
+                )
+                mail_list.append(mail)
+            newsletter = NewsLetter(
+                id=newsletter_model.id,
+                name=newsletter_model.name,
+                from_email=newsletter_model.from_email,
+                category=newsletter_model.category,
+                send_date=newsletter_model.send_date,
+                mails=mail_list,
+            )
+            return newsletter
