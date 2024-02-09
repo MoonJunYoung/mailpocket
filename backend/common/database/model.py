@@ -1,4 +1,6 @@
-from sqlalchemy import JSON, Column, Integer, String
+import datetime
+
+from sqlalchemy import DATE, JSON, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -68,6 +70,18 @@ class SubscribeModel(Base):
         self.id = id
         self.newsletter_id = newsletter_id
         self.user_id = user_id
+
+
+class SubscribeRankingModel(Base):
+    __tablename__ = "subscribe_ranking"
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    newsletter_id = Column(Integer)
+    subscribe_count = Column(Integer)
+    snapshot_at = Column(DATE, default=datetime.date.today())
+
+    def __init__(self, newsletter_id, subscribe_count):
+        self.newsletter_id = newsletter_id
+        self.subscribe_count = subscribe_count
 
 
 class MailModel(Base):

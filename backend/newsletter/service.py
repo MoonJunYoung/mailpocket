@@ -19,13 +19,6 @@ class NewsLetterService:
         self.user_repository = UserRepository()
         self.mail_repository = MailRepository()
 
-    def get_all_newsletters_with_first_mail(self):
-        newsletter_list = list()
-        newsletters = self.newsletter_repository.LoadNewslettersWithFirstMail().run()
-        for newsletter in newsletters:
-            newsletter_list.append(NewsLetterlDTO(newsletter))
-        return newsletter_list
-
     def subscribe(self, user_id, newsletter_ids):
         user = self.user_repository.ReadByID(user_id).run()
         self.user_repository.DeleteUserNewslettersMapping(user).run()
