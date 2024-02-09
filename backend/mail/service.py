@@ -37,7 +37,7 @@ class MailService:
             for channel in channels:
                 if channel.slack_channel_id in notified_slack_channel_id_list:
                     continue
-                # channel.send_notification(mail, newsletter)
+                channel.send_notification(mail, newsletter)
                 notified_slack_channel_id_list.append(channel.slack_channel_id)
 
     def read(self, s3_object_key):
