@@ -73,6 +73,9 @@ class NewsLetterRepository:
             )
             return newsletter
 
+        def run(self) -> NewsLetter:
+            return super().run()
+
     class LoadSubscribeNewsLettersByUser(MysqlCRUDTemplate):
         def __init__(self, user: User) -> None:
             self.user = user
