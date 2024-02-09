@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from backend.channel.domain import Channel
@@ -106,3 +107,17 @@ class NewsLetterRepository:
                 )
                 newsletter_list.append(newsletter)
             return newsletter_list
+
+    class UpdateNewsletterLastRecvDateTime(MysqlCRUDTemplate):
+        def __init__(self, newsletter: NewsLetter) -> None:
+            self.newsletter = newsletter
+            super().__init__()
+
+        def execute(self):
+            newsletter_model = (
+                self.session.query(NewsLetterModel)
+                .filter(NewsLetterModel.id == self.newsletter.id)
+                .first()
+            )
+            newsletter_model.last_recv_at = datetime.datetime.now()
+            self.session.commit()
