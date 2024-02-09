@@ -42,3 +42,6 @@ class Mail:
 
     def fail_summary(self):
         self.summary_list = {"요약을 실패했습니다.": "본문을 확인해주세요."}
+
+    def set_newsletter_id(self, newsletter_id):
+        self.newsletter_id = newsletter_id
