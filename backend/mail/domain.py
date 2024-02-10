@@ -12,6 +12,7 @@ class Mail:
         s3_object_key=None,
         subject=None,
         summary_list=None,
+        newsletter_id=None,
     ) -> None:
         self.id = id
         self.mail_content = mail_content
@@ -19,8 +20,7 @@ class Mail:
         self.subject = subject
         self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         self.summary_list = summary_list
-        if not self.mail_content:
-            del self.mail_content
+        self.newsletter_id = newsletter_id
 
     def parser_eamil(self):
         parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)
