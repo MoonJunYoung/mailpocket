@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import DATE, JSON, Column, Integer, String
+from sqlalchemy import DATE, DATETIME, JSON, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -51,6 +51,7 @@ class NewsLetterModel(Base):
     from_email = Column(String)
     category = Column(String)
     send_date = Column(String)
+    last_recv_at = Column(DATETIME)
 
     def __init__(self, id, name, from_email, category, send_date):
         self.id = id
@@ -91,6 +92,7 @@ class MailModel(Base):
     subject = Column(String)
     summary_list = Column(JSON)
     newsletter_id = Column(Integer)
+    recv_at = Column(DATETIME, default=datetime.datetime.now())
 
     def __init__(self, id, s3_object_key, subject, summary_list, newsletter_id):
         self.id = id

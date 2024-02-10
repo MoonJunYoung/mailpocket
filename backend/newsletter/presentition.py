@@ -1,3 +1,5 @@
+from enum import Enum
+
 from fastapi import APIRouter, Header, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
@@ -13,28 +15,32 @@ class SubscribeData(BaseModel):
     ids: list[int]
 
 
+class SubscribeStatus(str, Enum):
+    subscribed = "subscribed"
+    subscribable = "subscribable"
+
+
+class SortType(str, Enum):
+    ranking = "ranking"
+    recent = "recent"
+
+
 class NewsLetterPresentation:
     router = APIRouter(prefix="/newsletter")
 
-    @router.get("/subscribeable", status_code=200)
-    async def get_subscribeable_newsletters(
-        request: Request, cursor: int, Authorization=Header(None)
+    @router.get("", status_code=200)
+    async def get_newsletters(
+        request: Request,
+        subscribe_status: SubscribeStatus,
+        sort_type: SortType,
+        in_mail: bool = False,
+        cursor: int = None,
+        Authorization=Header(None),
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
-            newsletters = newsletter_service.get_subscribeable_newsletters(user_id)
-            return newsletters
-        except Exception as e:
-            catch_exception(e, request)
-
-    @router.get("/subscribed", status_code=200)
-    async def get_subscribed_newsletters(
-        request: Request, cursor: int, in_mail: bool = False, Authorization=Header(None)
-    ):
-        try:
-            user_id = Token.get_user_id_by_token(Authorization)
-            newsletters = newsletter_service.get_subscribed_newsletters(
-                user_id, in_mail
+            newsletters = newsletter_service.get_newsletters(
+                user_id, subscribe_status, sort_type, in_mail, cursor
             )
             return newsletters
         except Exception as e:
@@ -42,7 +48,9 @@ class NewsLetterPresentation:
 
     @router.patch("/subscribe", status_code=201)
     async def subscribe(
-        request: Request, subscribe_data: SubscribeData, Authorization=Header(None)
+        request: Request,
+        subscribe_data: SubscribeData,
+        Authorization=Header(None),
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
@@ -59,9 +67,9 @@ class NewsLetterPresentation:
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
-            newsletter_service.get_newsletter_with_previous_mail_list_by_newsletter_id(
+            newsltter = newsletter_service.get_newsletter_with_previous_mail_list_by_newsletter_id(
                 user_id, newsletter_id
             )
-
+            return newsltter
         except Exception as e:
             catch_exception(e, request)
