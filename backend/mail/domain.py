@@ -1,3 +1,4 @@
+import datetime
 from email import policy
 from email.parser import BytesParser
 
@@ -13,6 +14,7 @@ class Mail:
         subject=None,
         summary_list=None,
         newsletter_id=None,
+        recv_at=None,
     ) -> None:
         self.id = id
         self.mail_content = mail_content
@@ -21,10 +23,16 @@ class Mail:
         self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         self.summary_list = summary_list
         self.newsletter_id = newsletter_id
+        self.recv_at = recv_at
 
     def parser_eamil(self):
         parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)
-
+        self.date = datetime.datetime.strftime(
+            datetime.datetime.strptime(
+                str(parsed_email["Date"]), "%a, %d %b %Y %H:%M:%S %z"
+            ),
+            "%Y-%m-%d %H:%M:%S",
+        )
         from_email = str(parsed_email["From"])
         subject = str(parsed_email["Subject"])
         html_body = None

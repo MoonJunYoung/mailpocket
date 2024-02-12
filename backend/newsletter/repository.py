@@ -5,6 +5,7 @@ from sqlalchemy import func
 from backend.common.database.connector import MysqlCRUDTemplate
 from backend.common.database.model import (
     MailModel,
+    NewsletterEmailAddressesModel,
     NewsLetterModel,
     SubscribeModel,
     SubscribeRankingModel,
@@ -24,7 +25,11 @@ class NewsLetterRepository:
         def execute(self):
             newsletter_model = (
                 self.session.query(NewsLetterModel)
-                .filter(NewsLetterModel.from_email == self.from_email)
+                .join(
+                    NewsletterEmailAddressesModel,
+                    NewsLetterModel.id == NewsletterEmailAddressesModel.newsletter_id,
+                )
+                .filter(NewsletterEmailAddressesModel.email_address == self.from_email)
                 .first()
             )
             if not newsletter_model:
@@ -32,7 +37,6 @@ class NewsLetterRepository:
             newsletter = NewsLetter(
                 id=newsletter_model.id,
                 name=newsletter_model.name,
-                from_email=newsletter_model.from_email,
                 category=newsletter_model.category,
                 send_date=newsletter_model.send_date,
             )
@@ -66,12 +70,12 @@ class NewsLetterRepository:
                     id=mail_model.id,
                     s3_object_key=mail_model.s3_object_key,
                     subject=mail_model.subject,
+                    recv_at=mail_model.recv_at,
                 )
                 mail_list.append(mail)
             newsletter = NewsLetter(
                 id=newsletter_model.id,
                 name=newsletter_model.name,
-                from_email=newsletter_model.from_email,
                 category=newsletter_model.category,
                 send_date=newsletter_model.send_date,
                 mails=mail_list,
@@ -156,7 +160,6 @@ class NewsLetterRepository:
                 newsletter = NewsLetter(
                     id=newsletter_model.id,
                     name=newsletter_model.name,
-                    from_email=newsletter_model.from_email,
                     category=newsletter_model.category,
                     send_date=newsletter_model.send_date,
                     mail=mail,
@@ -190,4 +193,18 @@ class NewsLetterRepository:
                 for newsletter_model in newsletter_models
             ]
             self.session.add_all(subscribe_ranking_models)
+            self.session.commit()
+
+    class UpdateNewsletterLastRecvDateTime(MysqlCRUDTemplate):
+        def __init__(self, newsletter: NewsLetter) -> None:
+            self.newsletter = newsletter
+            super().__init__()
+
+        def execute(self):
+            newsletter_model = (
+                self.session.query(NewsLetterModel)
+                .filter(NewsLetterModel.id == self.newsletter.id)
+                .first()
+            )
+            newsletter_model.last_recv_at = datetime.datetime.now()
             self.session.commit()

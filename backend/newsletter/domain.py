@@ -6,7 +6,6 @@ class NewsLetter:
         self,
         id,
         name,
-        from_email,
         category,
         send_date,
         mail: Mail = None,
@@ -14,7 +13,6 @@ class NewsLetter:
     ) -> None:
         self.id = id
         self.name = name
-        self.from_email = from_email
         self.category = category
         self.send_date = send_date
         self.mail = mail
