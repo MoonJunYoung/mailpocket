@@ -1,3 +1,4 @@
+import datetime
 from email import policy
 from email.parser import BytesParser
 
@@ -26,7 +27,12 @@ class Mail:
 
     def parser_eamil(self):
         parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)
-        self.date = str(parsed_email["Date"])
+        self.date = datetime.datetime.strftime(
+            datetime.datetime.strptime(
+                str(parsed_email["Date"]), "%a, %d %b %Y %H:%M:%S %z"
+            ),
+            "%Y-%m-%d %H:%M:%S",
+        )
         from_email = str(parsed_email["From"])
         subject = str(parsed_email["Subject"])
         html_body = None

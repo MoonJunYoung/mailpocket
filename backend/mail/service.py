@@ -27,12 +27,13 @@ class MailService:
             mail.from_email
         ).run()
         mail.set_newsletter_id(newsletter.id)
+        mail.summary()
+        self.mail_repository.CreateMail(mail).run()
+        self.newsletter_repository.UpdateNewsletterLastRecvDateTime(newsletter).run()
+
         channels = self.channel_repository.ReadChannelsByNewsletter(newsletter).run()
         notified_slack_channel_id_list = list()
         if channels:
-            mail.summary()
-            self.mail_repository.CreateMail(mail).run()
-
             for channel in channels:
                 if channel.slack_channel_id in notified_slack_channel_id_list:
                     continue
