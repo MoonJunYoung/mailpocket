@@ -66,6 +66,7 @@ class NewsLetterRepository:
                     id=mail_model.id,
                     s3_object_key=mail_model.s3_object_key,
                     subject=mail_model.subject,
+                    recv_at=mail_model.recv_at,
                 )
                 mail_list.append(mail)
             newsletter = NewsLetter(
