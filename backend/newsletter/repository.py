@@ -184,6 +184,7 @@ class NewsLetterRepository:
                     SubscribeModel,
                     NewsLetterModel.id == SubscribeModel.newsletter_id,
                 )
+                .filter(NewsLetterModel.operating_status == True)
                 .group_by(NewsLetterModel.id)
                 .order_by(func.count(SubscribeModel.newsletter_id).desc())
                 .all()
