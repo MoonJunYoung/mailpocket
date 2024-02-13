@@ -32,20 +32,27 @@ def parsing_html_text(html):
 
 
 def mail_summary(from_email, subject, html):
-    html_text = parsing_html_text(html)
-    response = openai.ChatCompletion.create(
-        model=MODEL,
-        messages=[
-            {"role": "system", "content": PROMPT},
-            {"role": "user", "content": f"뉴스:{html_text}"},
-        ],
-        temperature=0,
-    )
-    print(f"summary logging: {from_email} {subject}\n{response}")
-    content = response["choices"][0]["message"]["content"]
-    if "```json" in content:
-        content = content.split("```json")[1].split("```")[0]
-    content = content.replace("{", "").replace("}", "")
-    content = "{" + content + "}"
-    summary_list = json.loads(content)
+    for _ in range(3):
+        try:
+            html_text = parsing_html_text(html)
+            response = openai.ChatCompletion.create(
+                model=MODEL,
+                messages=[
+                    {"role": "system", "content": PROMPT},
+                    {"role": "user", "content": f"뉴스:{html_text}"},
+                ],
+                temperature=0,
+            )
+            print(f"summary logging: {from_email} {subject}\n{response}")
+            content = response["choices"][0]["message"]["content"]
+            if "```json" in content:
+                content = content.split("```json")[1].split("```")[0]
+            content = content.replace("{", "").replace("}", "")
+            content = "{" + content + "}"
+            summary_list = json.loads(content)
+            return summary_list
+        except:
+            continue
+
+    summary_list = {"요약을 실패했습니다.": "본문을 확인해주세요."}
     return summary_list
