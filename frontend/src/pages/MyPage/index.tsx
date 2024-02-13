@@ -1,9 +1,15 @@
 import Cookies from "js-cookie";
-import React, { ReactComponentElement, useEffect, useState } from "react";
+import React, {
+  ReactComponentElement,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import {
   deleteChannelData,
   getChannelData,
+  getMail,
   getSubscribeData,
   Token,
 } from "../../api/api";
@@ -13,7 +19,6 @@ import {
 } from "../../components/Amplitude";
 
 import "../MyPage/hideScroll.css";
-import { Link } from "react-router-dom";
 
 export type ChannelDataType = {
   id: number;
@@ -23,53 +28,34 @@ export type ChannelDataType = {
 };
 
 const MyPage = () => {
-  const [channel, setChannel] = useState<ChannelDataType[]>([]);
-  const [activeTab, setActiveTab] = useState(channel.length);
+  const [newsLetters, setNewsLetters] = useState<any[]>([]);
+  const [mail, setMail] = useState({});
+  const [loadFlag, setLoadFlag] = useState(false);
+  const [activeTab, setActiveTab] = useState();
+  const [activeMail, setActiveMail] = useState();
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   const authToken = Token();
 
-  useEffect(() => {
-    if (!authToken) {
-      navigate("/landingpage");
-    } else {
-      sendEventToAmplitude("view my page", "");
-    }
-  }, [authToken, navigate]);
+  const handleSubscribe = async () => {
+    let responesSubscribe = await getSubscribeData(
+      "/testapi/newsletter?&subscribe_status=subscribed&sort_type=recent"
+    );
+    let test = responesSubscribe.data;
+
+    return test;
+  };
+
+  const handleMail = async (id: any) => {
+    let responseMail = await getMail(id);
+    return responseMail.data;
+  };
 
   const handleChannelAdd = () => {
     sendEventToAmplitude("click add destination", "");
     window.location.href =
       "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
   };
-
-  const handleGetChannel = async () => {
-    try {
-      const response = await getChannelData("/api/channel");
-      setChannel(response.data);
-      const responesSubscribe = await getSubscribeData(
-        "/api/newsletter/subscribe"
-      );
-      if (responesSubscribe.data.length === 0) {
-        navigate("/subscribe");
-      }
-    } catch (error) {
-      console.log("Api 데이터 불러오기 실패");
-    }
-  };
-
-  const handleDeleteChannel = async (channelId: number) => {
-    try {
-      await deleteChannelData(channelId);
-      setChannel(channel.filter((data) => data.id !== channelId));
-    } catch (error) {
-      console.log("Api 데이터 삭제 실패");
-    }
-  };
-
-  useEffect(() => {
-    handleGetChannel();
-  }, []);
 
   const handleLogOut = async () => {
     Cookies.remove("authToken");
@@ -81,13 +67,54 @@ const MyPage = () => {
     setOpenModal(true);
   };
 
+  const itemClick = async (id: any) => {
+    let responseMail = await handleMail(id);
+    setActiveTab(id);
+    setMail(responseMail);
+  };
+
+  useEffect(() => {
+    if (!authToken) {
+      navigate("/landingpage");
+    } else {
+      sendEventToAmplitude("view my page", "");
+    }
+  }, [authToken, navigate]);
+
+  useEffect(() => {
+    let sub = handleSubscribe();
+    sub.then((result: any) => {
+      setNewsLetters(result);
+      setActiveTab(result[0].id);
+    });
+  }, []);
   return (
     <div className="bg-whitesmoke h-screen">
       <div className="text-center mx-auto max-w-[1300px] h-auto bg-white">
         {/* 마이페이지 요소들의 display 요소 설정 */}
         <div className="flex">
-          <NavBar></NavBar>
-          <List></List>
+          <NavBar
+            newsLetters={newsLetters}
+            setNewsLetters={setNewsLetters}
+            mail={mail}
+            setMail={setMail}
+            onClick={itemClick}
+            handleMail={handleMail}
+            handleSubscribe={handleSubscribe}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          ></NavBar>
+          <List
+            mail={mail}
+            setMail={setMail}
+            handleMail={handleMail}
+            handleSubscribe={handleSubscribe}
+            newsLetters={newsLetters}
+            setNewsLetters={setNewsLetters}
+            loadFlag={loadFlag}
+            setLoadFlag={setLoadFlag}
+            activeTab={activeTab}
+          ></List>
           <Main></Main>
         </div>
       </div>
@@ -95,21 +122,36 @@ const MyPage = () => {
   );
 };
 
-const NavBar = () => {
+const NavBar = ({
+  newsLetters,
+  setNewsLetters,
+  mail,
+  setMail,
+  onClick,
+  handleMail,
+  handleSubscribe,
+  activeTab,
+  setActiveTab,
+}: any) => {
   return (
     <div
       className="flex flex-col  flex-[7%]  border-r-[1px] border-r-#E8E8E8 
     shadow-[1px_0px_5px_0px_#E8E8E8] h-screen min-w-[100px] justify-between"
     >
-      <div className="pt-[10px]  overflow-auto hideScroll">
-        <Item index="1" name="미라클"></Item>
-        <Item index="2" name="탑스터"></Item>
-        <Item index="3" name="브랜드"></Item>
-        <Item index="4" name="어쩌구"></Item>
-        <Item index="5" name="저쩌구구구"></Item>
-        <Item index="6" name="미라클"></Item>
-        <Item index="7" name="미라클"></Item>
-        <Item index="8" name="미라클"></Item>
+      <div className={`pt-[10px]  overflow-auto hideScroll`}>
+        {newsLetters.map((newsLetter: any) => {
+          return (
+            <Item
+              key={newsLetter.id}
+              index={newsLetter.id}
+              name={newsLetter.name}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              onClick={onClick}
+            ></Item>
+          );
+        })}
+
         <ChangeButton></ChangeButton>
       </div>
       <div className="">
@@ -132,9 +174,14 @@ const Authentication = () => {
   );
 };
 
-const Item = ({ index, name }: any) => {
+const Item = ({ index, name, onClick, activeTab, setActiveTab }: any) => {
   return (
-    <div className=" px-[19px] border-b-[1px] border-b-#E8E8E8">
+    <div
+      className={`px-[19px] border-b-[1px] border-b-#E8E8E8 h-[100px]`}
+      onClick={() => {
+        onClick(index);
+      }}
+    >
       <div className="mt-[15px] w-auto">
         <img
           className="mx-auto size-[42px]"
@@ -142,8 +189,15 @@ const Item = ({ index, name }: any) => {
           alt=""
         />
       </div>
-      <div className="text-[13px] mt-[6px] mb-[15px] text-[14px] font-bold text-[#666666]">
-        {name}
+
+      <div>
+        {index === activeTab ? (
+          <div className="border-t-[4px] border-solid border-[#8B5CF6] rounded-sm my-[20px]"></div>
+        ) : (
+          <div className="break-keep text-[13px] mt-[6px] mb-[15px] text-[14px] font-bold text-[#666666]">
+            {name}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -184,28 +238,47 @@ const Option = () => {
   );
 };
 
-const List = () => {
+const List = ({
+  mail,
+  setMail,
+  handleMail,
+  handleSubscribe,
+  newsLetters,
+  setNewsLetters,
+  setLoadFlag,
+  loadFlag,
+  activeTab,
+}: any) => {
+  useEffect(() => {
+    if (newsLetters.length > 0) {
+      let data = handleMail(newsLetters[0].id);
+      data.then((result: any) => {
+        setMail(result);
+      });
+    }
+  }, [newsLetters]);
+
   return (
     <div className="max-w-[310px]  flex-[24%] border-r-[1px] border-r-#E8E8E8 flex flex-col shadow-[1px_0px_5px_0px_#E8E8E8] h-screen">
       <div className="min-h-[inherit]">
         <ListItem item={<Header></Header>}></ListItem>
+        {mail.mails?.map((item: any) => {
+          return (
+            <ListItem
+              key={item.id}
+              item={
+                <Column
+                  key={item.id}
+                  subject={item.subject}
+                  name={mail.name}
+                  recv_at={item.recv_at}
+                ></Column>
+              }
+            ></ListItem>
+          );
+        })}
       </div>
-      <div className="overflow-auto hideScroll">
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-        <ListItem item={<Column></Column>}></ListItem>
-      </div>
+      <div className="overflow-auto hideScroll"></div>
     </div>
   );
 };
@@ -214,7 +287,6 @@ const Header = () => {
   return (
     <div className="flex items-center gap-[15px] min-h-[inherit]">
       <div className="text-[30px] font-bold">Pockets</div>
-      <span>11</span>
     </div>
   );
 };
@@ -227,13 +299,22 @@ const ListItem = ({ item }: any) => {
   );
 };
 
-const Column = () => {
+const Column = ({ key, subject, name, recv_at }: any) => {
   return (
     <div className="text-[16px] font-bold text-left">
       <div className="py-[12px]">
-        <div className=" text-[#666666]">The best font loading strategies</div>
-        <div className=" text-[#8F8F8F]">Frontend Focus</div>
-        <div className="text-[#D3D0D5] mt-[10px]">2024년 02월 06일 화요일</div>
+        <div className="mr-[15px]">
+          <div className=" text-[#666666]  break-keep">{subject}</div>
+          <div className=" text-[#8F8F8F] text-[14px] mt-[5px]">{name}</div>
+        </div>
+        <div className="text-[#D3D0D5] mt-[10px]">
+          {new Date(recv_at).toLocaleDateString("ko-KR", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </div>
       </div>
     </div>
   );
