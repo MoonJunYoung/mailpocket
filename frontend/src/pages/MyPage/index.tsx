@@ -14,6 +14,7 @@ import {
 
 import "../MyPage/hideScroll.css";
 import { Link } from "react-router-dom";
+import Summary from "../../components/Summary";
 
 export type ChannelDataType = {
   id: number;

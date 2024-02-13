@@ -24,6 +24,12 @@ interface postSubscribeType {
   ids: string[]
 }
 
+interface Params {
+  'in_mail': boolean;
+  'subscribe_status': string;
+  'sort_type': string;
+  cursor?: string;
+}
 
 // Read
 
@@ -68,8 +74,10 @@ export const deleteChannelData = (data: number) => {
 
 // Subscribe
 
-export const getNewsletterData = (query: string) => {
-  return axiosData().get(query);
+export const getNewsletterData = (query: string, params: Params) => {
+  return axiosData().get(query, {
+    params: params
+  })
 };
 
 export const putSubscribe = (data: postSubscribeType) => {

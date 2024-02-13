@@ -5,16 +5,15 @@ import { sendEventToAmplitude } from '../../components/Amplitude';
 import { useInfiniteQuery } from 'react-query';
 import Nav from '../../components/Nav';
 import Symbol from '../../components/Symbol';
-import axios from 'axios';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { Loader } from '../../components/Loader';
 import SlackGuideModal from '../../components/Modal/SlackGuideModal';
 
-type SummaryItem = {
+export type SummaryItem = {
   [key: string]: string;
 };
 
-interface NewsLetterDataType {
+export type NewsLetterDataType = {
   id: string;
   name: string;
   category: string;
@@ -26,6 +25,12 @@ interface NewsLetterDataType {
   }
 }
 
+interface Params {
+  'in_mail': boolean;
+  'subscribe_status': string;
+  'sort_type': string;
+  cursor?: string;
+}
 
 const Subscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([])
@@ -56,46 +61,57 @@ const Subscribe = () => {
     }
   }, [authToken, navigate]);
 
-  // const fetchNewsletter = async ({ pageParam = 1 }) => {
-  //   const { data } = await axios("/testapi/newsletter?page=" + pageParam, {
-  //     params: {
-  //       limit: 0,
-  //       page: pageParam,
-  //     },
-  //   })
-  // }
 
-  // const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
-  //   useInfiniteQuery("newsletter", fetchNewsletter, {
-  //     getNextPageParam: (lastPage: any) =>
-  //       lastPage.data.length > 0 ? lastPage.page + 1 : undefined
-  //   })
+  const fetchNewsletter = async (lastId: string | null) => {
+    let params: Params = {
+      'in_mail': true,
+      'subscribe_status': 'subscribable',
+      'sort_type': 'ranking'
+    };
 
-  // const fetchNext = useCallback(async () => {
-  //   const res = await fetchNextPage();
-  //   if (res.isError) {
-  //     console.log(res.error)
-  //   }
-  // }, [fetchNextPage])
+    if (lastId) {
+      params.cursor = lastId;
+    }
 
-  // useEffect(() => {
-  //   let timerId: NodeJS.Timeout | undefined
-  //   if (isPageEnd && hasNextPage) {
-  //     timerId = setTimeout(() => {
-  //       fetchNext()
-  //     }, 500)
-  //   }
+    const { data } = await getNewsletterData('/testapi/newsletter',
+      params
+    );
+    setSubscribeable((prevData) => [...prevData, ...data])
+    return data;
+  };
 
-  //   return () => clearTimeout(timerId)
+  const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery("newsletter", ({ pageParam }) => fetchNewsletter(pageParam), {
+      getNextPageParam: (lastPage) => {
+        const lastItem = lastPage[lastPage.length - 1];
+        return lastItem ? lastItem.id : null;
+      }
+    });
 
-  // }, [fetchNext, isPageEnd, hasNextPage])
+
+  const fetchNext = useCallback(async () => {
+    const res = await fetchNextPage();
+    if (res.isError) {
+      console.log(res.error)
+    }
+  }, [fetchNextPage])
+
+  useEffect(() => {
+    let timerId: NodeJS.Timeout | undefined
+    if (isPageEnd && hasNextPage) {
+      timerId = setTimeout(() => {
+        fetchNext()
+      }, 500)
+    }
+
+    return () => clearTimeout(timerId)
+
+  }, [fetchNext, isPageEnd, hasNextPage])
 
 
   const handleGetNewsLetterData = async () => {
     try {
-      const responesNewsletter = await getNewsletterData("/testapi/newsletter/subscribeable")
-      setSubscribeable(responesNewsletter.data)
-      const responesSubscribe = await getSubscribeData("/testapi/newsletter/subscribed")
+      const responesSubscribe = await getSubscribeData("testapi/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking")
       setNewsLettersubscribe(responesSubscribe.data)
     } catch (error) {
       console.log("Api 데이터 불러오기 실패")
@@ -150,10 +166,6 @@ const Subscribe = () => {
     });
   };
 
-  const handleChannelAdd = () => {
-    sendEventToAmplitude("click add destination", '')
-    window.location.href = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
-  }
 
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substring(0, n) + "..." : str;
@@ -178,78 +190,78 @@ const Subscribe = () => {
         </div>
         <div className='mt-6'>
           <div className='overflow-y-auto'>
-            <div>
-              <h1 className='mb-5 text-lg font-extrabold'>구독중인 뉴스레터</h1>
-              <div className='flex overflow-x-auto subscribe-scrollbar gap-4'>
-                {newslettersubscribe.map((data) =>
-                  <div className='w-full flex flex-col border rounded-md bg-white h-full' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }} key={data.id}>
-                    <div>
-                      <div className='border-b h-[70px]'>
-                        <p className='font-extrabold p-4'>{data.mail
-                          ? truncate(data.mail.subject, 38) : "해당 뉴스레터의 새 소식을 기다리고 있어요."}</p>
-                      </div>
-                      <div className={`h-[250px] w-[285px] ${seeMoreStates[data.id] ? "overflow-auto" : "overflow-hidden"} text-ellipsis relative custom-scrollbar px-5`}>
-                        {data.mail && data.mail.summary_list
-                          ? Object.entries(data.mail.summary_list).map(([key, value]) => (
-                            <div className='mt-2' key={key}>
-                              <div className='flex flex-col'>
-                                <p className=' font-extrabold'>{key}</p>
-                                <div className='mt-1'>
-                                  <span className='text-sm text-gray-500 font-semibold'>{value}</span>
+            <div className='md:p-3'>
+              {Object.keys(newslettersubscribe).length > 0 ? (
+                <div>
+                  <h1 className='mb-5 text-lg font-extrabold'>구독중인 뉴스레터</h1>
+                  <div className={`${newslettersubscribe.length > 4 ? 'flex' : 'grid grid-cols-4'} overflow-x-auto  gap-4`}>
+                    {newslettersubscribe.map((data) =>
+                      <div className=' w-full flex flex-col border rounded-md bg-white' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }} key={data.id}>
+                        <div className='relative'>
+                          <div className='border-b h-[70px]'>
+                            <p className='font-extrabold p-4'>{data.mail ? truncate(data.mail.subject, 35) : "해당 뉴스레터의 새 소식을 기다리고 있어요."}</p>
+                          </div>
+                          <div className={`h-[250px] w-[285px] ${seeMoreStates[data.id] ? "overflow-auto" : "overflow-hidden"} text-ellipsis custom-scrollbar px-5`}>
+                            {data.mail && data.mail.summary_list ? (
+                              Object.entries(data.mail.summary_list).map(([key, value]) => (
+                                <div className='mt-2' key={key}>
+                                  <div className='flex flex-col'>
+                                    <p className=' font-extrabold'>{key}</p>
+                                    <div className='mt-1'>
+                                      <span className='text-sm text-gray-500 font-semibold'>{value}</span>
+                                    </div>
+                                  </div>
+                                  {seeMoreStates[data.id] ? (
+                                    <span className='font-bold text-customPurple text-sm cursor-pointer absolute right-0 bottom-0 w-full bg-white text-center border-t' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>닫기</span>
+                                  ) : (
+                                    <span className='font-bold text-customPurple text-sm cursor-pointer absolute right-0 bottom-0 w-full bg-white text-center border-t' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>더보기</span>
+                                  )}
                                 </div>
-                              </div>
-                              {seeMoreStates[data.id] ?
-                                <span className='text-customPurple text-sm cursor-pointer absolute right-0 bottom-0' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>닫기</span>
-                                :
-                                <span className='text-customPurple text-sm cursor-pointer absolute right-0 bottom-0' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>더보기</span>
-                              }
-                            </div>
-                          ))
-                          : <p className='text-sm text-gray-500 font-semibold p-3'>소식이 생기면 메일포켓이 빠르게 요약해서 전달해드릴게요.</p>
-                        }
+                              ))
+                            ) : (
+                              <p className='text-sm text-gray-500 font-semibold p-3'>소식이 생기면 메일포켓이 빠르게 요약해서 전달해드릴게요.</p>
+                            )}
+                          </div>
+                        </div>
+                        <div className='flex justify-between items-center p-3 border-t'>
+                          <div className='flex items-center gap-2'>
+                            <img className='w-[30px] h-[30px] rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
+                            <span className='font-bold text-sm my-1 md:w-[55px]'>{data.name}</span>
+                          </div>
+                          <label className='relative border-t cursor-pointer'>
+                            <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none" />
+                            {newsletterchecked.includes(data.id) && (
+                              <span className='p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold'>구독해제</span>
+                            )}
+                            <span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton'>구독하기</span>
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                    <div className='flex  justify-between items-center p-3 border-t'>
-                      <div className='flex items-center gap-2'>
-                        <img className='w-[30px] h-[30px] rounded-3xl' src={`/images/${data.id}.png`} alt="newslettericon" />
-                        <span className='font-bold text-sm my-1 md:w-[55px]'>{data.name}</span>
-                      </div>
-                      <label className='relative border-t cursor-pointer'>
-                        <input type="checkbox" checked={newsletterchecked.includes(data.id)} onChange={() => handleNewsLetterSelected(data.id)} className="appearance-none" />
-                        {newsletterchecked.includes(data.id) && (
-                          <span className='p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold'>구독해제</span>
-                        )}
-                        <span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton'>구독하기</span>
-                      </label>
-                    </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </div>
+              ) : ''}
             </div>
-            <h1 className='my-5 text-lg font-extrabold'>구독 가능한 뉴스레터</h1>
+            <h1 className='my-5 text-lg font-extrabold md:p-3'>구독 가능한 뉴스레터</h1>
             <div className='grid grid-cols-4 gap-5 items-start md:grid-cols-1 md:m-3'>
               {subscribeable.map((data) =>
                 <div className='flex flex-col justify-between w-full border rounded-md bg-white' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }} key={data.id}>
-                  <div>
-                    <div className='border-b h-[70px]'>
-                      <p className='font-extrabold p-4'>{data.mail
-                        ? truncate(data.mail.subject, 38) : "해당 뉴스레터의 새 소식을 기다리고 있어요."}</p>
+                  <div className=' relative'>
+                    <div className='border-b h-[65px]'>
+                      <p className='font-extrabold p-3'>{data.mail
+                        ? truncate(data.mail.subject, 35) : "해당 뉴스레터의 새 소식을 기다리고 있어요."}</p>
                     </div>
-                    <div className={`h-[250px] ${seeMoreStates[data.id] ? "overflow-auto" : "overflow-hidden"} text-ellipsis relative custom-scrollbar px-5`}>
+                    <div className={`h-[250px] ${seeMoreStates[data.id] ? "overflow-auto" : "overflow-hidden"} custom-scrollbar px-5`}>
                       {data.mail && data.mail.summary_list
                         ? Object.entries(data.mail.summary_list).map(([key, value]) => (
                           <div className='mt-2' key={key}>
-                            <div className='flex flex-col'>
-                              <p className=' font-extrabold'>{key}</p>
-                              <div className='mt-1'>
-                                <span className='text-sm text-gray-500 font-semibold'>{value}</span>
-                              </div>
-                            </div>
-                            {seeMoreStates[data.id] ?
-                              <span className='text-customPurple text-sm cursor-pointer absolute right-0 bottom-0' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>닫기</span>
-                              :
-                              <span className='text-customPurple text-sm cursor-pointer absolute right-0 bottom-0' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>더보기</span>
-                            }
+                            <p className=' font-extrabold'>{key}</p>
+                            <span className='text-sm text-gray-500 font-semibold'>{value}</span>
+                            {seeMoreStates[data.id] ? (
+                              <span className='font-bold text-customPurple text-sm cursor-pointer absolute right-0 bottom-0 w-full bg-white text-center border-t' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>닫기</span>
+                            ) : (
+                              <span className='font-bold text-customPurple text-sm cursor-pointer absolute right-0 bottom-0 w-full bg-white text-center border-t' onClick={() => handleNewsLetterSeeMoreSelect(data.id)}>더보기</span>
+                            )}
                           </div>
                         ))
                         : <p className='text-sm text-gray-500 font-semibold p-3'>소식이 생기면 메일포켓이 빠르게 요약해서 전달해드릴게요.</p>
@@ -285,8 +297,8 @@ const Subscribe = () => {
           newsletterchecked={newsletterchecked}
         />
       )}
-      {/* {isFetching && hasNextPage && <Loader />} */}
       <div className='w-full  touch-none h-10 mb-10' ref={ref}></div>
+      {isFetching && hasNextPage && <Loader />}
     </div>
   );
 }

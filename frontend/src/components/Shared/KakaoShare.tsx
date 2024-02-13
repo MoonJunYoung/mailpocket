@@ -1,13 +1,19 @@
 import { useEffect } from "react";
+import { SummaryNewsLetterDataType } from "../../pages/ReadPage";
 
+type KakaoShareType = {
+  text?: string;
+  containerstyle: string;
+  imgstyle: string;
+  summaryNewsLetterData: SummaryNewsLetterDataType[];
+}
 
-
-
-
-const KakaoShare = () => {
+const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: KakaoShareType) => {
   useEffect(() => {
     initKakao();
   }, []);
+
+  const readLinks = summaryNewsLetterData.map((data) => data.read_link);
 
   const initKakao = () => {
     //@ts-ignore
@@ -26,19 +32,19 @@ const KakaoShare = () => {
       objectType: "feed",
       content: {
         title: "mailPocket",
-        // description: `${.name}의 뉴수레터 요약 결과 입니다.`,
+        description: `${summaryNewsLetterData.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.`,
         imageUrl: "",
         link: {
-          // webUrl: .share_link,
-          // mobileWebUrl: .share_link,
+          webUrl: readLinks.join(''),
+          mobileWebUrl: readLinks.join(''),
         },
       },
       buttons: [
         {
           title: "뉴스레터 확인하러가기",
           link: {
-            // webUrl: .share_link,
-            // mobileWebUrl: .share_link,
+            webUrl: readLinks.join(''),
+            mobileWebUrl: readLinks.join(''),
           },
         },
       ],
@@ -47,9 +53,9 @@ const KakaoShare = () => {
 
   return (
     <div>
-      <div className="share-node py-2 px-2 bg-kakaoBgColor flex items-center justify-center gap-1 rounded-lg cursor-pointer hover:scale-110 transition-transform" onClick={shareKakao}>
-        <img className="w-6" src="/images/kakao.png" alt="카카오톡 공유" />
-        <span className="font-extrabold text-sm" >카카오톡으로 공유하기</span>
+      <div className={containerstyle} onClick={shareKakao}>
+        <img className={imgstyle} src="/images/kakao.png" alt="카카오톡 공유" />
+        <span className="font-extrabold text-sm">{text}</span>
       </div>
     </div>
   );
