@@ -36,7 +36,7 @@ const GoogleLogin = () => {
     alt: "google",
     src: "/images/google.png",
     socialLoginUrl:
-      "https://accounts.google.com/o/oauth2/v2/auth?response_type=token&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&client_id=869341137433-6cein6aq8o739nitu99p8m2m71kr4dbi.apps.googleusercontent.com&redirect_uri=https://test.mailpocket.site/google-oauth-redirect",
+      "https://accounts.google.com/o/oauth2/v2/auth?response_type=token&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&client_id=470039216193-568hnttd1011ddmc5j22nqia9rcjm1ah.apps.googleusercontent.com&redirect_uri=https://test.mailpocket.site/google-oauth-redirect",
     type: "google",
     style: "border border-1 h-11 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center rounded-lg",
     title: "구글 계정으로 계속하기",

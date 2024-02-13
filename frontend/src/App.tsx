@@ -1,6 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MyPage from "./pages/MyPage";
+import MobileReadPage from "./mobile/MobileReadPage";
 import Subscribe from "./pages/SubscribePage";
 import SignIn from './components/Auth/SignIn';
 import SingUp from './components/Auth/SignUp';
@@ -13,6 +14,7 @@ import PageLoding from './components/PageLoding';
 import { Token, getUserData } from './api/api';
 import amplitude from 'amplitude-js';
 import { GooglesRedirect, KakaoRedirect, NaverRedirect } from './components/Oauth/SocialPlatformRedirect';
+import MobileMyPage from './mobile/MobileMyPage';
 
 
 
@@ -53,6 +55,8 @@ function App() {
           <Route path="/read" element={<ReadPage />} />
           <Route path="/subscribe" element={<Subscribe />} />
           <Route path="/landingpage" element={<LandingPage />} />
+          <Route path="/mobilereadpage" element={<MobileReadPage />} />
+          <Route path="/mobilemypage" element={<MobileMyPage />} />
         </Routes>
       </Router> : <PageLoding />}
     </div>

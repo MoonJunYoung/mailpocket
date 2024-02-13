@@ -97,7 +97,7 @@ const SignUp = () => {
               <input className='authcontainer-submit_data placeholder-gray-500  placeholder:font-bold'
                 type="text"
                 name="identifier"
-                placeholder=' 이메일'
+                placeholder=' 아이디'
                 value={formData.identifier}
                 onChange={handleInputChange}
               />
