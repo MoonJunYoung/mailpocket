@@ -59,7 +59,7 @@ class NewsLetterPresentation:
         except Exception as e:
             catch_exception(e, request)
 
-    @router.get("/{newsletter_id}/mails", status_code=201)
+    @router.get("/{newsletter_id}/mail", status_code=200)
     async def get_newsletter_with_previous_mail_list(
         request: Request,
         newsletter_id: int,
