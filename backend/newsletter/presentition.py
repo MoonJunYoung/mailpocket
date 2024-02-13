@@ -25,6 +25,19 @@ class SortType(str, Enum):
     recent = "recent"
 
 
+class Category(str, Enum):
+    IT_Tech = "IT/테크"
+    Health_Medical = "건강/의학"
+    Design = "디자인"
+    Business_Finance = "비즈/제테크"
+    CurrentAffairs_Society = "시사/사회"
+    Entertainment = "엔터테이먼트"
+    Travel = "여행"
+    Hobby_SelfImprovement = "취미/자기계발"
+    Trend_Lifestyle = "트렌드/라이프"
+    Food = "푸드"
+
+
 class NewsLetterPresentation:
     router = APIRouter(prefix="/newsletter")
 
@@ -72,7 +85,7 @@ class NewsLetterPresentation:
         except Exception as e:
             catch_exception(e, request)
 
-    @router.delete("/{newsletter_id}/subscribe", status_code=201)
+    @router.delete("/{newsletter_id}/subscribe", status_code=204)
     async def newsletter_subscribe_cancel(
         request: Request,
         newsletter_id: int,
