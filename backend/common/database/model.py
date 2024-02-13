@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import DATE, DATETIME, JSON, Column, Integer, String
+from sqlalchemy import DATE, DATETIME, JSON, Boolean, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -52,6 +52,7 @@ class NewsLetterModel(Base):
     category = Column(String)
     send_date = Column(String)
     last_recv_at = Column(DATETIME)
+    operating_status = Column(Boolean)
 
     def __init__(self, id, name, from_email, category, send_date):
         self.id = id
