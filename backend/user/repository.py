@@ -61,6 +61,34 @@ class UserRepository:
             )
             return user
 
+    class CreateUserNewsletterMapping(MysqlCRUDTemplate):
+        def __init__(self, user: User, newsletter_id) -> None:
+            self.user = user
+            self.newsletter_id = newsletter_id
+            super().__init__()
+
+        def execute(self):
+            subscribe_model = SubscribeModel(
+                id=None, newsletter_id=self.newsletter_id, user_id=self.user.id
+            )
+            self.session.add(subscribe_model)
+            self.session.commit()
+
+    class DeleteUserNewsletterMapping(MysqlCRUDTemplate):
+        def __init__(self, user: User, newsletter_id) -> None:
+            self.user = user
+            self.newsletter_id = newsletter_id
+            super().__init__()
+
+        def execute(self):
+            subscribe_model = (
+                self.session.query(SubscribeModel)
+                .filter(SubscribeModel.user_id == self.user.id)
+                .filter(SubscribeModel.newsletter_id == self.newsletter_id)
+            ).first()
+            self.session.delete(subscribe_model)
+            self.session.commit()
+
     class CreateUserNewslettersMapping(MysqlCRUDTemplate):
         def __init__(self, user: User, newsletter_ids: list[int]) -> None:
             self.user = user

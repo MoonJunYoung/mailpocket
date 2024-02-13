@@ -19,7 +19,15 @@ class NewsLetterService:
         self.user_repository = UserRepository()
         self.mail_repository = MailRepository()
 
-    def subscribe(self, user_id, newsletter_ids):
+    def newsletter_subscribe(self, user_id, newsletter_id):
+        user = self.user_repository.ReadByID(user_id).run()
+        self.user_repository.CreateUserNewsletterMapping(user, newsletter_id).run()
+
+    def newsletter_subscribe_cancel(self, user_id, newsletter_id):
+        user = self.user_repository.ReadByID(user_id).run()
+        self.user_repository.DeleteUserNewsletterMapping(user, newsletter_id).run()
+
+    def newsletters_subscribe(self, user_id, newsletter_ids):
         user = self.user_repository.ReadByID(user_id).run()
         self.user_repository.DeleteUserNewslettersMapping(user).run()
         self.user_repository.CreateUserNewslettersMapping(user, newsletter_ids).run()

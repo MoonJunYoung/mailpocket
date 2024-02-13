@@ -46,15 +46,41 @@ class NewsLetterPresentation:
         except Exception as e:
             catch_exception(e, request)
 
-    @router.patch("/subscribe", status_code=201)
-    async def subscribe(
+    @router.put("/subscribe", status_code=201)
+    async def newsletters_subscribe(
         request: Request,
         subscribe_data: SubscribeData,
         Authorization=Header(None),
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
-            newsletter_service.subscribe(user_id, subscribe_data.ids)
+            newsletter_service.newsletters_subscribe(user_id, subscribe_data.ids)
+
+        except Exception as e:
+            catch_exception(e, request)
+
+    @router.post("/{newsletter_id}/subscribe", status_code=201)
+    async def newsletter_subscribe(
+        request: Request,
+        newsletter_id: int,
+        Authorization=Header(None),
+    ):
+        try:
+            user_id = Token.get_user_id_by_token(Authorization)
+            newsletter_service.newsletter_subscribe(user_id, newsletter_id.ids)
+
+        except Exception as e:
+            catch_exception(e, request)
+
+    @router.delete("/{newsletter_id}/subscribe", status_code=201)
+    async def newsletter_subscribe_cancel(
+        request: Request,
+        newsletter_id: int,
+        Authorization=Header(None),
+    ):
+        try:
+            user_id = Token.get_user_id_by_token(Authorization)
+            newsletter_service.newsletter_subscribe_cancel(user_id, newsletter_id.ids)
 
         except Exception as e:
             catch_exception(e, request)
