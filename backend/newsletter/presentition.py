@@ -80,7 +80,7 @@ class NewsLetterPresentation:
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
-            newsletter_service.newsletter_subscribe(user_id, newsletter_id.ids)
+            newsletter_service.newsletter_subscribe(user_id, newsletter_id)
 
         except Exception as e:
             catch_exception(e, request)
@@ -93,7 +93,7 @@ class NewsLetterPresentation:
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
-            newsletter_service.newsletter_subscribe_cancel(user_id, newsletter_id.ids)
+            newsletter_service.newsletter_subscribe_cancel(user_id, newsletter_id)
 
         except Exception as e:
             catch_exception(e, request)
