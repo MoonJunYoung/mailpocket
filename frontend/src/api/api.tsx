@@ -24,10 +24,10 @@ interface postSubscribeType {
   ids: string[]
 }
 
-interface Params {
-  'in_mail': boolean;
-  'subscribe_status': string;
-  'sort_type': string;
+export interface Params {
+  in_mail: boolean;
+  subscribe_status: string;
+  sort_type: string;
   cursor?: string;
 }
 
@@ -81,10 +81,26 @@ export const getNewsletterData = (query: string, params: Params) => {
 };
 
 export const putSubscribe = (data: postSubscribeType) => {
-  return axiosData().patch("/testapi/newsletter/subscribe", data);
+  return axiosData().put("/testapi/newsletter/subscribe", data);
 };
 
 export const getSubscribeData = (query: string) => {
   return axiosData().get(query);
 };
 
+
+// read 
+
+export const readPageSubscribe = (newsletterId:number) => {
+  return axiosData().post(`/testapi/newsletter/${newsletterId}/subscribe`);
+};
+
+export const readPageUnSubscribe = (newsletterId:number) => {
+  return axiosData().delete(`/testapi/newsletter/${newsletterId}/subscribe`);
+};
+
+// mobilemypage
+
+export const getNewsLetterDetail = (query: string) => {
+  return axiosData().get(query);
+};

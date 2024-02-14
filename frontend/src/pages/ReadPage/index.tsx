@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { getReadMailData } from "../../api/api";
+import { getReadMailData, Token } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import PageLoding from "../../components/PageLoding";
 import Summary from "../../components/Summary";
@@ -27,6 +27,7 @@ const ReadPage = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const mail = searchParams.get("mail");
+  const authToken = Token();
 
   const handleGetData = async () => {
     try {
@@ -44,7 +45,7 @@ const ReadPage = () => {
 
   return (
     <div className="bg-white">
-      <div className="flex  items-center justify-between border-b p-4">
+      {authToken ? "" : (<div className="flex  items-center justify-between border-b p-4">
         <img className="h-6 md:w-[90px] md:mt-[10px] md:ml-[10px] md:h-[20px]"
           src="/images/MailpocketLogo.png"
           alt="Logo"
@@ -55,8 +56,8 @@ const ReadPage = () => {
           <Link className="font-extrabold text-base underline ml-2 text-customPurple" to="/landingpage">알아보기</Link>
         </div>
         <Link className="font-extrabold mr-4 text-base text-customPurple" to="/sign-in">로그인하기</Link>
-      </div>
-      <div className="flex flex-col items-center justify-center">
+      </div>)}
+      <div className="flex flex-col items-center justify-center pb-[80px]">
         <Summary summaryNewsLetterData={readmaildata} />
         <div className="border-b w-[730px] mt-10">
           <p className="font-bold text-lg p-3 text-gray-500">본문</p>
@@ -70,9 +71,19 @@ const ReadPage = () => {
             );
           })}
         </div>
+        <div className="flex justify-center items-center fixed bottom-0  h-[80px]  mt-10">
+          <div className="w-[730px] h-[80px] border-t absolute top-0 bg-white z-10">
+            <img className="w-[180px] absolute top-4 right-0 cursor-pointer" src="/images/MailpocketLogo.png" alt="MailpocketLogo" onClick={() => (window.location.href = "/landingpage")} />
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 export default ReadPage;
+
+
+
+
+

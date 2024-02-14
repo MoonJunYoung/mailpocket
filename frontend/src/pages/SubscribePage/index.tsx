@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getNewsletterData, getSubscribeData, putSubscribe, Token } from '../../api/api';
+import { getNewsletterData, getSubscribeData, Params, putSubscribe, Token } from '../../api/api';
 import { sendEventToAmplitude } from '../../components/Amplitude';
 import { useInfiniteQuery } from 'react-query';
 import Nav from '../../components/Nav';
@@ -25,12 +25,6 @@ export type NewsLetterDataType = {
   }
 }
 
-interface Params {
-  'in_mail': boolean;
-  'subscribe_status': string;
-  'sort_type': string;
-  cursor?: string;
-}
 
 const Subscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([])

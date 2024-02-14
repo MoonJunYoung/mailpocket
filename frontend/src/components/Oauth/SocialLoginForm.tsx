@@ -21,6 +21,7 @@ export const SocialLoginForm = ({
   title,
   titleStyle,
 }: SocialLoginFormType) => {
+  
   const handleSocialLogin = () => {
     sendEventToAmplitude("click 3rd party sign in", { "provider type": type })
     window.location.href = socialLoginUrl;

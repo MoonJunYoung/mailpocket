@@ -3,6 +3,8 @@ import KakaoShare from './Shared/KakaoShare'
 import Symbol from './Symbol'
 import UrlShare from './Shared/UrlShare'
 import { SummaryNewsLetterDataType } from '../pages/ReadPage'
+import { readPageSubscribe, readPageUnSubscribe, Token } from '../api/api'
+import { sendEventToAmplitude } from './Amplitude'
 
 interface SummaryProps {
   summaryNewsLetterData: SummaryNewsLetterDataType[];
@@ -10,6 +12,31 @@ interface SummaryProps {
 
 const Summary = ({ summaryNewsLetterData }: SummaryProps) => {
   const [newslettemoresee, setNewsLetteMoreSee] = useState(true);
+  const [subscribestatus, setSubscribeStatus] = useState(true)
+  const authToken = Token();
+
+  const handleNewsLetterSelected = async (newsletterId: number) => {
+    try {
+      const response = await readPageSubscribe(newsletterId)
+      if (response.status === 201) {
+        setSubscribeStatus(false)
+      }
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패")
+    }
+  }
+
+  const handleNewsLetterUnSelected = async (newsletterId: number) => {
+    try {
+      const response = await readPageUnSubscribe(newsletterId)
+      if (response.status === 204) {
+        setSubscribeStatus(true)
+      }
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패")
+    }
+  }
+
 
   return (
     <div>
@@ -17,13 +44,21 @@ const Summary = ({ summaryNewsLetterData }: SummaryProps) => {
         {summaryNewsLetterData.map((data) => (
           <div key={data.id} className='border-b flex justify-between mt-8'>
             <div>
-              <div className='flex gap-2'>
+              <div className='flex items-center gap-2'>
                 <img className='w-8' src={`images/${data.newsletter_id}.png`} alt={String(data.newsletter_id)} />
                 <span className='font-semibold text-gray-600'>{data.from_name}</span>
+                {authToken ? (
+                  subscribestatus ?
+                    (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.newsletter_id)}>구독하기</span>)
+                    :
+                    (<span className='p-2 rounded-xl  border border-gray-200 bg-gray-200  text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}>구독해제</span>)
+                ) : ""}
               </div>
               <p className='my-4 text-2xl font-bold'>{data.subject}</p>
             </div>
-            <span className='text-sm font-bold text-gray-400'>{new Date(data.date).toLocaleDateString('ko-KR')}</span>
+            <span className='text-sm font-bold text-gray-400'>
+              {new Date(data.date).toLocaleDateString('ko-KR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            </span>
           </div>
         ))}
       </div>
@@ -41,9 +76,9 @@ const Summary = ({ summaryNewsLetterData }: SummaryProps) => {
             <div key={data.id} className={`p-3 flex flex-col items-start border-b h-[280px] ${newslettemoresee ? 'overflow-y-hidden' : 'overflow-y-auto'} custom-scrollbar`}>
               {data.summary_list ? (
                 Object.entries(data.summary_list).map(([key, value]) => (
-                  <div className='mt-1' key={key}>
+                  <div className='my-1' key={key}>
                     <div className='flex flex-col'>
-                      <p className='font-extrabold'>{key}</p>
+                      <p className='my-1 font-extrabold'>{key}</p>
                       <span className='text-sm text-gray-500 font-semibold'>{value}</span>
                     </div>
                   </div>
