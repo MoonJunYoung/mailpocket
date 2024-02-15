@@ -19,6 +19,8 @@ import {
 } from "../../components/Amplitude";
 
 import "../MyPage/hideScroll.css";
+import { Link } from "react-router-dom";
+import { SettingModal } from "../../components/Modal/SettingModal";
 
 export type ChannelDataType = {
   id: number;
@@ -95,43 +97,43 @@ const MyPage = () => {
         <div className="flex">
           <NavBar
             newsLetters={newsLetters}
-            setNewsLetters={setNewsLetters}
-            mail={mail}
-            setMail={setMail}
             onClick={itemClick}
-            handleMail={handleMail}
-            handleSubscribe={handleSubscribe}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            handleLogOut={handleLogOut}
+            setOpenModal={setOpenModal}
           ></NavBar>
           <List
             mail={mail}
             setMail={setMail}
             handleMail={handleMail}
-            handleSubscribe={handleSubscribe}
             newsLetters={newsLetters}
-            setNewsLetters={setNewsLetters}
-            loadFlag={loadFlag}
-            setLoadFlag={setLoadFlag}
-            activeTab={activeTab}
+            activeMail={activeMail}
+            setActiveMail={setActiveMail}
           ></List>
           <Main></Main>
         </div>
       </div>
+      {openModal === true ? (
+        <SettingModal
+          setOpenModal={setOpenModal}
+          openModal={openModal}
+          newsLetters={newsLetters}
+        ></SettingModal>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
 
 const NavBar = ({
   newsLetters,
-  setNewsLetters,
-  mail,
-  setMail,
   onClick,
-  handleMail,
-  handleSubscribe,
   activeTab,
   setActiveTab,
+  handleLogOut,
+  setOpenModal,
 }: any) => {
   return (
     <div
@@ -156,20 +158,25 @@ const NavBar = ({
       </div>
       <div className="">
         <div className="">
-          <Option></Option>
+          <Option setOpenModal={setOpenModal}></Option>
         </div>
         <div className="border-t-[1px] border-t-#E8E8E8">
-          <Authentication></Authentication>
+          <Authentication handleLogOut={handleLogOut}></Authentication>
         </div>
       </div>
     </div>
   );
 };
 
-const Authentication = () => {
+const Authentication = ({ handleLogOut }: any) => {
   return (
     <div className="py-[12px]">
-      <span className="font-extrabold underline">로그아웃</span>
+      <span
+        onClick={handleLogOut}
+        className="cursor-pointer font-extrabold underline"
+      >
+        로그아웃
+      </span>
     </div>
   );
 };
@@ -177,7 +184,7 @@ const Authentication = () => {
 const Item = ({ index, name, onClick, activeTab, setActiveTab }: any) => {
   return (
     <div
-      className={`px-[19px] border-b-[1px] border-b-#E8E8E8 h-[100px]`}
+      className={`px-[19px] border-b-[1px] border-b-#E8E8E8 h-[100px] cursor-pointer`}
       onClick={() => {
         onClick(index);
       }}
@@ -206,27 +213,34 @@ const Item = ({ index, name, onClick, activeTab, setActiveTab }: any) => {
 // Item이랑 합치면 되는데 시간 없으니깐 나중에 합치기
 const ChangeButton = () => {
   return (
-    <div className="mt-[15px] px-[19px] ">
-      <div className="bg-[#EEEEEE]  size-[42px] mx-auto rounded-xl">
-        <img
-          className="mx-auto size-[32px] h-full"
-          src="images\plus2.svg"
-          alt=""
-        />
+    <Link to="/subscribe">
+      <div className="mt-[15px] px-[19px] cursor-pointer">
+        <div className="bg-[#EEEEEE]  size-[42px] mx-auto rounded-xl">
+          <img
+            className="mx-auto p-[10px] h-full"
+            src="images/add.png"
+            alt=""
+          />
+        </div>
+        <div className="text-[13px] my-[15px] h-[13px] text-[16px] font-bold text-[#666666]">
+          변경
+        </div>
       </div>
-      <div className="text-[13px] my-[15px] h-[13px] text-[16px] font-bold text-[#666666]">
-        변경
-      </div>
-    </div>
+    </Link>
   );
 };
 
-const Option = () => {
+const Option = ({ setOpenModal }: any) => {
   return (
-    <div className="mt-[15px] px-[19px] ">
+    <div
+      onClick={() => {
+        setOpenModal(true);
+      }}
+      className="mt-[15px] px-[19px] cursor-pointer "
+    >
       <div className="bg-[#EEEEEE]  size-[42px] mx-auto rounded-xl">
         <img
-          className="mx-auto size-[15px] h-full"
+          className="mx-auto size-[20px] h-full"
           src="images\setting.svg"
           alt=""
         />
@@ -242,12 +256,9 @@ const List = ({
   mail,
   setMail,
   handleMail,
-  handleSubscribe,
   newsLetters,
-  setNewsLetters,
-  setLoadFlag,
-  loadFlag,
-  activeTab,
+  activeMail,
+  setActiveMail,
 }: any) => {
   useEffect(() => {
     if (newsLetters.length > 0) {
@@ -257,15 +268,26 @@ const List = ({
       });
     }
   }, [newsLetters]);
-
+  useEffect(() => {
+    if (
+      Object.keys(mail).length !== 0 &&
+      mail.constructor === Object &&
+      mail.mails[0]
+    ) {
+      setActiveMail(mail.mails[0].id);
+    }
+  }, [mail]);
   return (
     <div className="max-w-[310px]  flex-[24%] border-r-[1px] border-r-#E8E8E8 flex flex-col shadow-[1px_0px_5px_0px_#E8E8E8] h-screen">
-      <div className="min-h-[inherit]">
+      <div className="min-h-[inherit] overflow-auto hideScroll">
         <ListItem item={<Header></Header>}></ListItem>
         {mail.mails?.map((item: any) => {
           return (
             <ListItem
               key={item.id}
+              activeMail={activeMail}
+              id={item.id}
+              setActiveMail={setActiveMail}
               item={
                 <Column
                   key={item.id}
@@ -278,7 +300,6 @@ const List = ({
           );
         })}
       </div>
-      <div className="overflow-auto hideScroll"></div>
     </div>
   );
 };
@@ -286,14 +307,23 @@ const List = ({
 const Header = () => {
   return (
     <div className="flex items-center gap-[15px] min-h-[inherit]">
-      <div className="text-[30px] font-bold">Pockets</div>
+      <div className="text-[30px] font-[800]">Pockets</div>
     </div>
   );
 };
 
-const ListItem = ({ item }: any) => {
+const ListItem = ({ item, activeMail, id, setActiveMail }: any) => {
   return (
-    <div className="min-h-[100px] border-b-[1px] border-b-#E8E8E8 ">
+    <div
+      onClick={() => {
+        if (id) {
+          setActiveMail(id);
+        }
+      }}
+      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${
+        id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
+      }`}
+    >
       <div className="ml-[20px] focus:bg-slate-100 min-h-[inherit]">{item}</div>
     </div>
   );
