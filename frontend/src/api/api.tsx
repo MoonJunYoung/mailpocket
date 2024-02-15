@@ -11,18 +11,18 @@ const axiosData = () =>
   });
 
 interface postAuthDataType {
-  identifier: string,
-  password: string
+  identifier: string;
+  password: string;
 }
 
-
 interface SlackTokenType {
-  code: string
+  code: string;
 }
 
 interface postSubscribeType {
-  ids: string[]
+  ids: string[];
 }
+
 
 export interface Params {
   in_mail: boolean;
@@ -30,6 +30,7 @@ export interface Params {
   sort_type: string;
   cursor?: string;
 }
+
 
 // Read
 
@@ -40,7 +41,6 @@ export const getReadMailData = (data: string | null) => {
 export const getUserData = () => {
   return axiosData().get("/testapi/user");
 };
-
 
 // Auth
 
@@ -61,7 +61,6 @@ export const postSlackToken = (data: SlackTokenType) => {
 export const getSlackToken = (data: any) => {
   return axiosData().get(`/testapi/${data}`);
 };
-
 
 // Channle
 
@@ -86,6 +85,12 @@ export const putSubscribe = (data: postSubscribeType) => {
 
 export const getSubscribeData = (query: string) => {
   return axiosData().get(query);
+};
+
+
+// Mail
+export const getMail = (newsletter_id: any) => {
+  return axiosData().get(`/testapi/newsletter/${newsletter_id}/mail`);
 };
 
 
