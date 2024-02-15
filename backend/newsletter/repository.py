@@ -82,6 +82,41 @@ class NewsLetterRepository:
             )
             return newsletter
 
+    class LoadNewsLetterWithLastMailByID(MysqlCRUDTemplate):
+        def __init__(self, id) -> None:
+            self.id = id
+            super().__init__()
+
+        def execute(self):
+            newsletter_model = (
+                self.session.query(NewsLetterModel)
+                .filter(NewsLetterModel.id == self.id)
+                .first()
+            )
+            if not newsletter_model:
+                return None
+            mail_model = (
+                self.session.query(MailModel)
+                .filter(MailModel.newsletter_id == newsletter_model.id)
+                .order_by(MailModel.recv_at.desc())
+                .first()
+            )
+            if mail_model:
+                mail = Mail(
+                    id=mail_model.id,
+                    s3_object_key=mail_model.s3_object_key,
+                    subject=mail_model.subject,
+                    recv_at=mail_model.recv_at,
+                )
+            newsletter = NewsLetter(
+                id=newsletter_model.id,
+                name=newsletter_model.name,
+                category=newsletter_model.category,
+                send_date=newsletter_model.send_date,
+                mail=mail,
+            )
+            return newsletter
+
     class ReadNewsletters(MysqlCRUDTemplate):
         def __init__(
             self, user: User, subscribe_status, sort_type, in_mail, cursor

@@ -112,3 +112,20 @@ class NewsLetterPresentation:
             return newsltter
         except Exception as e:
             catch_exception(e, request)
+
+    @router.get("/{newsletter_id}/last-mail", status_code=200)
+    async def get_newsletter_with_last_mail(
+        request: Request,
+        newsletter_id: int,
+        Authorization=Header(None),
+    ):
+        try:
+            user_id = Token.get_user_id_by_token(Authorization)
+            newsltter = (
+                newsletter_service.get_newsletter_with_last_mail_by_newsletter_id(
+                    user_id, newsletter_id
+                )
+            )
+            return newsltter
+        except Exception as e:
+            catch_exception(e, request)

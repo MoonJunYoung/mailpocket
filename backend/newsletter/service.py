@@ -51,3 +51,10 @@ class NewsLetterService:
             newsletter_id
         ).run()
         return NewsLetterlDTO(newsletter)
+
+    def get_newsletter_with_last_mail_by_newsletter_id(self, user_id, newsletter_id):
+        user = self.user_repository.ReadByID(user_id).run()
+        newsletter = self.newsletter_repository.LoadNewsLetterWithLastMailByID(
+            newsletter_id
+        ).run()
+        return NewsLetterlDTO(newsletter)
