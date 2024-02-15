@@ -23,6 +23,15 @@ interface postSubscribeType {
   ids: string[];
 }
 
+
+export interface Params {
+  in_mail: boolean;
+  subscribe_status: string;
+  sort_type: string;
+  cursor?: string;
+}
+
+
 // Read
 
 export const getReadMailData = (data: string | null) => {
@@ -64,19 +73,39 @@ export const deleteChannelData = (data: number) => {
 
 // Subscribe
 
-export const getNewsletterData = (query: string) => {
-  return axiosData().get(query);
+export const getNewsletterData = (query: string, params: Params) => {
+  return axiosData().get(query, {
+    params: params
+  })
 };
 
 export const putSubscribe = (data: postSubscribeType) => {
-  return axiosData().patch("/testapi/newsletter/subscribe", data);
+  return axiosData().put("/testapi/newsletter/subscribe", data);
 };
 
 export const getSubscribeData = (query: string) => {
   return axiosData().get(query);
 };
 
+
 // Mail
 export const getMail = (newsletter_id: any) => {
   return axiosData().get(`/testapi/newsletter/${newsletter_id}/mail`);
+};
+
+
+// read 
+
+export const readPageSubscribe = (newsletterId:number) => {
+  return axiosData().post(`/testapi/newsletter/${newsletterId}/subscribe`);
+};
+
+export const readPageUnSubscribe = (newsletterId:number) => {
+  return axiosData().delete(`/testapi/newsletter/${newsletterId}/subscribe`);
+};
+
+// mobilemypage
+
+export const getNewsLetterDetail = (query: string) => {
+  return axiosData().get(query);
 };

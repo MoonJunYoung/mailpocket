@@ -1,3 +1,4 @@
+import datetime
 from email import policy
 from email.parser import BytesParser
 
@@ -12,6 +13,8 @@ class Mail:
         s3_object_key=None,
         subject=None,
         summary_list=None,
+        newsletter_id=None,
+        recv_at=None,
     ) -> None:
         self.id = id
         self.mail_content = mail_content
@@ -19,12 +22,17 @@ class Mail:
         self.subject = subject
         self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         self.summary_list = summary_list
-        if not self.mail_content:
-            del self.mail_content
+        self.newsletter_id = newsletter_id
+        self.recv_at = recv_at
 
     def parser_eamil(self):
         parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)
-
+        self.date = datetime.datetime.strftime(
+            datetime.datetime.strptime(
+                str(parsed_email["Date"]), "%a, %d %b %Y %H:%M:%S %z"
+            ),
+            "%Y-%m-%d %H:%M:%S",
+        )
         from_email = str(parsed_email["From"])
         subject = str(parsed_email["Subject"])
         html_body = None
@@ -50,12 +58,7 @@ class Mail:
         del self.mail_content
 
     def summary(self):
-        try:
-            self.summary_list = mail_summary(
-                self.from_email, self.subject, self.html_body
-            )
-        except:
-            self.summary_list = {"요약을 실패했습니다.": "본문을 확인해주세요."}
+        self.summary_list = mail_summary(self.from_email, self.subject, self.html_body)
 
     # 리펙토링 필수,, 일단 급해서
     def set_newsletter_id(self, newsletter_id):

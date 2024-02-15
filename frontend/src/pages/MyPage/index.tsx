@@ -20,6 +20,7 @@ import {
 
 import "../MyPage/hideScroll.css";
 import { Link } from "react-router-dom";
+
 import { SettingModal } from "../../components/Modal/SettingModal";
 
 export type ChannelDataType = {

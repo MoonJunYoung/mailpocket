@@ -31,6 +31,7 @@ class MailRepository(S3Connector):
                 subject=self.mail.subject,
                 summary_list=self.mail.summary_list,
                 newsletter_id=self.mail.newsletter_id,
+                recv_at=self.mail.date,
             )
             self.session.add(mail_model)
             self.session.commit()

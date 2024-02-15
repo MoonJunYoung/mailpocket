@@ -92,7 +92,7 @@ const SignIn = () => {
                 type="text"
                 name="identifier"
                 value={formData.identifier}
-                placeholder=' 이메일'
+                placeholder=' 아이디'
                 onChange={handleInputChange}
               />
             </div>
