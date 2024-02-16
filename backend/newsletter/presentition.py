@@ -6,9 +6,11 @@ from pydantic import BaseModel
 
 from backend.common.exceptions import catch_exception
 from backend.common.token import Token
+from backend.mail.service import MailService
 from backend.newsletter.service import NewsLetterService
 
 newsletter_service = NewsLetterService()
+mail_service = MailService()
 
 
 class SubscribeData(BaseModel):
@@ -121,11 +123,9 @@ class NewsLetterPresentation:
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
-            newsltter = (
-                newsletter_service.get_newsletter_with_last_mail_by_newsletter_id(
-                    user_id, newsletter_id
-                )
+            mail = mail_service.get_last_mail_of_newsletter_by_newsletter_id(
+                user_id, newsletter_id
             )
-            return newsltter
+            return mail
         except Exception as e:
             catch_exception(e, request)

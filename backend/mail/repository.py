@@ -19,6 +19,18 @@ class MailRepository(S3Connector):
         mail = Mail(id=None, mail_content=mail_content, s3_object_key=s3_object_key)
         return mail
 
+    def load_by_s3_object_key(self, mail: Mail):
+        try:
+            object = self.seoul_s3_client.get_object(
+                Bucket=self.seoul_bucket_name, Key=mail.s3_object_key
+            )
+        except:
+            object = self.virginia_s3_client.get_object(
+                Bucket=self.virginia_bucket_name, Key=mail.s3_object_key
+            )
+        mail_content = object["Body"].read()
+        mail.mail_content = mail_content
+
     class CreateMail(MysqlCRUDTemplate):
         def __init__(self, mail: Mail) -> None:
             self.mail = mail
@@ -80,3 +92,29 @@ class MailRepository(S3Connector):
                 )
                 mail_list.append(mail)
             return mail_list
+
+    class ReadLastMailOfNewsltterByNewsletterID(MysqlCRUDTemplate):
+        def __init__(self, newsletter_id) -> None:
+            self.newsletter_id = newsletter_id
+            super().__init__()
+
+        def execute(self):
+            mail_model = (
+                self.session.query(MailModel)
+                .filter(MailModel.newsletter_id == self.newsletter_id)
+                .order_by(MailModel.recv_at.desc())
+                .first()
+            )
+            if not mail_model:
+                return False
+            mail = Mail(
+                id=mail_model.id,
+                s3_object_key=mail_model.s3_object_key,
+                subject=mail_model.subject,
+                summary_list=mail_model.summary_list,
+                newsletter_id=mail_model.newsletter_id,
+            )
+            return mail
+
+        def run(self) -> Mail:
+            return super().run()

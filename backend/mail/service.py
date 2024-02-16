@@ -42,12 +42,15 @@ class MailService:
 
     def read(self, s3_object_key):
         mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
+        self.mail_repository.ReadMail(mail).run()
         mail.parser_eamil()
-        newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(
-            mail.from_email
+        return mail
+
+    def get_last_mail_of_newsletter_by_newsletter_id(self, user_id, newsletter_id):
+        user = self.user_repository.ReadByID(user_id).run()
+        mail = self.mail_repository.ReadLastMailOfNewsltterByNewsletterID(
+            newsletter_id
         ).run()
-        if not self.mail_repository.ReadMail(mail).run():
-            mail.set_newsletter_id(newsletter.id)
-            mail.summary()
-            self.mail_repository.CreateMail(mail).run()
+        self.mail_repository.load_by_s3_object_key(mail)
+        mail.parser_eamil()
         return mail
