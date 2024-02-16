@@ -84,7 +84,7 @@ class NewsLetterRepository:
 
     class ReadNewsletters(MysqlCRUDTemplate):
         def __init__(
-            self, user: User, subscribe_status, sort_type, in_mail, cursor
+            self, user: User, subscribe_status, sort_type, in_mail, cursor, category
         ) -> None:
             super().__init__()
             self.user = user
@@ -104,6 +104,10 @@ class NewsLetterRepository:
                         NewsLetterModel.id == SubscribeRankingModel.newsletter_id,
                     )
                     .order_by(SubscribeRankingModel.id)
+                )
+            if category:
+                self.table_model = self.table_model.filter(
+                    NewsLetterModel.category == category
                 )
 
             subscribe_models = (

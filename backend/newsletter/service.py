@@ -32,11 +32,13 @@ class NewsLetterService:
         self.user_repository.DeleteUserNewslettersMapping(user).run()
         self.user_repository.CreateUserNewslettersMapping(user, newsletter_ids).run()
 
-    def get_newsletters(self, user_id, subscribe_status, sort_type, in_mail, cursor):
+    def get_newsletters(
+        self, user_id, subscribe_status, sort_type, in_mail, cursor, category
+    ):
         newsletter_list = list()
         user = self.user_repository.ReadByID(user_id).run()
         newsletters = self.newsletter_repository.ReadNewsletters(
-            user, subscribe_status, sort_type, in_mail, cursor
+            user, subscribe_status, sort_type, in_mail, cursor, category
         ).run()
         if newsletters:
             for newsletter in newsletters:

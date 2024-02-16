@@ -50,12 +50,13 @@ class NewsLetterPresentation:
         sort_type: SortType,
         in_mail: bool = False,
         cursor: int = None,
+        category: Category = None,
         Authorization=Header(None),
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
             newsletters = newsletter_service.get_newsletters(
-                user_id, subscribe_status, sort_type, in_mail, cursor
+                user_id, subscribe_status, sort_type, in_mail, cursor, category
             )
             return newsletters
         except Exception as e:
