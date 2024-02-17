@@ -5,7 +5,7 @@ type KakaoShareType = {
   text?: string;
   containerstyle: string;
   imgstyle: string;
-  summaryNewsLetterData: SummaryNewsLetterDataType[];
+  summaryNewsLetterData?: SummaryNewsLetterDataType[];
 }
 
 const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: KakaoShareType) => {
@@ -13,7 +13,7 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     initKakao();
   }, []);
 
-  const readLinks = summaryNewsLetterData.map((data) => data.read_link);
+  const readLinks = summaryNewsLetterData?.map((data) => data.read_link);
 
   const initKakao = () => {
     //@ts-ignore
@@ -32,19 +32,19 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
       objectType: "feed",
       content: {
         title: "mailPocket",
-        description: `${summaryNewsLetterData.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.`,
+        description: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.`,
         imageUrl: "",
         link: {
-          webUrl: readLinks.join(''),
-          mobileWebUrl: readLinks.join(''),
+          webUrl: readLinks?.join(''),
+          mobileWebUrl: readLinks?.join(''),
         },
       },
       buttons: [
         {
           title: "뉴스레터 확인하러가기",
           link: {
-            webUrl: readLinks.join(''),
-            mobileWebUrl: readLinks.join(''),
+            webUrl: readLinks?.join(''),
+            mobileWebUrl: readLinks?.join(''),
           },
         },
       ],

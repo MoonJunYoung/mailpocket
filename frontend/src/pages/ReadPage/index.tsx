@@ -14,10 +14,8 @@ export interface SummaryNewsLetterDataType {
   read_link: string,
   summary_list: SummaryItem,
   newsletter_id: number,
-  recv_at: null,
   date: string,
   from_name: string,
-  from_email: string,
   html_body: string
 }
 

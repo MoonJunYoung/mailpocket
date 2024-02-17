@@ -74,7 +74,7 @@ interface MobileMayPageNavType {
 
 
 
-export const MobileMyPageNav = ({ MayPageNavNewsLetterData, mynewsletter,onSelectItem }: MobileMayPageNavType) => {
+export const MobileMyPageNav = ({ MayPageNavNewsLetterData, mynewsletter, onSelectItem }: MobileMayPageNavType) => {
   const [subscribestatus, setSubscribeStatus] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const truncate = (str: string, n: number) => {
@@ -110,11 +110,11 @@ export const MobileMyPageNav = ({ MayPageNavNewsLetterData, mynewsletter,onSelec
   return (
     <div>
       {MayPageNavNewsLetterData.map((data) => (
-        <div key={data.id} className='bg-white border-b p-3 flex items-center justify-around gap-4 mb-3'>
-          <img className='w-5' src="/images/menu.png" alt="menu" onClick={handleModalOpen}/>
+        <div key={data.newsletter_id} className='bg-white border-b p-3 flex items-center justify-around gap-4 mb-3'>
+          <img className='w-5' src="/images/menu.png" alt="menu" onClick={handleModalOpen} />
           <div className='flex items-center justify-center gap-2'>
-            <img className='w-8' src={`/images/${data.id}.png`} alt={String(data.id)} />
-            <span className='text-sm font-semibold'>{truncate(data.mails[0].subject, 16)}</span>
+            <img className='w-8' src={`/images/${data.newsletter_id}.png`} alt={String(data.newsletter_id)} />
+              <span className='text-sm font-semibold'>{truncate(data.subject, 16)}</span>
           </div>
           {subscribestatus ?
             (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.id)}>구독하기</span>)

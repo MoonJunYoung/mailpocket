@@ -1,31 +1,26 @@
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getNewsLetterDetail, getSubscribeData, Token } from '../../api/api'
+import { getMyPageNewsLetterDetail, getMyPageSubscribeData, Token } from '../../api/api'
 import { AmplitudeResetUserId, sendEventToAmplitude } from '../../components/Amplitude'
 import { MobileMyPageNav } from '../../components/mobileComponent/MobileNav'
 import MobileSeeMore from '../../components/mobileComponent/MobileSeeMore'
 import MobileSummary from '../../components/mobileComponent/MobileSummary'
-import { NewsLetterDataType } from '../../pages/SubscribePage'
+import PageLoding from '../../components/PageLoding'
+import { NewsLetterDataType, SummaryItem } from '../../pages/SubscribePage'
 
 
 export interface NavNewsLetterDataType {
   id: number,
-  name: string,
-  category: string,
-  mail: null,
-  mails: [
-    {
-      id: number,
-      mail_content: null,
-      s3_object_key: string,
-      subject: string,
-      read_link: string,
-      summary_list: null,
-      newsletter_id: null,
-      recv_at: string
-    },
-  ]
+  s3_object_key: string,
+  subject: string,
+  read_link: string
+  summary_list: SummaryItem,
+  newsletter_id: number,
+  date: string,
+  from_name: string,
+  from_email: string,
+  html_body: string
 }
 
 
@@ -33,7 +28,6 @@ const MobileMyPage = () => {
   const [mynewsletter, setMyNewsLetter] = useState<NewsLetterDataType[]>([])
   const [mynewsletterdetail, setMyNewsLetterDetail] = useState<NavNewsLetterDataType[]>([])
   const [selectedItem, setSelectedItem] = useState('');
-
   const navigate = useNavigate();
   const authToken = Token();
 
@@ -55,10 +49,12 @@ const MobileMyPage = () => {
 
   const handlegetData = async () => {
     try {
-      const responseNewsLetterList = await getSubscribeData('testapi/newsletter?&subscribe_status=subscribed&sort_type=recent');
+      const responseNewsLetterList = await getMyPageSubscribeData('testapi/newsletter?&subscribe_status=subscribed&sort_type=recent');
       setMyNewsLetter(responseNewsLetterList.data);
-      const responseNewsLetterDetail = await getNewsLetterDetail(`testapi/newsletter/${responseNewsLetterList.data[0].id}/mail`)
-      setMyNewsLetterDetail([responseNewsLetterDetail.data])
+      if (responseNewsLetterList.data.length > 0) {
+        const responseNewsLetterDetail = await getMyPageNewsLetterDetail(`testapi/newsletter/${selectedItem ? selectedItem : responseNewsLetterList.data[0].id}/last-mail`)
+        setMyNewsLetterDetail([responseNewsLetterDetail.data])
+      }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패", error);
     }
@@ -66,14 +62,26 @@ const MobileMyPage = () => {
 
   useEffect(() => {
     handlegetData()
-  }, []);
+  }, [selectedItem]);
 
   return (
     <div>
-      <MobileMyPageNav MayPageNavNewsLetterData={mynewsletterdetail} mynewsletter={mynewsletter} onSelectItem={setSelectedItem} />
-      {/* <MobileSummary /> */}
+      <MobileMyPageNav
+        MayPageNavNewsLetterData={mynewsletterdetail}
+        mynewsletter={mynewsletter}
+        onSelectItem={setSelectedItem}
+      />
+      <MobileSummary summaryNewsLetterData={mynewsletterdetail} />
+      {mynewsletterdetail.map((data) => {
+        return data.html_body !== null ? (
+          <div className='mt-10' dangerouslySetInnerHTML={{ __html: data.html_body }} />
+        ) : (
+          <PageLoding />
+        );
+      })}
     </div>
-  )
+  );
+
 }
 
 export default MobileMyPage

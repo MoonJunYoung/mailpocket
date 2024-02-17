@@ -13,7 +13,8 @@ interface MobileMenuType {
 
 const MobileMenu = ({ setOpenModal, mynewsletter, onSelectItem }: MobileMenuType) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+  const [selectedItem, setSelectedItem] = useState(mynewsletter.length > 0 ? mynewsletter[0].id : null); 
   const navigate = useNavigate();
 
   const closeModal = () => {
@@ -40,7 +41,7 @@ const MobileMenu = ({ setOpenModal, mynewsletter, onSelectItem }: MobileMenuType
                 setSelectedItem(data.id);
               }}>
                 <img className='w-[45px]' src={`/images/${data.id}.png`} alt={data.id} />
-                <p className={`font-semibold py-3 w-[63px] ${selectedItem === data.id ? ' border-customPurple border-solid border-b-4' : ''}`}>{data.name}</p>
+                <p className={`font-semibold py-3 w-[63px] ${selectedItem === data.id ? 'border-customPurple border-solid border-b-4' : ''}`}>{data.name}</p>
               </div>
             )}
           </div>
@@ -48,7 +49,7 @@ const MobileMenu = ({ setOpenModal, mynewsletter, onSelectItem }: MobileMenuType
             <span className='text-gray-500 font-semibold' onClick={handleLogOut}>로그아웃</span>
           </div>
         </div>
-        <span className={`pl-2 text-2xl animate-right-to-left ${isOpen ? "animate-right-to-left" : "animate-left-to-right"}`} onClick={closeModal}>X</span>
+        <span className={`cursor-pointer pl-2 text-2xl animate-right-to-left ${isOpen ? "animate-right-to-left" : "animate-left-to-right"}`} onClick={closeModal}>X</span>
       </div>
     </div>
   )
