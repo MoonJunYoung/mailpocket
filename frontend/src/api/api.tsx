@@ -106,6 +106,10 @@ export const readPageUnSubscribe = (newsletterId:number) => {
 
 // mobilemypage
 
-export const getNewsLetterDetail = (query: string) => {
+export const getMyPageNewsLetterDetail = (query: string) => {
+  return axiosData().get(query);
+};
+
+export const getMyPageSubscribeData = (query: string) => {
   return axiosData().get(query);
 };

@@ -1,16 +1,18 @@
 
 import { useState } from 'react';
+import { NavNewsLetterDataType } from '../../mobile/MobileMyPage';
 import { SummaryNewsLetterDataType } from '../../pages/ReadPage';
 import KakaoShare from '../Shared/KakaoShare'
 import UrlShare from '../Shared/UrlShare'
 
 
 interface SummaryProps {
-  summaryNewsLetterData: SummaryNewsLetterDataType[];
+  summaryNewsLetterData: SummaryNewsLetterDataType[] 
+
 }
 
 
-const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
+const MobileSummary = ({ summaryNewsLetterData  }: SummaryProps) => {
   const [newslettemoresee, setNewsLetteMoreSee] = useState(true);
   return (
     <div>
