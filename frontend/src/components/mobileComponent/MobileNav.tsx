@@ -70,11 +70,12 @@ interface MobileMayPageNavType {
   MayPageNavNewsLetterData: NavNewsLetterDataType[]
   mynewsletter: NewsLetterDataType[]
   onSelectItem: React.Dispatch<React.SetStateAction<string>>;
+  selectItemId : string
 }
 
 
 
-export const MobileMyPageNav = ({ MayPageNavNewsLetterData, mynewsletter, onSelectItem }: MobileMayPageNavType) => {
+export const MobileMyPageNav = ({ MayPageNavNewsLetterData, mynewsletter, onSelectItem ,selectItemId}: MobileMayPageNavType) => {
   const [subscribestatus, setSubscribeStatus] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const truncate = (str: string, n: number) => {
@@ -127,6 +128,7 @@ export const MobileMyPageNav = ({ MayPageNavNewsLetterData, mynewsletter, onSele
           setOpenModal={setOpenModal}
           mynewsletter={mynewsletter}
           onSelectItem={onSelectItem}
+          selectItemId={selectItemId}
         />
       )}
     </div>

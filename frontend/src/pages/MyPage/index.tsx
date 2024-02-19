@@ -10,6 +10,7 @@ import {
   deleteChannelData,
   getChannelData,
   getMail,
+  getMailDetail,
   getSubscribeData,
   Token,
 } from "../../api/api";
@@ -22,6 +23,11 @@ import "../MyPage/hideScroll.css";
 import { Link } from "react-router-dom";
 
 import { SettingModal } from "../../components/Modal/SettingModal";
+import Summary from "../../components/Summary";
+import { SummaryNewsLetterDataType } from "../ReadPage";
+import PageLoding from "../../components/PageLoding";
+import { deflateSync } from "zlib";
+
 
 export type ChannelDataType = {
   id: number;
@@ -30,6 +36,11 @@ export type ChannelDataType = {
   name: string;
 };
 
+interface MailDetailType {
+  detailmail: SummaryNewsLetterDataType[];
+}
+
+
 const MyPage = () => {
   const [newsLetters, setNewsLetters] = useState<any[]>([]);
   const [mail, setMail] = useState({});
@@ -37,6 +48,7 @@ const MyPage = () => {
   const [activeTab, setActiveTab] = useState();
   const [activeMail, setActiveMail] = useState();
   const [openModal, setOpenModal] = useState(false);
+  const [detailmail, setDetailMail] = useState<any[]>([])
   const navigate = useNavigate();
   const authToken = Token();
 
@@ -54,11 +66,6 @@ const MyPage = () => {
     return responseMail.data;
   };
 
-  const handleChannelAdd = () => {
-    sendEventToAmplitude("click add destination", "");
-    window.location.href =
-      "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
-  };
 
   const handleLogOut = async () => {
     Cookies.remove("authToken");
@@ -66,9 +73,7 @@ const MyPage = () => {
     navigate("/sign-in");
   };
 
-  const handleModalOpen = () => {
-    setOpenModal(true);
-  };
+
 
   const itemClick = async (id: any) => {
     let responseMail = await handleMail(id);
@@ -91,11 +96,21 @@ const MyPage = () => {
       setActiveTab(result[0].id);
     });
   }, []);
+
+  const handleGetMailDetailData = async (s3_object_key: string) => {
+    try {
+      const response = await getMailDetail(s3_object_key)
+      setDetailMail([response.data])
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패", error);
+    }
+  }
+
   return (
     <div className="bg-whitesmoke h-screen">
       <div className="text-center mx-auto max-w-[1300px] h-auto bg-white">
         {/* 마이페이지 요소들의 display 요소 설정 */}
-        <div className="flex">
+        <div className="flex relative">
           <NavBar
             newsLetters={newsLetters}
             onClick={itemClick}
@@ -111,8 +126,9 @@ const MyPage = () => {
             newsLetters={newsLetters}
             activeMail={activeMail}
             setActiveMail={setActiveMail}
+            handleGetMailDetailData={handleGetMailDetailData}
           ></List>
-          <Main></Main>
+          <Main detailmail={detailmail}></Main>
         </div>
       </div>
       {openModal === true ? (
@@ -138,7 +154,7 @@ const NavBar = ({
 }: any) => {
   return (
     <div
-      className="flex flex-col  flex-[7%]  border-r-[1px] border-r-#E8E8E8 
+      className="flex flex-col sticky top-0 z-1  flex-[7%]  border-r-[1px] border-r-#E8E8E8 
     shadow-[1px_0px_5px_0px_#E8E8E8] h-screen min-w-[100px] justify-between"
     >
       <div className={`pt-[10px]  overflow-auto hideScroll`}>
@@ -154,11 +170,10 @@ const NavBar = ({
             ></Item>
           );
         })}
-
-        <ChangeButton></ChangeButton>
       </div>
       <div className="">
         <div className="">
+          <ChangeButton></ChangeButton>
           <Option setOpenModal={setOpenModal}></Option>
         </div>
         <div className="border-t-[1px] border-t-#E8E8E8">
@@ -246,6 +261,7 @@ const Option = ({ setOpenModal }: any) => {
           alt=""
         />
       </div>
+
       <div className="text-[13px] my-[15px] h-[13px] text-[16px] font-bold text-[#666666]">
         설정
       </div>
@@ -260,7 +276,9 @@ const List = ({
   newsLetters,
   activeMail,
   setActiveMail,
+  handleGetMailDetailData,
 }: any) => {
+
   useEffect(() => {
     if (newsLetters.length > 0) {
       let data = handleMail(newsLetters[0].id);
@@ -269,6 +287,7 @@ const List = ({
       });
     }
   }, [newsLetters]);
+
   useEffect(() => {
     if (
       Object.keys(mail).length !== 0 &&
@@ -278,8 +297,17 @@ const List = ({
       setActiveMail(mail.mails[0].id);
     }
   }, [mail]);
+
+
+  useEffect(() => {
+    if (mail.mails) {
+      handleGetMailDetailData(mail.mails[0].s3_object_key)
+    }
+  }, [mail])
+
+
   return (
-    <div className="max-w-[310px]  flex-[24%] border-r-[1px] border-r-#E8E8E8 flex flex-col shadow-[1px_0px_5px_0px_#E8E8E8] h-screen">
+    <div className="max-w-[310px] sticky top-0 z-2  flex-[24%] border-r-[1px] border-r-#E8E8E8 flex flex-col shadow-[1px_0px_5px_0px_#E8E8E8] h-screen">
       <div className="min-h-[inherit] overflow-auto hideScroll">
         <ListItem item={<Header></Header>}></ListItem>
         {mail.mails?.map((item: any) => {
@@ -291,8 +319,10 @@ const List = ({
               setActiveMail={setActiveMail}
               item={
                 <Column
+                  handleGetMailDetailData={handleGetMailDetailData}
                   key={item.id}
                   subject={item.subject}
+                  s3_object_key={item.s3_object_key}
                   name={mail.name}
                   recv_at={item.recv_at}
                 ></Column>
@@ -321,19 +351,18 @@ const ListItem = ({ item, activeMail, id, setActiveMail }: any) => {
           setActiveMail(id);
         }
       }}
-      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${
-        id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
-      }`}
+      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
+        }`}
     >
       <div className="ml-[20px] focus:bg-slate-100 min-h-[inherit]">{item}</div>
     </div>
   );
 };
 
-const Column = ({ key, subject, name, recv_at }: any) => {
+const Column = ({ key, subject, name, recv_at, s3_object_key, handleGetMailDetailData }: any) => {
   return (
     <div className="text-[16px] font-bold text-left">
-      <div className="py-[12px]">
+      <div className="py-[12px]" onClick={() => handleGetMailDetailData(s3_object_key)}>
         <div className="mr-[15px]">
           <div className=" text-[#666666]  break-keep">{subject}</div>
           <div className=" text-[#8F8F8F] text-[14px] mt-[5px]">{name}</div>
@@ -351,35 +380,29 @@ const Column = ({ key, subject, name, recv_at }: any) => {
   );
 };
 
-const Main = () => {
+const Main = ({ detailmail }: MailDetailType) => {
   return (
     <div className="flex-[70%] h-full">
       <div className="max-w-[700px] mx-auto mt-[30px]">
         <div>
-          <MainHeader></MainHeader>
+          <MainHeader detailmail={detailmail}></MainHeader>
         </div>
       </div>
     </div>
   );
 };
 
-const MainHeader = () => {
+const MainHeader = ({ detailmail }: MailDetailType) => {
   return (
     <div className="flex flex-col gap-[10px] font-bold border-b-[1px] border-b-#E8E8E8 pb-[30px]">
-      <div className="flex justify-between">
-        <div className="flex gap-[7px] items-center">
-          <div>
-            <img className="mx-auto size-[30px]" src={"images/1.png"} alt="" />
-          </div>
-          <div className="text-[#8F8F8F]">캐릿</div>
-        </div>
-        <div className="text-[#D3D0D5] text-[14px]">
-          2020년 03월 23일 화요일
-        </div>
-      </div>
-      <div className="font-extrabold text-[30px] text-left">
-        The Best font loading strategies
-      </div>
+      <Summary summaryNewsLetterData={detailmail} />
+      {detailmail.map((data) => {
+        return data.html_body !== null ? (
+          <div className="mt-10" dangerouslySetInnerHTML={{ __html: data.html_body }} />
+        ) : (
+          <PageLoding />
+        );
+      })}
     </div>
   );
 };
