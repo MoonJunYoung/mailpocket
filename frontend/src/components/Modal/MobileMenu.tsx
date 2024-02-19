@@ -1,7 +1,6 @@
 import Cookies from 'js-cookie';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import useOnClickOutside from '../../hooks/useOnClickOutside';
 import { NewsLetterDataType } from '../../pages/SubscribePage';
 import { AmplitudeResetUserId } from '../Amplitude';
 
@@ -9,12 +8,13 @@ interface MobileMenuType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   mynewsletter: NewsLetterDataType[]
   onSelectItem: React.Dispatch<React.SetStateAction<string>>;
+  selectItemId: string
 }
 
-const MobileMenu = ({ setOpenModal, mynewsletter, onSelectItem }: MobileMenuType) => {
+const MobileMenu = ({ setOpenModal, mynewsletter, onSelectItem, selectItemId }: MobileMenuType) => {
   const [isOpen, setIsOpen] = useState(true);
-
-  const [selectedItem, setSelectedItem] = useState(mynewsletter.length > 0 ? mynewsletter[0].id : null); 
+  const [selectedItem, setSelectedItem] = useState(selectItemId ? selectItemId : mynewsletter[0].id );
+  
   const navigate = useNavigate();
 
   const closeModal = () => {
@@ -30,16 +30,18 @@ const MobileMenu = ({ setOpenModal, mynewsletter, onSelectItem }: MobileMenuType
     navigate("/sign-in");
   };
 
+  const handleItemClick = (id: string) => {
+    onSelectItem(id);
+    setSelectedItem(id);
+  }
+
   return (
     <div className='z-10 absolute'>
       <div className="fixed inset-0 bg-stone-300 bg-opacity-50 flex justify-start">
         <div className={`h-full relative flex flex-col max-h-400 w-250 bg-white ${isOpen ? "animate-right-to-left" : "animate-left-to-right"}`}>
           <div className='mb-[45px] overflow-auto subscribe-scrollbar w-full flex flex-col items-center gap-3'>
             {mynewsletter.map((data) =>
-              <div className={`text-center border-b p-3 flex flex-col items-center justify-center`} key={data.id} onClick={() => {
-                onSelectItem(data.id);
-                setSelectedItem(data.id);
-              }}>
+              <div className={`text-center border-b p-3 flex flex-col items-center justify-center`} key={data.id} onClick={() => { handleItemClick(data.id); }}>
                 <img className='w-[45px]' src={`/images/${data.id}.png`} alt={data.id} />
                 <p className={`font-semibold py-3 w-[63px] ${selectedItem === data.id ? 'border-customPurple border-solid border-b-4' : ''}`}>{data.name}</p>
               </div>

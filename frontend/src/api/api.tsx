@@ -93,6 +93,9 @@ export const getMail = (newsletter_id: any) => {
   return axiosData().get(`/testapi/newsletter/${newsletter_id}/mail`);
 };
 
+export const getMailDetail = (s3_object_key: string) => {
+  return axiosData().get(`/testapi/mail?key=${s3_object_key}`);
+}
 
 // read 
 
@@ -113,3 +116,4 @@ export const getMyPageNewsLetterDetail = (query: string) => {
 export const getMyPageSubscribeData = (query: string) => {
   return axiosData().get(query);
 };
+

@@ -73,7 +73,7 @@ const Summary = ({ summaryNewsLetterData }: SummaryProps) => {
             </div>
           </div>
           {summaryNewsLetterData.map((data) => (
-            <div key={data.id} className={`p-3 flex flex-col items-start border-b h-[280px] ${newslettemoresee ? 'overflow-y-hidden' : 'overflow-y-auto'} custom-scrollbar`}>
+            <div key={data.id} className={`p-3 flex flex-col items-start text-start  border-b h-[280px] ${newslettemoresee ? 'overflow-y-hidden' : 'overflow-y-auto'} custom-scrollbar`}>
               {data.summary_list ? (
                 Object.entries(data.summary_list).map(([key, value]) => (
                   <div className='my-1' key={key}>

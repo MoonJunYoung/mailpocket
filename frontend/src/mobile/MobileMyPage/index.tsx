@@ -1,10 +1,9 @@
-import Cookies from 'js-cookie'
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMyPageNewsLetterDetail, getMyPageSubscribeData, Token } from '../../api/api'
-import { AmplitudeResetUserId, sendEventToAmplitude } from '../../components/Amplitude'
+import { sendEventToAmplitude } from '../../components/Amplitude'
 import { MobileMyPageNav } from '../../components/mobileComponent/MobileNav'
-import MobileSeeMore from '../../components/mobileComponent/MobileSeeMore'
+
 import MobileSummary from '../../components/mobileComponent/MobileSummary'
 import PageLoding from '../../components/PageLoding'
 import { NewsLetterDataType, SummaryItem } from '../../pages/SubscribePage'
@@ -28,6 +27,7 @@ const MobileMyPage = () => {
   const [mynewsletter, setMyNewsLetter] = useState<NewsLetterDataType[]>([])
   const [mynewsletterdetail, setMyNewsLetterDetail] = useState<NavNewsLetterDataType[]>([])
   const [selectedItem, setSelectedItem] = useState('');
+
   const navigate = useNavigate();
   const authToken = Token();
 
@@ -40,11 +40,6 @@ const MobileMyPage = () => {
     }
   }, [authToken, navigate]);
 
-  const handleLogOut = async () => {
-    Cookies.remove("authToken");
-    await AmplitudeResetUserId();
-    navigate("/sign-in");
-  };
 
 
   const handlegetData = async () => {
@@ -70,6 +65,7 @@ const MobileMyPage = () => {
         MayPageNavNewsLetterData={mynewsletterdetail}
         mynewsletter={mynewsletter}
         onSelectItem={setSelectedItem}
+        selectItemId={selectedItem}
       />
       <MobileSummary summaryNewsLetterData={mynewsletterdetail} />
       {mynewsletterdetail.map((data) => {
@@ -85,3 +81,5 @@ const MobileMyPage = () => {
 }
 
 export default MobileMyPage
+
+
