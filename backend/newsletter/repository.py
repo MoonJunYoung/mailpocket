@@ -128,10 +128,10 @@ class NewsLetterRepository:
                     NewsLetterModel.id.not_in(subscribed_newsletter_ids)
                 )
 
-            if in_mail and not cursor:
+            if in_mail and not cursor and subscribe_status == "subscribable":
                 self.newsletter_models = self.newsletter_models.limit(8)
 
-            elif in_mail and cursor:
+            elif in_mail and cursor and subscribe_status == "subscribable":
                 cursor_row = (
                     self.session.query(SubscribeRankingModel)
                     .filter(SubscribeRankingModel.newsletter_id == cursor)
