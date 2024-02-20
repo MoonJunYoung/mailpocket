@@ -93,6 +93,10 @@ const Subscribe = () => {
       params.cursor = lastId;
     }
 
+    if (category !== "전체") {
+      params.category = category;
+    }
+
     const { data } = await getNewsletterData("/testapi/newsletter", params);
     setSubscribeable((prevData) => [...prevData, ...data]);
     return data;
@@ -232,6 +236,7 @@ const Subscribe = () => {
               activeCategory={activeCategory}
               setActiveCategory={setActiveCategory}
               categories={categories}
+              setSubscribeable={setSubscribeable}
             ></Category>
           </div>
         </div>
