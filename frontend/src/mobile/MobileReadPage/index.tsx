@@ -4,10 +4,11 @@ import MobileSeeMore from '../../components/mobileComponent/MobileSeeMore'
 import MobileSummary from '../../components/mobileComponent/MobileSummary'
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { getReadMailData, Token } from "../../api/api";
+import { getReadMailData, getSubscribeData, Token } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import { SummaryItem } from '../../pages/SubscribePage';
 import PageLoding from '../../components/PageLoding';
+import { SubscribeNewsLetterDataType } from '../../components/Summary';
 
 
 
@@ -29,10 +30,22 @@ export interface readmaildataType {
 
 const MobileReadPage = () => {
   const [readmaildata, setReadMailData] = useState<readmaildataType[]>([]);
+  const [newslettersubscribe, setNewsLettersubscribe] = useState<SubscribeNewsLetterDataType[]>([])
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const mail = searchParams.get("mail");
   const authToken = Token();
+
+
+  const handleGetNewsLetterData = async () => {
+    try {
+      const responesSubscribe = await getSubscribeData("testapi/newsletter?&subscribe_status=subscribed&sort_type=recent")
+      setNewsLettersubscribe(responesSubscribe.data)
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패")
+    }
+  }
+
 
   const handleGetData = async () => {
     try {
@@ -46,14 +59,18 @@ const MobileReadPage = () => {
 
   useEffect(() => {
     handleGetData();
+    handleGetNewsLetterData();
   }, [location]);
 
 
   return (
     <div>
       {authToken ? "" : <MobileSeeMore />}
-      <MobileReadNav ReadNavNewsLetterData={readmaildata} />
-      <MobileSummary summaryNewsLetterData={readmaildata} />
+      <MobileReadNav ReadNavNewsLetterData={readmaildata} newslettersubscribe={newslettersubscribe} />
+      <div className="mt-1">
+        <MobileSummary summaryNewsLetterData={readmaildata} />
+      </div>
+
       <div className="mt-5">
         {readmaildata.map((data) => {
           return data.html_body !== null ? (

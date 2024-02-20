@@ -23,7 +23,7 @@ import "../MyPage/hideScroll.css";
 import { Link } from "react-router-dom";
 
 import { SettingModal } from "../../components/Modal/SettingModal";
-import Summary from "../../components/Summary";
+import Summary, { SubscribeNewsLetterDataType } from "../../components/Summary";
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
 import { deflateSync } from "zlib";
@@ -36,13 +36,14 @@ export type ChannelDataType = {
   name: string;
 };
 
-interface MailDetailType {
+interface MailType {
   detailmail: SummaryNewsLetterDataType[];
+  newsLetters : SubscribeNewsLetterDataType[];
 }
 
 
 const MyPage = () => {
-  const [newsLetters, setNewsLetters] = useState<any[]>([]);
+  const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>([]);
   const [mail, setMail] = useState({});
   const [loadFlag, setLoadFlag] = useState(false);
   const [activeTab, setActiveTab] = useState();
@@ -128,7 +129,7 @@ const MyPage = () => {
             setActiveMail={setActiveMail}
             handleGetMailDetailData={handleGetMailDetailData}
           ></List>
-          <Main detailmail={detailmail}></Main>
+          <Main detailmail={detailmail} newsLetters={newsLetters}></Main>
         </div>
       </div>
       {openModal === true ? (
@@ -380,22 +381,22 @@ const Column = ({ key, subject, name, recv_at, s3_object_key, handleGetMailDetai
   );
 };
 
-const Main = ({ detailmail }: MailDetailType) => {
+const Main = ({ detailmail, newsLetters }: MailType) => {
   return (
     <div className="flex-[70%] h-full">
       <div className="max-w-[700px] mx-auto mt-[30px]">
         <div>
-          <MainHeader detailmail={detailmail}></MainHeader>
+          <MainHeader detailmail={detailmail} newsLetters={newsLetters}></MainHeader>
         </div>
       </div>
     </div>
   );
 };
 
-const MainHeader = ({ detailmail }: MailDetailType) => {
+const MainHeader = ({ detailmail, newsLetters }: MailType) => {
   return (
     <div className="flex flex-col gap-[10px] font-bold border-b-[1px] border-b-#E8E8E8 pb-[30px]">
-      <Summary summaryNewsLetterData={detailmail} />
+      <Summary summaryNewsLetterData={detailmail}  newslettersubscribe={newsLetters}/>
       {detailmail.map((data) => {
         return data.html_body !== null ? (
           <div className="mt-10" dangerouslySetInnerHTML={{ __html: data.html_body }} />

@@ -20,7 +20,7 @@ interface SlackTokenType {
 }
 
 interface postSubscribeType {
-  ids: string[];
+  ids: number[];
 }
 
 

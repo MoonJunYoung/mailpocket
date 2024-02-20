@@ -4,7 +4,7 @@ import useOnClickOutside from '../../hooks/useOnClickOutside';
 interface SlackGuideModalType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   handlePostNewsLetterData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>;
-  newsletterchecked: string[];
+  newsletterchecked: number[];
 }
 
 const SlackGuideModal = ({ setOpenModal, handlePostNewsLetterData, newsletterchecked }: SlackGuideModalType) => {

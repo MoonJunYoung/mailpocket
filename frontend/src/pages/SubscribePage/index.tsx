@@ -14,7 +14,7 @@ export type SummaryItem = {
 };
 
 export type NewsLetterDataType = {
-  id: string;
+  id: number;
   name: string;
   category: string;
   mail: {
@@ -22,6 +22,7 @@ export type NewsLetterDataType = {
     subject: string;
     summary_list: SummaryItem;
     s3_object_key: string;
+    newsletter_id: number;
   }
 }
 
@@ -29,8 +30,8 @@ export type NewsLetterDataType = {
 const Subscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([])
   const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([])
-  const [newsletterchecked, setNewsLetterChecked] = useState<string[]>([])
-  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: string]: boolean }>({});
+  const [newsletterchecked, setNewsLetterChecked] = useState<number[]>([])
+  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>({});
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const authToken = Token();
@@ -40,7 +41,7 @@ const Subscribe = () => {
 
 
 
-  const handleNewsLetterSeeMoreSelect = (newsletterid: string) => {
+  const handleNewsLetterSeeMoreSelect = (newsletterid: number) => {
     setSeeMoreStates((prevStates) => ({
       ...prevStates,
       [newsletterid]: !prevStates[newsletterid],
@@ -148,7 +149,7 @@ const Subscribe = () => {
     setNewsLetterChecked([...newslettersubscribeId])
   }
 
-  const handleNewsLetterSelected = (newsletterid: string) => {
+  const handleNewsLetterSelected = (newsletterid: number) => {
     setNewsLetterChecked((prevChecked) => {
       const newsletters = subscribeable.find(item => item.id === newsletterid);
       if (prevChecked.includes(newsletterid)) {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import KakaoShare from './Shared/KakaoShare'
 import Symbol from './Symbol'
 import UrlShare from './Shared/UrlShare'
@@ -6,59 +6,87 @@ import { SummaryNewsLetterDataType } from '../pages/ReadPage'
 import { readPageSubscribe, readPageUnSubscribe, Token } from '../api/api'
 import { sendEventToAmplitude } from './Amplitude'
 
-interface SummaryProps {
-  summaryNewsLetterData: SummaryNewsLetterDataType[];
+
+export interface SubscribeNewsLetterDataType {
+  id: number,
+  name: string,
+  category: string,
 }
 
-const Summary = ({ summaryNewsLetterData }: SummaryProps) => {
+interface SummaryProps {
+  summaryNewsLetterData: SummaryNewsLetterDataType[];
+  newslettersubscribe?: SubscribeNewsLetterDataType[]
+}
+
+const Summary = ({ summaryNewsLetterData, newslettersubscribe }: SummaryProps) => {
   const [newslettemoresee, setNewsLetteMoreSee] = useState(true);
-  const [subscribestatus, setSubscribeStatus] = useState(true)
+  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
   const authToken = Token();
+
+  useEffect(() => {
+    if (newslettersubscribe) {
+      const newslettersubscribed = newslettersubscribe.map((data) => data.id);
+      const newSubscriptionStatusMap: Record<number, boolean> = {};
+      summaryNewsLetterData.forEach((data) => {
+        const isSubscribed = newslettersubscribed.includes(data.newsletter_id);
+        newSubscriptionStatusMap[data.newsletter_id] = isSubscribed;
+      });
+      setSubscriptionStatusMap(newSubscriptionStatusMap);
+    }
+  }, [newslettersubscribe, summaryNewsLetterData]);
 
   const handleNewsLetterSelected = async (newsletterId: number) => {
     try {
-      const response = await readPageSubscribe(newsletterId)
+      const response = await readPageSubscribe(newsletterId);
       if (response.status === 201) {
-        setSubscribeStatus(false)
+        setSubscriptionStatusMap((prevMap) => ({
+          ...prevMap,
+          [newsletterId]: true,
+        }));
       }
     } catch (error) {
-      console.log("Api 데이터 불러오기 실패")
+      console.log("Api 데이터 불러오기 실패");
     }
-  }
+  };
 
   const handleNewsLetterUnSelected = async (newsletterId: number) => {
     try {
-      const response = await readPageUnSubscribe(newsletterId)
+      const response = await readPageUnSubscribe(newsletterId);
       if (response.status === 204) {
-        setSubscribeStatus(true)
+        setSubscriptionStatusMap((prevMap) => ({
+          ...prevMap,
+          [newsletterId]: false,
+        }));
       }
     } catch (error) {
-      console.log("Api 데이터 불러오기 실패")
+      console.log("Api 데이터 불러오기 실패");
     }
-  }
+  };
 
 
   return (
     <div>
       <div>
         {summaryNewsLetterData.map((data) => (
-          <div key={data.id} className='border-b flex justify-between mt-8'>
+          <div key={data.id} className='border-b flex mt-8 flex-col'>
             <div>
-              <div className='flex items-center gap-2'>
-                <img className='w-8' src={`images/${data.newsletter_id}.png`} alt={String(data.newsletter_id)} />
-                <span className='font-semibold text-gray-600'>{data.from_name}</span>
-                {authToken ? (
-                  subscribestatus ?
-                    (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.newsletter_id)}>구독하기</span>)
-                    :
-                    (<span className='p-2 rounded-xl  border border-gray-200 bg-gray-200  text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}>구독해제</span>)
-                ) : ""}
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-2'>
+                  <img className='w-8' src={`images/${data.newsletter_id}.png`} alt={String(data.newsletter_id)} />
+                  <span className='font-semibold text-gray-600'>{data.from_name}</span>
+                  {authToken ? (
+                    subscriptionStatusMap[data.newsletter_id] ?
+                      (<span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}>구독해제</span>)
+                      :
+                      (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.newsletter_id)}>구독하기</span>)
+                  ) : ""}
+                </div>
+                <span className='text-sm font-bold text-gray-400'>
+                  {new Date(data.date).toLocaleDateString('ko-KR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                </span>
               </div>
-              <p className='my-4 text-2xl font-bold'>{data.subject}</p>
             </div>
-            <span className='text-sm font-bold text-gray-400'>
-              {new Date(data.date).toLocaleDateString('ko-KR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-            </span>
+            <p className='my-4 text-left text-2xl font-bold'>{data.subject}</p>
           </div>
         ))}
       </div>
@@ -98,6 +126,6 @@ const Summary = ({ summaryNewsLetterData }: SummaryProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default Summary;

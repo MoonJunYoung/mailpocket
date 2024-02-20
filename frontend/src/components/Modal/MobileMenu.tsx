@@ -7,8 +7,8 @@ import { AmplitudeResetUserId } from '../Amplitude';
 interface MobileMenuType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   mynewsletter: NewsLetterDataType[]
-  onSelectItem: React.Dispatch<React.SetStateAction<string>>;
-  selectItemId: string
+  onSelectItem: React.Dispatch<React.SetStateAction<number>>;
+  selectItemId: number
 }
 
 const MobileMenu = ({ setOpenModal, mynewsletter, onSelectItem, selectItemId }: MobileMenuType) => {
@@ -30,7 +30,7 @@ const MobileMenu = ({ setOpenModal, mynewsletter, onSelectItem, selectItemId }: 
     navigate("/sign-in");
   };
 
-  const handleItemClick = (id: string) => {
+  const handleItemClick = (id: number) => {
     onSelectItem(id);
     setSelectedItem(id);
   }
@@ -42,7 +42,7 @@ const MobileMenu = ({ setOpenModal, mynewsletter, onSelectItem, selectItemId }: 
           <div className='mb-[45px] overflow-auto subscribe-scrollbar w-full flex flex-col items-center gap-3'>
             {mynewsletter.map((data) =>
               <div className={`text-center border-b p-3 flex flex-col items-center justify-center`} key={data.id} onClick={() => { handleItemClick(data.id); }}>
-                <img className='w-[45px]' src={`/images/${data.id}.png`} alt={data.id} />
+                <img className='w-[45px]' src={`/images/${data.id}.png`} alt={String(data.id)} />
                 <p className={`font-semibold py-3 w-[63px] ${selectedItem === data.id ? 'border-customPurple border-solid border-b-4' : ''}`}>{data.name}</p>
               </div>
             )}

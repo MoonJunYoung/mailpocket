@@ -12,7 +12,7 @@ interface SummaryProps {
 }
 
 
-const MobileSummary = ({ summaryNewsLetterData  }: SummaryProps) => {
+const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
   const [newslettemoresee, setNewsLetteMoreSee] = useState(true);
   return (
     <div>
