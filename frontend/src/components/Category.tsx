@@ -5,6 +5,7 @@ const Category = ({
   activeCategory,
   setActiveCategory,
   categories,
+  setSubscribeable,
 }: any) => {
   const inMounted = useRef(false);
   useEffect(() => {
@@ -15,7 +16,7 @@ const Category = ({
           console.log(result);
         });
       } else {
-        let test = fetchNewsletter(activeCategory);
+        let test = fetchNewsletter(undefined, activeCategory);
         test.then((result: any) => {
           console.log(result);
         });
@@ -30,6 +31,7 @@ const Category = ({
           <button
             onClick={() => {
               setActiveCategory(category);
+              setSubscribeable([]);
             }}
             className={`${
               activeCategory === category ||
