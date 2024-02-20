@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { getReadMailData, Token } from "../../api/api";
+import { getReadMailData, getSubscribeData, Token } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import PageLoding from "../../components/PageLoding";
-import Summary from "../../components/Summary";
-import { SummaryItem } from "../SubscribePage";
+import Summary, { SubscribeNewsLetterDataType } from "../../components/Summary";
+import { NewsLetterDataType, SummaryItem } from "../SubscribePage";
 
 export interface SummaryNewsLetterDataType {
   id: number,
@@ -22,10 +22,23 @@ export interface SummaryNewsLetterDataType {
 
 const ReadPage = () => {
   const [readmaildata, setReadMailData] = useState<SummaryNewsLetterDataType[]>([]);
+  const [newslettersubscribe, setNewsLettersubscribe] = useState<SubscribeNewsLetterDataType[]>([])
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const mail = searchParams.get("mail");
   const authToken = Token();
+
+
+
+  const handleGetNewsLetterData = async () => {
+    try {
+      const responesSubscribe = await getSubscribeData("testapi/newsletter?&subscribe_status=subscribed&sort_type=recent")
+      setNewsLettersubscribe(responesSubscribe.data)
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패")
+    }
+  }
+
 
   const handleGetData = async () => {
     try {
@@ -39,6 +52,7 @@ const ReadPage = () => {
 
   useEffect(() => {
     handleGetData();
+    handleGetNewsLetterData();
   }, [location]);
 
   return (
@@ -56,7 +70,7 @@ const ReadPage = () => {
         <Link className="font-extrabold mr-4 text-base text-customPurple" to="/sign-in">로그인하기</Link>
       </div>)}
       <div className="flex flex-col items-center justify-center pb-[80px]">
-        <Summary summaryNewsLetterData={readmaildata} />
+        <Summary summaryNewsLetterData={readmaildata} newslettersubscribe={newslettersubscribe} />
         <div className="border-b w-[730px] mt-10">
           <p className="font-bold text-lg p-3 text-gray-500">본문</p>
         </div>

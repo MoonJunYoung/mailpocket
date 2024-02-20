@@ -26,7 +26,7 @@ export interface NavNewsLetterDataType {
 const MobileMyPage = () => {
   const [mynewsletter, setMyNewsLetter] = useState<NewsLetterDataType[]>([])
   const [mynewsletterdetail, setMyNewsLetterDetail] = useState<NavNewsLetterDataType[]>([])
-  const [selectedItem, setSelectedItem] = useState('');
+  const [selectedItem, setSelectedItem] = useState(0);
 
   const navigate = useNavigate();
   const authToken = Token();
