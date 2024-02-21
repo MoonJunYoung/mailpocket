@@ -28,7 +28,6 @@ import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
 import { deflateSync } from "zlib";
 
-
 export type ChannelDataType = {
   id: number;
   team_name: string;
@@ -40,7 +39,6 @@ interface MailDetailType {
   detailmail: SummaryNewsLetterDataType[];
 }
 
-
 const MyPage = () => {
   const [newsLetters, setNewsLetters] = useState<any[]>([]);
   const [mail, setMail] = useState({});
@@ -48,7 +46,7 @@ const MyPage = () => {
   const [activeTab, setActiveTab] = useState();
   const [activeMail, setActiveMail] = useState();
   const [openModal, setOpenModal] = useState(false);
-  const [detailmail, setDetailMail] = useState<any[]>([])
+  const [detailmail, setDetailMail] = useState<any[]>([]);
   const navigate = useNavigate();
   const authToken = Token();
 
@@ -66,14 +64,11 @@ const MyPage = () => {
     return responseMail.data;
   };
 
-
   const handleLogOut = async () => {
     Cookies.remove("authToken");
     await AmplitudeResetUserId();
     navigate("/sign-in");
   };
-
-
 
   const itemClick = async (id: any) => {
     let responseMail = await handleMail(id);
@@ -99,12 +94,12 @@ const MyPage = () => {
 
   const handleGetMailDetailData = async (s3_object_key: string) => {
     try {
-      const response = await getMailDetail(s3_object_key)
-      setDetailMail([response.data])
+      const response = await getMailDetail(s3_object_key);
+      setDetailMail([response.data]);
     } catch (error) {
       console.log("Api 데이터 불러오기 실패", error);
     }
-  }
+  };
 
   return (
     <div className="bg-whitesmoke h-screen">
@@ -278,7 +273,6 @@ const List = ({
   setActiveMail,
   handleGetMailDetailData,
 }: any) => {
-
   useEffect(() => {
     if (newsLetters.length > 0) {
       let data = handleMail(newsLetters[0].id);
@@ -298,13 +292,11 @@ const List = ({
     }
   }, [mail]);
 
-
   useEffect(() => {
     if (mail.mails) {
-      handleGetMailDetailData(mail.mails[0].s3_object_key)
+      handleGetMailDetailData(mail.mails[0].s3_object_key);
     }
-  }, [mail])
-
+  }, [mail]);
 
   return (
     <div className="max-w-[310px] sticky top-0 z-2  flex-[24%] border-r-[1px] border-r-#E8E8E8 flex flex-col shadow-[1px_0px_5px_0px_#E8E8E8] h-screen">
@@ -351,18 +343,29 @@ const ListItem = ({ item, activeMail, id, setActiveMail }: any) => {
           setActiveMail(id);
         }
       }}
-      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
-        }`}
+      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${
+        id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
+      }`}
     >
       <div className="ml-[20px] focus:bg-slate-100 min-h-[inherit]">{item}</div>
     </div>
   );
 };
 
-const Column = ({ key, subject, name, recv_at, s3_object_key, handleGetMailDetailData }: any) => {
+const Column = ({
+  key,
+  subject,
+  name,
+  recv_at,
+  s3_object_key,
+  handleGetMailDetailData,
+}: any) => {
   return (
     <div className="text-[16px] font-bold text-left">
-      <div className="py-[12px]" onClick={() => handleGetMailDetailData(s3_object_key)}>
+      <div
+        className="py-[12px]"
+        onClick={() => handleGetMailDetailData(s3_object_key)}
+      >
         <div className="mr-[15px]">
           <div className=" text-[#666666]  break-keep">{subject}</div>
           <div className=" text-[#8F8F8F] text-[14px] mt-[5px]">{name}</div>
@@ -398,7 +401,10 @@ const MainHeader = ({ detailmail }: MailDetailType) => {
       <Summary summaryNewsLetterData={detailmail} />
       {detailmail.map((data) => {
         return data.html_body !== null ? (
-          <div className="mt-10" dangerouslySetInnerHTML={{ __html: data.html_body }} />
+          <div
+            className="mt-10"
+            dangerouslySetInnerHTML={{ __html: data.html_body }}
+          />
         ) : (
           <PageLoding />
         );
