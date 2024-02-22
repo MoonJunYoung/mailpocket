@@ -5,6 +5,8 @@ import {
   getSubscribeData,
   Params,
   putSubscribe,
+  readPageSubscribe,
+  readPageUnSubscribe,
   Token,
 } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
@@ -46,6 +48,7 @@ const MobileSubscribe = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const [isActiveMailModal, setIsActiveMailModal] = useState(false);
+  const [acitveMailData, setActiveMailData] = useState();
 
   const [activeCategory, setActiveCategory] = useState("전체");
   const categories = [
@@ -108,7 +111,7 @@ const MobileSubscribe = () => {
   const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
       "newsletter",
-      ({ pageParam }) => fetchNewsletter(pageParam),
+      ({ pageParam }) => fetchNewsletter(pageParam, activeCategory),
       {
         getNextPageParam: (lastPage) => {
           const lastItem = lastPage[lastPage.length - 1];
@@ -207,7 +210,18 @@ const MobileSubscribe = () => {
     <div className="mx-auto h-auto bg-white">
       <Nav />
       <div className="mx-auto max-w-[1200px] mt-3 mb-10">
-        <MailModal></MailModal>
+        {isActiveMailModal === true ? (
+          <MailModal
+            setIsActiveMailModal={setIsActiveMailModal}
+            acitveMailData={acitveMailData}
+            newslettersubscribe={newslettersubscribe}
+            setNewsLettersubscribe={setNewsLettersubscribe}
+            subscribeable={subscribeable}
+            setSubscribeable={setSubscribeable}
+          ></MailModal>
+        ) : (
+          ""
+        )}
         <div className="flex justify-between md:gap-8 px-3">
           <div className="flex gap-2 justify-center ">
             <Symbol />
@@ -257,7 +271,11 @@ const MobileSubscribe = () => {
                   >
                     {newslettersubscribe.map((data) => (
                       <div>
-                        <NewsLetter data={data}></NewsLetter>
+                        <NewsLetter
+                          setActiveMailData={setActiveMailData}
+                          setIsActiveMailModal={setIsActiveMailModal}
+                          data={data}
+                        ></NewsLetter>
                       </div>
                     ))}
                   </div>
@@ -272,7 +290,11 @@ const MobileSubscribe = () => {
             <div className="grid md:grid-cols-4 gap-4 px-[10px]">
               {subscribeable.map((data) => (
                 <div className="">
-                  <NewsLetter data={data}></NewsLetter>
+                  <NewsLetter
+                    setActiveMailData={setActiveMailData}
+                    setIsActiveMailModal={setIsActiveMailModal}
+                    data={data}
+                  ></NewsLetter>
                 </div>
               ))}
             </div>
@@ -300,9 +322,13 @@ const MobileSubscribe = () => {
   );
 };
 
-const NewsLetter = ({ data }: any) => {
+const NewsLetter = ({ data, setActiveMailData, setIsActiveMailModal }: any) => {
   return (
     <div
+      onClick={() => {
+        setActiveMailData(data);
+        setIsActiveMailModal(true);
+      }}
       className="justify-around flex flex-wrap border-2 rounded-md bg-white items-center"
       // style={{ boxShadow: "-1px 5px 1px 1px lightgray" }}
       key={data.id}
@@ -325,8 +351,35 @@ const NewsLetter = ({ data }: any) => {
   );
 };
 
-const MailModal = ({ setOpenModal, newsLetters, openModal }: any) => {
-  const [channels, setChannels] = useState([]);
+const MailModal = ({
+  setIsActiveMailModal,
+  acitveMailData,
+  newslettersubscribe,
+  setNewsLettersubscribe,
+  subscribeable,
+  setSubscribeable,
+}: any) => {
+  const [isSub, setIsSub] = useState(false);
+
+  const hasId = (): any => {
+    return newslettersubscribe.some((subscribe: any) => {
+      return subscribe.id === acitveMailData.id;
+    });
+  };
+
+  const deleteSubscribe = (
+    subscribeToDelete: NewsLetterDataType,
+    subScribeList: Array<NewsLetterDataType>
+  ) => {
+    return subScribeList.filter((newLetter: NewsLetterDataType) => {
+      return newLetter.id !== subscribeToDelete.id;
+    });
+  };
+
+  useEffect(() => {
+    let result = hasId();
+    setIsSub(result);
+  }, []);
 
   return (
     <div className="w-full h-full fixed top-0">
@@ -334,27 +387,99 @@ const MailModal = ({ setOpenModal, newsLetters, openModal }: any) => {
         <div className="w-[80%] h-[500px] fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-white rounded-lg">
           <span
             onClick={() => {
-              setOpenModal(false);
+              setIsActiveMailModal(false);
             }}
             className="fixed top-3 right-5 cursor-pointer"
           >
             <img src="/images/close.svg" alt="" className="size-6" />
           </span>
-          <div className="p-[40px] h-full">
+          <div className="p-[20px] h-full">
             <div className="flex flex-col h-full">
-              <div className="flex flex-col gap-2 text-[20px] font-extrabold">
-                <div>개의 뉴스레터 소식을</div>
-                <div>개의 채널에 전달하고 있어요.</div>
+              <div className="flex items-center  gap-2 text-[20px] font-semibold">
+                <div className="">
+                  <img
+                    className="size-[40px] rounded-full border-1 border-black"
+                    src={"images/" + acitveMailData.id + ".png"}
+                    alt=""
+                  />
+                </div>
+                <div className="">{acitveMailData.name}</div>
               </div>
-              <div className="pt-[30px] overflow-hidden h-full ">
-                <div className="flex overflow-auto h-full items-start gap-[15px] flex-col"></div>
+              <div className="pt-[20px] overflow-hidden h-full ">
+                <div className="font-extrabold text-base mb-3">
+                  {acitveMailData.mail.subject}
+                </div>
+                <div className="flex overflow-auto h-full items-start gap-[15px] flex-col">
+                  {Object.entries(acitveMailData.mail.summary_list).map(
+                    ([key, value]: any) => {
+                      return (
+                        <div>
+                          <div className="font-extrabold mb-3">{key}</div>
+                          <div className="font-bold text-sm">{value}</div>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
               </div>
-              <div className="">
-                <Link to="https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=">
-                  <button className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[20px] rounded-md font-semibold">
+              <div className="mt-3">
+                {isSub ? (
+                  <button
+                    onClick={async () => {
+                      setIsSub(false);
+                      try {
+                        let response = await readPageUnSubscribe(
+                          acitveMailData.id
+                        );
+                        const result = deleteSubscribe(
+                          acitveMailData,
+                          newslettersubscribe
+                        );
+                        setNewsLettersubscribe(result);
+                        setSubscribeable((prev: any) => [
+                          ...prev,
+                          acitveMailData,
+                        ]);
+                        if (response.status === 201) {
+                          sendEventToAmplitude(
+                            "complete to select article",
+                            ""
+                          );
+                        }
+                      } catch (error) {
+                        setIsSub(true);
+                      }
+                    }}
+                    className="bg-[gray] text-[#FFFFFF] w-full p-[10px] rounded-md font-semibold"
+                  >
+                    구독해제
+                  </button>
+                ) : (
+                  <button
+                    onClick={async () => {
+                      setIsSub(true);
+                      try {
+                        let response = await readPageSubscribe(
+                          acitveMailData.id
+                        );
+                        const result = deleteSubscribe(
+                          acitveMailData,
+                          subscribeable
+                        );
+                        setSubscribeable(result);
+                        setNewsLettersubscribe((prev: any) => [
+                          ...prev,
+                          acitveMailData,
+                        ]);
+                      } catch (error) {
+                        setIsSub(true);
+                      }
+                    }}
+                    className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[10px] rounded-md font-semibold"
+                  >
                     구독하기
                   </button>
-                </Link>
+                )}
               </div>
             </div>
           </div>

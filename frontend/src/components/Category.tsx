@@ -9,16 +9,17 @@ const Category = ({
 }: any) => {
   const inMounted = useRef(false);
   useEffect(() => {
+    setSubscribeable([]);
     if (inMounted.current) {
       if (activeCategory === "전체") {
         let test = fetchNewsletter();
         test.then((result: any) => {
-          console.log(result);
+          inMounted.current = false;
         });
       } else {
-        let test = fetchNewsletter(undefined, activeCategory);
+        let test = fetchNewsletter(0, activeCategory);
         test.then((result: any) => {
-          console.log(result);
+          inMounted.current = false;
         });
       }
     } else inMounted.current = true;
@@ -31,7 +32,6 @@ const Category = ({
           <button
             onClick={() => {
               setActiveCategory(category);
-              setSubscribeable([]);
             }}
             className={`${
               activeCategory === category ||

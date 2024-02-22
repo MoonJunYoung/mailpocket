@@ -237,6 +237,7 @@ const Subscribe = () => {
               setActiveCategory={setActiveCategory}
               categories={categories}
               setSubscribeable={setSubscribeable}
+              newslettersubscribe={newslettersubscribe}
             ></Category>
           </div>
         </div>
