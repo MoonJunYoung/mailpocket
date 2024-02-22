@@ -51,18 +51,52 @@ const MobileSubscribe = () => {
   const [acitveMailData, setActiveMailData] = useState();
 
   const [activeCategory, setActiveCategory] = useState("전체");
+
   const categories = [
-    "전체",
-    "IT/테크",
-    "건강/의학",
-    "디자인",
-    "비즈/제테크",
-    "시사/사회",
-    "엔터테이먼트",
-    "여행",
-    "취미/자기계발",
-    "트렌드/라이프",
-    "푸드",
+    {
+      id: 1,
+      name: "전체",
+    },
+    {
+      id: 2,
+      name: "IT/테크",
+    },
+    {
+      id: 3,
+      name: "건강/의학",
+    },
+    {
+      id: 4,
+      name: "디자인",
+    },
+    {
+      id: 5,
+      name: "비즈/제테크",
+    },
+    {
+      id: 6,
+      name: "시사/사회",
+    },
+    {
+      id: 7,
+      name: "엔터테이먼트",
+    },
+    {
+      id: 8,
+      name: "여행",
+    },
+    {
+      id: 9,
+      name: "취미/자기계발",
+    },
+    {
+      id: 10,
+      name: "트렌드/라이프",
+    },
+    {
+      id: 11,
+      name: "푸드",
+    },
   ];
 
   const authToken = Token();
@@ -207,7 +241,7 @@ const MobileSubscribe = () => {
   };
 
   return (
-    <div className="mx-auto h-auto bg-white">
+    <div className="mx-auto h-[100%] bg-white">
       <Nav />
       <div className="mx-auto max-w-[1200px] mt-3 mb-10">
         {isActiveMailModal === true ? (
