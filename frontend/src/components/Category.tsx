@@ -5,25 +5,12 @@ const Category = ({
   activeCategory,
   setActiveCategory,
   categories,
+  subscribeable,
   setSubscribeable,
 }: any) => {
-  // const inMounted = useRef(false);
-  // useEffect(() => {
-  //   setSubscribeable([]);
-  //   if (inMounted.current) {
-  //     if (activeCategory === "전체") {
-  //       let response = fetchNewsletter();
-  //       response.then((result: any) => {
-  //         inMounted.current = false;
-  //       });
-  //     } else {
-  //       let response = fetchNewsletter(undefined, activeCategory);
-  //       response.then((result: any) => {
-  //         inMounted.current = false;
-  //       });
-  //     }
-  //   } else inMounted.current = true;
-  // }, [activeCategory]);
+  useEffect(() => {
+    setSubscribeable([]);
+  }, [activeCategory]);
 
   return (
     <>
@@ -31,7 +18,7 @@ const Category = ({
         return (
           <button
             key={category.id}
-            onClick={() => {
+            onClick={function () {
               setActiveCategory(category.name);
             }}
             className={`${

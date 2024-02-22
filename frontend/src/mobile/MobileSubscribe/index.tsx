@@ -19,6 +19,8 @@ import SlackGuideModal from "../../components/Modal/SlackGuideModal";
 import { Category } from "../../components/Category";
 import "../../index.css";
 import { Link } from "react-router-dom";
+import { subscribe } from "diagnostics_channel";
+import { Subscribable } from "react-query/types/core/subscribable";
 export type SummaryItem = {
   [key: string]: string;
 };
@@ -51,6 +53,8 @@ const MobileSubscribe = () => {
   const [acitveMailData, setActiveMailData] = useState();
 
   const [activeCategory, setActiveCategory] = useState("전체");
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const categories = [
     {
@@ -138,19 +142,22 @@ const MobileSubscribe = () => {
     }
 
     const { data } = await getNewsletterData("/testapi/newsletter", params);
+
     setSubscribeable((prevData) => [...prevData, ...data]);
+
     return data;
   };
 
   const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
-      "newsletter",
+      ["newsletter", activeCategory],
       ({ pageParam }) => fetchNewsletter(pageParam, activeCategory),
       {
         getNextPageParam: (lastPage) => {
           const lastItem = lastPage[lastPage.length - 1];
           return lastItem ? lastItem.id : null;
         },
+        refetchOnWindowFocus: false,
       }
     );
 
@@ -241,7 +248,7 @@ const MobileSubscribe = () => {
   };
 
   return (
-    <div className="mx-auto h-[100%] bg-white">
+    <div className="mx-auto min-h-[100vh] bg-white">
       <Nav />
       <div className="mx-auto max-w-[1200px] mt-3 mb-10">
         {isActiveMailModal === true ? (
@@ -252,6 +259,7 @@ const MobileSubscribe = () => {
             setNewsLettersubscribe={setNewsLettersubscribe}
             subscribeable={subscribeable}
             setSubscribeable={setSubscribeable}
+            activeCategory={activeCategory}
           ></MailModal>
         ) : (
           ""
@@ -288,7 +296,11 @@ const MobileSubscribe = () => {
               activeCategory={activeCategory}
               setActiveCategory={setActiveCategory}
               categories={categories}
+              subscribeable={subscribeable}
               setSubscribeable={setSubscribeable}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              fetchNextPage={fetchNextPage}
             ></Category>
           </div>
         </div>
@@ -392,6 +404,7 @@ const MailModal = ({
   setNewsLettersubscribe,
   subscribeable,
   setSubscribeable,
+  activeCategory,
 }: any) => {
   const [isSub, setIsSub] = useState(false);
 
@@ -469,11 +482,18 @@ const MailModal = ({
                           acitveMailData,
                           newslettersubscribe
                         );
+
                         setNewsLettersubscribe(result);
-                        setSubscribeable((prev: any) => [
-                          ...prev,
-                          acitveMailData,
-                        ]);
+                        if (
+                          activeCategory === "전체" ||
+                          activeCategory === acitveMailData.category
+                        ) {
+                          setSubscribeable((prev: any) => [
+                            ...prev,
+                            acitveMailData,
+                          ]);
+                        }
+
                         if (response.status === 201) {
                           sendEventToAmplitude(
                             "complete to select article",
@@ -502,11 +522,11 @@ const MailModal = ({
                         );
                         setSubscribeable(result);
                         setNewsLettersubscribe((prev: any) => [
-                          ...prev,
                           acitveMailData,
+                          ...prev,
                         ]);
                       } catch (error) {
-                        setIsSub(true);
+                        console.log(error);
                       }
                     }}
                     className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[10px] rounded-md font-semibold"

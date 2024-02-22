@@ -5,6 +5,8 @@ import {
   getSubscribeData,
   Params,
   putSubscribe,
+  readPageSubscribe,
+  readPageUnSubscribe,
   Token,
 } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
@@ -47,17 +49,50 @@ const Subscribe = () => {
 
   const [activeCategory, setActiveCategory] = useState("전체");
   const categories = [
-    "전체",
-    "IT/테크",
-    "건강/의학",
-    "디자인",
-    "비즈/제테크",
-    "시사/사회",
-    "엔터테이먼트",
-    "여행",
-    "취미/자기계발",
-    "트렌드/라이프",
-    "푸드",
+    {
+      id: 1,
+      name: "전체",
+    },
+    {
+      id: 2,
+      name: "IT/테크",
+    },
+    {
+      id: 3,
+      name: "건강/의학",
+    },
+    {
+      id: 4,
+      name: "디자인",
+    },
+    {
+      id: 5,
+      name: "비즈/제테크",
+    },
+    {
+      id: 6,
+      name: "시사/사회",
+    },
+    {
+      id: 7,
+      name: "엔터테이먼트",
+    },
+    {
+      id: 8,
+      name: "여행",
+    },
+    {
+      id: 9,
+      name: "취미/자기계발",
+    },
+    {
+      id: 10,
+      name: "트렌드/라이프",
+    },
+    {
+      id: 11,
+      name: "푸드",
+    },
   ];
 
   const authToken = Token();
@@ -105,8 +140,8 @@ const Subscribe = () => {
 
   const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
-      "newsletter",
-      ({ pageParam }) => fetchNewsletter(pageParam),
+      ["newsletter", activeCategory],
+      ({ pageParam }) => fetchNewsletter(pageParam, activeCategory),
       {
         getNextPageParam: (lastPage) => {
           const lastItem = lastPage[lastPage.length - 1];
@@ -152,12 +187,9 @@ const Subscribe = () => {
       if (newsletterchecked.length <= 0) {
         alert("뉴스레터를 구독해주세요");
       } else {
-        const responesPut = await putSubscribe({ ids: newsletterchecked });
-        if (responesPut.status === 201) {
-          sendEventToAmplitude("complete to select article", "");
-          window.location.href =
-            "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
-        }
+        sendEventToAmplitude("complete to select article", "");
+        window.location.href =
+          "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
       }
     } catch (error) {
       console.log("Api 데이터 보내기 실패");
@@ -194,6 +226,15 @@ const Subscribe = () => {
         });
         return [...prevChecked, newsletterid];
       }
+    });
+  };
+
+  const deleteSubscribe = (
+    subscribeToDelete: NewsLetterDataType,
+    subScribeList: Array<NewsLetterDataType>
+  ) => {
+    return subScribeList.filter((newLetter: NewsLetterDataType) => {
+      return newLetter.id !== subscribeToDelete.id;
     });
   };
 
@@ -335,15 +376,55 @@ const Subscribe = () => {
                             <input
                               type="checkbox"
                               checked={newsletterchecked.includes(data.id)}
-                              onChange={() => handleNewsLetterSelected(data.id)}
+                              onChange={async (e) => {
+                                handleNewsLetterSelected(data.id);
+                              }}
                               className="appearance-none"
                             />
                             {newsletterchecked.includes(data.id) && (
-                              <span className="p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold">
+                              <span
+                                onClick={async () => {
+                                  await readPageUnSubscribe(data.id);
+                                  let response = await readPageUnSubscribe(
+                                    data.id
+                                  );
+                                  const result = deleteSubscribe(
+                                    data,
+                                    newslettersubscribe
+                                  );
+
+                                  setNewsLettersubscribe(result);
+                                  if (
+                                    activeCategory === "전체" ||
+                                    activeCategory === data.category
+                                  ) {
+                                    setSubscribeable((prev: any) => [
+                                      ...prev,
+                                      data,
+                                    ]);
+                                  }
+                                }}
+                                className="p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold"
+                              >
                                 구독해제
                               </span>
                             )}
-                            <span className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton">
+                            <span
+                              onClick={async () => {
+                                await readPageSubscribe(data.id);
+                                let response = await readPageSubscribe(data.id);
+                                const result = deleteSubscribe(
+                                  data,
+                                  subscribeable
+                                );
+                                setSubscribeable(result);
+                                setNewsLettersubscribe((prev: any) => [
+                                  data,
+                                  ...prev,
+                                ]);
+                              }}
+                              className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton"
+                            >
                               구독하기
                             </span>
                           </label>
@@ -438,11 +519,39 @@ const Subscribe = () => {
                         className="appearance-none"
                       />
                       {newsletterchecked.includes(data.id) && (
-                        <span className="p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold">
+                        <span
+                          onClick={async () => {
+                            await readPageUnSubscribe(data.id);
+                            const result = deleteSubscribe(
+                              data,
+                              newslettersubscribe
+                            );
+                            setNewsLettersubscribe(result);
+                            if (
+                              activeCategory === "전체" ||
+                              activeCategory === data.category
+                            ) {
+                              setSubscribeable((prev: any) => [...prev, data]);
+                            }
+                          }}
+                          className="p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold"
+                        >
                           구독해제
                         </span>
                       )}
-                      <span className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton">
+                      <span
+                        onClick={async () => {
+                          await readPageSubscribe(data.id);
+                          let response = await readPageSubscribe(data.id);
+                          const result = deleteSubscribe(data, subscribeable);
+                          setSubscribeable(result);
+                          setNewsLettersubscribe((prev: any) => [
+                            data,
+                            ...prev,
+                          ]);
+                        }}
+                        className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton"
+                      >
                         구독하기
                       </span>
                     </label>
