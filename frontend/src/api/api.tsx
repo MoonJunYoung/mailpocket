@@ -23,14 +23,13 @@ interface postSubscribeType {
   ids: number[];
 }
 
-
 export interface Params {
   in_mail: boolean;
   subscribe_status: string;
   sort_type: string;
   cursor?: string;
+  category?: string;
 }
-
 
 // Read
 
@@ -75,8 +74,8 @@ export const deleteChannelData = (data: number) => {
 
 export const getNewsletterData = (query: string, params: Params) => {
   return axiosData().get(query, {
-    params: params
-  })
+    params: params,
+  });
 };
 
 export const putSubscribe = (data: postSubscribeType) => {
@@ -87,7 +86,6 @@ export const getSubscribeData = (query: string) => {
   return axiosData().get(query);
 };
 
-
 // Mail
 export const getMail = (newsletter_id: any) => {
   return axiosData().get(`/testapi/newsletter/${newsletter_id}/mail`);
@@ -95,15 +93,15 @@ export const getMail = (newsletter_id: any) => {
 
 export const getMailDetail = (s3_object_key: string) => {
   return axiosData().get(`/testapi/mail?key=${s3_object_key}`);
-}
+};
 
-// read 
+// read
 
-export const readPageSubscribe = (newsletterId:number) => {
+export const readPageSubscribe = (newsletterId: number) => {
   return axiosData().post(`/testapi/newsletter/${newsletterId}/subscribe`);
 };
 
-export const readPageUnSubscribe = (newsletterId:number) => {
+export const readPageUnSubscribe = (newsletterId: number) => {
   return axiosData().delete(`/testapi/newsletter/${newsletterId}/subscribe`);
 };
 
@@ -116,4 +114,3 @@ export const getMyPageNewsLetterDetail = (query: string) => {
 export const getMyPageSubscribeData = (query: string) => {
   return axiosData().get(query);
 };
-
