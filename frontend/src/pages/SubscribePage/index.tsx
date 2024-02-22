@@ -29,18 +29,7 @@ export type NewsLetterDataType = {
     subject: string;
     summary_list: SummaryItem;
     s3_object_key: string;
-<<<<<<< HEAD
     newsletter_id: number;
-  }
-}
-
-
-const Subscribe = () => {
-  const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([])
-  const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([])
-  const [newsletterchecked, setNewsLetterChecked] = useState<number[]>([])
-  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>({});
-=======
   };
 };
 
@@ -49,11 +38,10 @@ const Subscribe = () => {
   const [newslettersubscribe, setNewsLettersubscribe] = useState<
     NewsLetterDataType[]
   >([]);
-  const [newsletterchecked, setNewsLetterChecked] = useState<string[]>([]);
-  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: string]: boolean }>(
+  const [newsletterchecked, setNewsLetterChecked] = useState<number[]>([]);
+  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>(
     {}
   );
->>>>>>> category
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
 
@@ -77,13 +65,7 @@ const Subscribe = () => {
   const pageRef = useIntersectionObserver(ref, {});
   const isPageEnd = pageRef?.isIntersecting;
 
-<<<<<<< HEAD
-
-
   const handleNewsLetterSeeMoreSelect = (newsletterid: number) => {
-=======
-  const handleNewsLetterSeeMoreSelect = (newsletterid: string) => {
->>>>>>> category
     setSeeMoreStates((prevStates) => ({
       ...prevStates,
       [newsletterid]: !prevStates[newsletterid],

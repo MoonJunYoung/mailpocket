@@ -24,7 +24,7 @@ export type SummaryItem = {
 };
 
 export type NewsLetterDataType = {
-  id: string;
+  id: number;
   name: string;
   category: string;
   mail: {
@@ -40,7 +40,7 @@ const MobileSubscribe = () => {
   const [newslettersubscribe, setNewsLettersubscribe] = useState<
     NewsLetterDataType[]
   >([]);
-  const [newsletterchecked, setNewsLetterChecked] = useState<string[]>([]);
+  const [newsletterchecked, setNewsLetterChecked] = useState<number[]>([]);
   const [seeMoreStates, setSeeMoreStates] = useState<{ [id: string]: boolean }>(
     {}
   );
@@ -220,7 +220,7 @@ const MobileSubscribe = () => {
     setNewsLetterChecked([...newslettersubscribeId]);
   };
 
-  const handleNewsLetterSelected = (newsletterid: string) => {
+  const handleNewsLetterSelected = (newsletterid: number) => {
     setNewsLetterChecked((prevChecked) => {
       const newsletters = subscribeable.find(
         (item) => item.id === newsletterid
