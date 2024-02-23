@@ -23,7 +23,7 @@ import "../MyPage/hideScroll.css";
 import { Link } from "react-router-dom";
 
 import { SettingModal } from "../../components/Modal/SettingModal";
-import Summary, { SubscribeNewsLetterDataType } from "../../components/Summary";
+import { SubscribeNewsLetterDataType,MySummary } from "../../components/Summary";
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
 import { deflateSync } from "zlib";
@@ -42,6 +42,7 @@ interface MailType {
 
 const MyPage = () => {
   const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>([]);
+  
   const [mail, setMail] = useState({});
   const [loadFlag, setLoadFlag] = useState(false);
   const [activeTab, setActiveTab] = useState();
@@ -56,7 +57,6 @@ const MyPage = () => {
       "/testapi/newsletter?&subscribe_status=subscribed&sort_type=recent"
     );
     let test = responesSubscribe.data;
-
     return test;
   };
 
@@ -124,7 +124,7 @@ const MyPage = () => {
             setActiveMail={setActiveMail}
             handleGetMailDetailData={handleGetMailDetailData}
           ></List>
-          <Main detailmail={detailmail} newsLetters={newsLetters}></Main>
+          <Main detailmail={detailmail} newsLetters={newsLetters} ></Main>
         </div>
       </div>
       {openModal === true ? (
@@ -399,7 +399,7 @@ const Main = ({ detailmail, newsLetters }: MailType) => {
 const MainHeader = ({ detailmail, newsLetters }: MailType) => {
   return (
     <div className="flex flex-col gap-[10px] font-bold border-b-[1px] border-b-#E8E8E8 pb-[30px]">
-      <Summary summaryNewsLetterData={detailmail}  newslettersubscribe={newsLetters}/>
+      <MySummary summaryNewsLetterData={detailmail} newslettersubscribe={newsLetters} />
       {detailmail.map((data) => {
         return data.html_body !== null ? (
           <div

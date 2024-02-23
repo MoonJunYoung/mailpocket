@@ -83,9 +83,9 @@ const LandingPage = () => {
             </div>
           </div>
           <div className='font-semibold mt-14 border border-1 border-white w-full p-2 rounded-lg bg-whitesmoke'>메일포켓을 미리 알아볼까요?</div>
-          <div className='mt-8 flex items-center'>
+          <div className='mt-8 flex flex-col '>
             <div>
-              <img className='w-[500px]' src="/images/subscribeimg.png" alt="subscribeimg" />
+              <img className='w-[600px] mb-6' src="/images/subscribeimg.png" alt="subscribeimg" />
             </div>
             <div>
               <h1 className='font-extrabold text-xl'>다양한 뉴스레터가 여러분을 기다리고 있어요!</h1>

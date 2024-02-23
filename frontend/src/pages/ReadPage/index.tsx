@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { getReadMailData, getSubscribeData, Token } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import PageLoding from "../../components/PageLoding";
-import Summary, { SubscribeNewsLetterDataType } from "../../components/Summary";
+import { SubscribeNewsLetterDataType, Summary } from "../../components/Summary";
 import { NewsLetterDataType, SummaryItem } from "../SubscribePage";
 
 export interface SummaryNewsLetterDataType {
