@@ -1,8 +1,10 @@
+import { type } from "@testing-library/user-event/dist/type"
+
 
 const Symbol = () => {
   return (
     <div >
-      <img className='w-[60px] animate-greetings' src='/images/MailpocketSymbol.png' alt='symbol' />
+      <img className='w-[60px]' src='/images/MailpocketSymbol.png' alt='symbol' />
     </div>
   )
 }

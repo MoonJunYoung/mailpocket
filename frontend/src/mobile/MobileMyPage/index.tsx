@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMyPageNewsLetterDetail, getMyPageSubscribeData, Token } from '../../api/api'
 import { sendEventToAmplitude } from '../../components/Amplitude'
@@ -39,7 +39,6 @@ const MobileMyPage = () => {
       sendEventToAmplitude("view my page", "");
     }
   }, [authToken, navigate]);
-
 
 
   const handlegetData = async () => {
