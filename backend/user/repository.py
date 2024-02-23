@@ -1,6 +1,9 @@
 from backend.common.database.connector import MysqlCRUDTemplate
 from backend.common.database.model import SubscribeModel, UserModel
-from backend.common.exceptions import AlreadySubscribedException
+from backend.common.exceptions import (
+    AlreadySubscribedException,
+    NotSubscribedNewsletterException,
+)
 from backend.user.domain import User
 
 
@@ -94,6 +97,8 @@ class UserRepository:
                 .filter(SubscribeModel.user_id == self.user.id)
                 .filter(SubscribeModel.newsletter_id == self.newsletter_id)
             ).first()
+            if not subscribe_model:
+                raise NotSubscribedNewsletterException
             self.session.delete(subscribe_model)
             self.session.commit()
 
