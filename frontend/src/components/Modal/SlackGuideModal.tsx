@@ -1,13 +1,14 @@
 import React, { useRef } from 'react'
 import useOnClickOutside from '../../hooks/useOnClickOutside';
+import { NewsLetterDataType } from '../../pages/SubscribePage';
 
 interface SlackGuideModalType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   handlePostNewsLetterData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>;
-  newsletterchecked: number[];
+  newslettersubscribe: NewsLetterDataType[];
 }
 
-const SlackGuideModal = ({ setOpenModal, handlePostNewsLetterData, newsletterchecked }: SlackGuideModalType) => {
+const SlackGuideModal = ({ setOpenModal, handlePostNewsLetterData, newslettersubscribe }: SlackGuideModalType) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useOnClickOutside(ref, () => {
@@ -20,7 +21,7 @@ const SlackGuideModal = ({ setOpenModal, handlePostNewsLetterData, newsletterche
         <div ref={ref} className="py-3 px-7 rounded-lg relative flex justify-center flex-col max-h-400 w-250 bg-white transition-all ease-in-out animate-fadeIn">
           <div className='my-5 w-full flex flex-col items-start gap-2'>
             <p className='font-extrabold text-xl'>
-              {`${newsletterchecked.length}개 뉴스레터 구독 완료`}
+              {`${newslettersubscribe.length}개 뉴스레터 구독 완료`}
             </p>
             <span className='font-bold text-gray-500'>
               슬랙을 연동하면 3줄 요약된 뉴스레터를 편하게 받아보실 수 있어요.

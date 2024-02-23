@@ -100,7 +100,7 @@ const LandingPage = () => {
           <div className='my-6 border-b-2 border-whitesmoke w-full'></div>
           <div className='mt-8 mb-[100px] flex items-center'>
             <div>
-              <img className='w-[500px]' src="/images/summaryimg.png" alt="summaryimg" />
+              <img className='w-[500px] ' src="/images/summaryimg.png" alt="summaryimg" />
             </div>
             <div>
               <h1 className='font-extrabold text-xl'>요약된 뉴스소식을 슬랙 채널에서 만나보세요🔥</h1>

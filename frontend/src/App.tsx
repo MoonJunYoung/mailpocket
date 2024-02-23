@@ -29,9 +29,7 @@ function App() {
       try {
         await initializeAmplitude();
         setAmplitudeInitialized(true);
-
         const authToken = Token();
-
         if (authToken) {
           const userInfo = await getUserData();
           amplitude.getInstance().setUserId(userInfo.data.id);
