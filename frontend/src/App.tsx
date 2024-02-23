@@ -1,5 +1,10 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import MyPage from "./pages/MyPage";
 import MobileReadPage from "./mobile/MobileReadPage";
 import Subscribe from "./pages/SubscribePage";
@@ -21,8 +26,18 @@ import {
 import MobileMyPage from "./mobile/MobileMyPage";
 import MobileSubscribe from "./mobile/MobileSubscribe";
 
+import UAParser from "ua-parser-js";
+
+const parser = new UAParser(navigator.userAgent);
+
 function App() {
   const [amplitudeInitialized, setAmplitudeInitialized] = useState(false);
+  if (
+    parser.getDevice().type === "mobile" &&
+    !window.location.pathname.includes("mobile")
+  ) {
+    window.location.href = `/mobile${window.location.pathname}${window.location.search}`;
+  }
 
   useEffect(() => {
     const initializeAndSetUserId = async () => {
@@ -62,9 +77,9 @@ function App() {
             <Route path="/read" element={<ReadPage />} />
             <Route path="/subscribe" element={<Subscribe />} />
             <Route path="/landingpage" element={<LandingPage />} />
-            <Route path="/mobilereadpage" element={<MobileReadPage />} />
-            <Route path="/mobilemypage" element={<MobileMyPage />} />
-            <Route path="/mobileSubscribe" element={<MobileSubscribe />} />
+            <Route path="/mobile/read" element={<MobileReadPage />} />
+            <Route path="/mobile" index element={<MobileMyPage />} />
+            <Route path="/mobile/subscribe" element={<MobileSubscribe />} />
           </Routes>
         </Router>
       ) : (
