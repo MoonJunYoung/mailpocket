@@ -1,5 +1,6 @@
 from backend.common.database.connector import MysqlCRUDTemplate
 from backend.common.database.model import SubscribeModel, UserModel
+from backend.common.exceptions import AlreadySubscribedException
 from backend.user.domain import User
 
 
@@ -68,6 +69,13 @@ class UserRepository:
             super().__init__()
 
         def execute(self):
+            if (
+                self.session.query(SubscribeModel)
+                .filter(SubscribeModel.user_id == self.user.id)
+                .filter(SubscribeModel.newsletter_id == self.newsletter_id)
+                .first()
+            ):
+                raise AlreadySubscribedException
             subscribe_model = SubscribeModel(
                 id=None, newsletter_id=self.newsletter_id, user_id=self.user.id
             )

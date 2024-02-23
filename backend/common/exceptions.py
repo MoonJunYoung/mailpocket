@@ -106,3 +106,11 @@ class InvalidOauthException(CustomException):
 
     status_code = 401
     detail = "invalid Oatun Information"
+
+
+class AlreadySubscribedException(CustomException):
+    def __init__(self) -> None:
+        super().__init__(f"You are already subscribed to that newsletter")
+
+    status_code = 409
+    detail = "You are already subscribed to that newsletter"
