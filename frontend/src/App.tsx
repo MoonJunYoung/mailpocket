@@ -14,10 +14,12 @@ import RedirectMypage from "./components/RedirectMypage";
 import ReadPage from "./pages/ReadPage";
 import LandingPage from "./pages/LandingPage";
 import { useEffect, useState } from "react";
-import { initializeAmplitude } from "./components/Amplitude";
+import {
+  AmplitudeSetUserId,
+  initializeAmplitude,
+} from "./components/Amplitude";
 import PageLoding from "./components/PageLoding";
 import { Token, getUserData } from "./api/api";
-import amplitude from "amplitude-js";
 import {
   GooglesRedirect,
   KakaoRedirect,
@@ -44,13 +46,7 @@ function App() {
       try {
         await initializeAmplitude();
         setAmplitudeInitialized(true);
-
-        const authToken = Token();
-
-        if (authToken) {
-          const userInfo = await getUserData();
-          amplitude.getInstance().setUserId(userInfo.data.id);
-        }
+        await AmplitudeSetUserId();
       } catch (error) {
         console.error("Error in initialization:", error);
       }
