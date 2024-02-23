@@ -7,13 +7,25 @@ import UrlShare from '../Shared/UrlShare'
 
 
 interface SummaryProps {
-  summaryNewsLetterData: SummaryNewsLetterDataType[] 
+  summaryNewsLetterData: SummaryNewsLetterDataType[]
 
 }
 
 
 const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
+
+
   const [newslettemoresee, setNewsLetteMoreSee] = useState(true);
+  const [expandedSummaries, setExpandedSummaries] = useState<Record<number, boolean>>({});
+
+
+  const toggleSummaryExpansion = (summaryId: number) => {
+    setExpandedSummaries((prevState) => ({
+      ...prevState,
+      [summaryId]: !prevState[summaryId],
+    }));
+  };
+
   return (
     <div>
       <div className='flex justify-center gap-5'>
@@ -29,7 +41,7 @@ const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
             </div>
           </div>
           {summaryNewsLetterData.map((data) => (
-            <div key={data.id} className={`p-3 flex flex-col items-start border-b h-[230px] ${newslettemoresee ? 'overflow-y-hidden' : 'overflow-y-auto'} custom-scrollbar`}>
+            <div key={data.id} className={`p-3 flex flex-col items-start border-b h-[230px] ${expandedSummaries[data.id] ? 'h-auto' : 'overflow-hidden'} custom-scrollbar`}>
               {data.summary_list ? (
                 Object.entries(data.summary_list).map(([key, value]) => (
                   <div className='mt-1' key={key}>
@@ -45,11 +57,13 @@ const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
             </div>
           ))}
 
-          {newslettemoresee ? (
-            <div className='p-3 cursor-pointer text-center'><span className='text-lg text-customPurple font-bold' onClick={() => setNewsLetteMoreSee(false)}>펼치기</span></div>
-          ) : (
-            <div className='p-3 cursor-pointer text-center'><span className='text-lg text-customPurple font-bold' onClick={() => setNewsLetteMoreSee(true)}>닫기</span></div>
-          )}
+          {summaryNewsLetterData.map((data) => (
+            <div key={data.id} className='p-3 cursor-pointer text-center'  onClick={() => toggleSummaryExpansion(data.id)}>
+              <span className='text-lg text-customPurple font-bold'>
+                {expandedSummaries[data.id] ? '닫기' : '펼치기'}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
