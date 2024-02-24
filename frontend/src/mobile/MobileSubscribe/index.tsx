@@ -355,13 +355,13 @@ const MobileSubscribe = () => {
           </div>
         </div>
       </div>
-      {openModal && (
+      {/* {openModal && (
         <SlackGuideModal
           setOpenModal={setOpenModal}
           handlePostNewsLetterData={handlePostNewsLetterData}
           newsletterchecked={newsletterchecked}
         />
-      )}
+      )} */}
       <div className="w-full  touch-none h-10 mb-10" ref={ref}></div>
       {isFetching && hasNextPage && <Loader />}
     </div>

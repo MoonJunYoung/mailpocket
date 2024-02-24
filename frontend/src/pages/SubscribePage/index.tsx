@@ -37,13 +37,11 @@ export type NewsLetterDataType = {
 
 const Subscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
-  const [newslettersubscribe, setNewsLettersubscribe] = useState<
-    NewsLetterDataType[]
-  >([]);
-  const [newsletterchecked, setNewsLetterChecked] = useState<number[]>([]);
+  const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([]);
   const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>(
     {}
   );
+  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
 
@@ -184,7 +182,7 @@ const Subscribe = () => {
   ) => {
     e.preventDefault();
     try {
-      if (newsletterchecked.length <= 0) {
+      if (newslettersubscribe.length <= 0) {
         alert("뉴스레터를 구독해주세요");
       } else {
         sendEventToAmplitude("complete to select article", "");
@@ -196,47 +194,50 @@ const Subscribe = () => {
     }
   };
 
-  useEffect(() => {
-    handleGetNewsLetterData();
-  }, []);
+  const handleNewsLetterSelected = async (newsletterId: number, bool:boolean, newslettername:string) => {
+    try {
+      console.log(newslettername)
+      const response = await readPageSubscribe(newsletterId);
+      if (response.status === 201) {
+        setSubscriptionStatusMap((prevMap) => ({
+          ...prevMap,
+          [newsletterId]: bool,
+        }));
+      }
+      sendEventToAmplitude("select article", {
+        "article name": newslettername,
+      });
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패");
+    }
+  };
+
+  const handleNewsLetterUnSelected = async (newsletterId: number, bool:boolean, newslettername:string) => {
+    try {
+      console.log(newslettername)
+      const response = await readPageUnSubscribe(newsletterId);
+      if (response.status === 204) {
+        setSubscriptionStatusMap((prevMap) => ({
+          ...prevMap,
+          [newsletterId]: bool,
+        }));
+      }
+      sendEventToAmplitude("select article", {
+        "unselect article": newslettername,
+      });
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패");
+    }
+  };
 
   useEffect(() => {
-    handleNewsLetterSubcribeDataRenewal();
-  }, [newslettersubscribe]);
+    handleGetNewsLetterData();
+  }, [subscriptionStatusMap]);
 
   const handleModalOpen = () => {
     setOpenModal(true);
   };
 
-  const handleNewsLetterSubcribeDataRenewal = () => {
-    const newslettersubscribeId = newslettersubscribe.map((item) => item.id);
-    setNewsLetterChecked([...newslettersubscribeId]);
-  };
-
-  const handleNewsLetterSelected = (newsletterid: number) => {
-    setNewsLetterChecked((prevChecked) => {
-      const newsletters = subscribeable.find(
-        (item) => item.id === newsletterid
-      );
-      if (prevChecked.includes(newsletterid)) {
-        return prevChecked.filter((id) => id !== newsletterid);
-      } else {
-        sendEventToAmplitude("select article", {
-          "article name": newsletters?.name,
-        });
-        return [...prevChecked, newsletterid];
-      }
-    });
-  };
-
-  const deleteSubscribe = (
-    subscribeToDelete: NewsLetterDataType,
-    subScribeList: Array<NewsLetterDataType>
-  ) => {
-    return subScribeList.filter((newLetter: NewsLetterDataType) => {
-      return newLetter.id !== subscribeToDelete.id;
-    });
-  };
 
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substring(0, n) + "..." : str;
@@ -292,11 +293,10 @@ const Subscribe = () => {
                     구독중인 뉴스레터
                   </h1>
                   <div
-                    className={`${
-                      newslettersubscribe.length > 4
-                        ? "flex"
-                        : "grid grid-cols-4"
-                    } overflow-x-auto  gap-4`}
+                    className={`${newslettersubscribe.length > 4
+                      ? "flex"
+                      : "grid grid-cols-4"
+                      } overflow-x-auto  gap-4`}
                   >
                     {newslettersubscribe.map((data) => (
                       <div
@@ -313,11 +313,10 @@ const Subscribe = () => {
                             </p>
                           </div>
                           <div
-                            className={`h-[250px] w-[285px] ${
-                              seeMoreStates[data.id]
-                                ? "overflow-auto"
-                                : "overflow-hidden"
-                            } text-ellipsis custom-scrollbar px-5`}
+                            className={`h-[250px] w-[285px] ${seeMoreStates[data.id]
+                              ? "overflow-auto"
+                              : "overflow-hidden"
+                              } text-ellipsis custom-scrollbar px-5`}
                           >
                             {data.mail && data.mail.summary_list ? (
                               Object.entries(data.mail.summary_list).map(
@@ -372,62 +371,12 @@ const Subscribe = () => {
                               {data.name}
                             </span>
                           </div>
-                          <label className="relative border-t cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={newsletterchecked.includes(data.id)}
-                              onChange={async (e) => {
-                                handleNewsLetterSelected(data.id);
-                              }}
-                              className="appearance-none"
-                            />
-                            {newsletterchecked.includes(data.id) && (
-                              <span
-                                onClick={async () => {
-                                  await readPageUnSubscribe(data.id);
-                                  let response = await readPageUnSubscribe(
-                                    data.id
-                                  );
-                                  const result = deleteSubscribe(
-                                    data,
-                                    newslettersubscribe
-                                  );
-
-                                  setNewsLettersubscribe(result);
-                                  if (
-                                    activeCategory === "전체" ||
-                                    activeCategory === data.category
-                                  ) {
-                                    setSubscribeable((prev: any) => [
-                                      ...prev,
-                                      data,
-                                    ]);
-                                  }
-                                }}
-                                className="p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold"
-                              >
-                                구독해제
-                              </span>
-                            )}
-                            <span
-                              onClick={async () => {
-                                await readPageSubscribe(data.id);
-                                let response = await readPageSubscribe(data.id);
-                                const result = deleteSubscribe(
-                                  data,
-                                  subscribeable
-                                );
-                                setSubscribeable(result);
-                                setNewsLettersubscribe((prev: any) => [
-                                  data,
-                                  ...prev,
-                                ]);
-                              }}
-                              className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton"
-                            >
-                              구독하기
-                            </span>
-                          </label>
+                          {
+                            subscriptionStatusMap[data.id] ?
+                              (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.id , false, data.name)}>구독하기</span>)
+                              :
+                              (<span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.id, true, data.name)}>구독해제</span>)
+                          }
                         </div>
                       </div>
                     ))}
@@ -456,11 +405,10 @@ const Subscribe = () => {
                       </p>
                     </div>
                     <div
-                      className={`h-[250px] ${
-                        seeMoreStates[data.id]
-                          ? "overflow-auto"
-                          : "overflow-hidden"
-                      } custom-scrollbar px-5`}
+                      className={`h-[250px] ${seeMoreStates[data.id]
+                        ? "overflow-auto"
+                        : "overflow-hidden"
+                        } custom-scrollbar px-5`}
                     >
                       {data.mail && data.mail.summary_list ? (
                         Object.entries(data.mail.summary_list).map(
@@ -511,50 +459,13 @@ const Subscribe = () => {
                         {data.name}
                       </span>
                     </div>
-                    <label className="relative border-t cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={newsletterchecked.includes(data.id)}
-                        onChange={() => handleNewsLetterSelected(data.id)}
-                        className="appearance-none"
-                      />
-                      {newsletterchecked.includes(data.id) && (
-                        <span
-                          onClick={async () => {
-                            await readPageUnSubscribe(data.id);
-                            const result = deleteSubscribe(
-                              data,
-                              newslettersubscribe
-                            );
-                            setNewsLettersubscribe(result);
-                            if (
-                              activeCategory === "전체" ||
-                              activeCategory === data.category
-                            ) {
-                              setSubscribeable((prev: any) => [...prev, data]);
-                            }
-                          }}
-                          className="p-2 rounded-xl  border border-gray-200 absolute top-[-4px] bg-gray-200  text-gray-400 text-xs font-bold"
-                        >
-                          구독해제
-                        </span>
-                      )}
-                      <span
-                        onClick={async () => {
-                          await readPageSubscribe(data.id);
-                          let response = await readPageSubscribe(data.id);
-                          const result = deleteSubscribe(data, subscribeable);
-                          setSubscribeable(result);
-                          setNewsLettersubscribe((prev: any) => [
-                            data,
-                            ...prev,
-                          ]);
-                        }}
-                        className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold bg-subscribebutton"
-                      >
-                        구독하기
-                      </span>
-                    </label>
+                    {
+                      subscriptionStatusMap[data.id] ?
+                        (<span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.id, false, data.name)}>구독해제</span>)
+                        :
+                        (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.id, true, data.name)}>구독하기</span>)
+
+                    }
                   </div>
                 </div>
               ))}
@@ -574,7 +485,7 @@ const Subscribe = () => {
         <SlackGuideModal
           setOpenModal={setOpenModal}
           handlePostNewsLetterData={handlePostNewsLetterData}
-          newsletterchecked={newsletterchecked}
+          newslettersubscribe={newslettersubscribe}
         />
       )}
       <div className="w-full  touch-none h-10 mb-10" ref={ref}></div>
