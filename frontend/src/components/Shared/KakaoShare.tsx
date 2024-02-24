@@ -14,7 +14,6 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
   }, []);
 
   const readLinks = summaryNewsLetterData?.map((data) => data.read_link);
-
   const initKakao = () => {
     //@ts-ignore
     if (window.Kakao) {
@@ -31,8 +30,8 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     window.Kakao.Link.sendDefault({
       objectType: "feed",
       content: {
-        title: "mailPocket",
-        description: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.`,
+        title: "MailPocket",
+        description: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.\n${summaryNewsLetterData?.map((data) => data.share_text)}`,
         imageUrl: "",
         link: {
           webUrl: readLinks?.join(''),

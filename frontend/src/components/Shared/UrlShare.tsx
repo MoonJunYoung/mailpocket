@@ -12,7 +12,12 @@ const UrlShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: Url
   const getApiDataCopy = async () => {
     try {
       const readLinks = summaryNewsLetterData?.map((data) => data.read_link);
-      await navigator.clipboard.writeText(readLinks.join(''));
+      const fromName = summaryNewsLetterData?.map((data) => data.from_name);
+      const summaryList = summaryNewsLetterData?.map((data) => data.share_text);
+      const combinedValues = [...fromName ,'\t' , ...summaryList,'\t' , ...readLinks];
+      const textToCopy = combinedValues.join("\n");
+      console.log(textToCopy)
+      await navigator.clipboard.writeText(textToCopy);
       alert("텍스트가 클립보드에 복사되었습니다.");
     } catch (error) {
       console.error("클립보드 복사 실패");

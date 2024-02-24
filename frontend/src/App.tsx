@@ -28,9 +28,11 @@ import {
 import MobileMyPage from "./mobile/MobileMyPage";
 import MobileSubscribe from "./mobile/MobileSubscribe";
 
-import UAParser from "ua-parser-js";
+export const isMobile =
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
 
-const parser = new UAParser(navigator.userAgent);
 
 function App() {
   const [amplitudeInitialized, setAmplitudeInitialized] = useState(false);
@@ -54,6 +56,8 @@ function App() {
 
     initializeAndSetUserId();
   }, []);
+
+
 
   return (
     <div className={amplitudeInitialized ? "" : "flex justify-center"}>

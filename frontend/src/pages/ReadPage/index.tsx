@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
+
 import { getReadMailData, getSubscribeData, Token } from "../../api/api";
+import { isMobile } from "../../App";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import PageLoding from "../../components/PageLoding";
 import { SubscribeNewsLetterDataType, Summary } from "../../components/Summary";
@@ -16,7 +19,8 @@ export interface SummaryNewsLetterDataType {
   newsletter_id: number,
   date: string,
   from_name: string,
-  html_body: string
+  html_body: string,
+  share_text?: string
 }
 
 
@@ -27,8 +31,15 @@ const ReadPage = () => {
   const searchParams = new URLSearchParams(location.search);
   const mail = searchParams.get("mail");
   const authToken = Token();
+  const navigate = useNavigate();
 
 
+
+  useEffect(() => {
+    if (isMobile) {
+      navigate(`/mobilereadpage?mail=${mail}`);
+    } 
+  }, [isMobile]);
 
   const handleGetNewsLetterData = async () => {
     try {
