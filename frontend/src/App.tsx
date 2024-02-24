@@ -71,9 +71,9 @@ function App() {
             <Route path="/read" element={<ReadPage />} />
             <Route path="/subscribe" element={<Subscribe />} />
             <Route path="/landingpage" element={<LandingPage />} />
-            <Route path="/mobile/read" element={<MobileReadPage />} />
-            <Route path="/mobile" index element={<MobileMyPage />} />
-            <Route path="/mobile/subscribe" element={<MobileSubscribe />} />
+            <Route path="/mobileread" element={<MobileReadPage />} />
+            <Route path="/mobilemypage" index element={<MobileMyPage />} />
+            <Route path="/mobileSubscribe" element={<MobileSubscribe />} />
           </Routes>
         </Router>
       ) : (
