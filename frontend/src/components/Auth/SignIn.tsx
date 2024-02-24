@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { postSignInData, Token } from '../../api/api'
+import { isMobile } from '../../App'
 import { AmplitudeSetUserId, sendEventToAmplitude } from '../Amplitude'
 import Nav from '../Nav'
 import { GoogleLogin, KakaoLogin, NaverLogin } from '../Oauth/SocialPlatformLogin'
@@ -48,7 +49,7 @@ const SignIn = () => {
         });
         await AmplitudeSetUserId()
         sendEventToAmplitude("complete sign in", "")
-        navigate("/");
+        isMobile ? navigate("/mobilemypage") : navigate("/");
       } else {
         alert("아이디 및 비밀번호를 확인해주세요.")
       }

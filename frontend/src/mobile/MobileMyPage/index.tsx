@@ -27,10 +27,18 @@ const MobileMyPage = () => {
   const [mynewsletter, setMyNewsLetter] = useState<NewsLetterDataType[]>([])
   const [mynewsletterdetail, setMyNewsLetterDetail] = useState<NavNewsLetterDataType[]>([])
   const [selectedItem, setSelectedItem] = useState(0);
-
   const navigate = useNavigate();
   const authToken = Token();
 
+  useEffect(() => {
+    if (mynewsletter.length === 0) {
+      alert()
+      navigate("/mobileSubscribe");
+    } else {
+      sendEventToAmplitude("view my page", "");
+    }
+  }, [mynewsletter]);
+  
 
   useEffect(() => {
     if (!authToken) {

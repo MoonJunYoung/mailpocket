@@ -4,7 +4,6 @@ import {
   getNewsletterData,
   getSubscribeData,
   Params,
-  putSubscribe,
   readPageSubscribe,
   readPageUnSubscribe,
   Token,
