@@ -36,7 +36,6 @@ const MobileMyPage = () => {
 
   useEffect(() => {
     if (mynewsletter.length === 0) {
-      alert()
       navigate("/mobileSubscribe");
     } else {
       sendEventToAmplitude("view my page", "");

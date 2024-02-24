@@ -510,25 +510,28 @@ const MailModal = ({
                   </button>
                 ) : (
                   <button
-                    onClick={async () => {
-                      setIsSub(true);
-                      try {
-                        let response = await readPageSubscribe(
-                          acitveMailData.id
-                        );
-                        const result = deleteSubscribe(
-                          acitveMailData,
-                          subscribeable
-                        );
-                        setSubscribeable(result);
-                        setNewsLettersubscribe((prev: any) => [
-                          acitveMailData,
-                          ...prev,
-                        ]);
-                      } catch (error) {
-                        console.log(error);
+                    onClick={
+                      async () => {
+                        setIsActiveMailModal(false);
+                        setIsSub(true);
+                        try {
+                          let response = await readPageSubscribe(
+                            acitveMailData.id
+                          );
+                          const result = deleteSubscribe(
+                            acitveMailData,
+                            subscribeable
+                          );
+                          setSubscribeable(result);
+                          setNewsLettersubscribe((prev: any) => [
+                            acitveMailData,
+                            ...prev,
+                          ]);
+                        } catch (error) {
+                          console.log(error);
+                        }
                       }
-                    }}
+                    }
                     className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[10px] rounded-md font-semibold"
                   >
                     구독하기
@@ -539,7 +542,7 @@ const MailModal = ({
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
