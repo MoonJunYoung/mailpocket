@@ -23,7 +23,10 @@ import "../MyPage/hideScroll.css";
 import { Link } from "react-router-dom";
 
 import { SettingModal } from "../../components/Modal/SettingModal";
-import { SubscribeNewsLetterDataType,MySummary } from "../../components/Summary";
+import {
+  SubscribeNewsLetterDataType,
+  MySummary,
+} from "../../components/Summary";
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
 import { deflateSync } from "zlib";
@@ -37,12 +40,14 @@ export type ChannelDataType = {
 
 interface MailType {
   detailmail: SummaryNewsLetterDataType[];
-  newsLetters : SubscribeNewsLetterDataType[];
+  newsLetters: SubscribeNewsLetterDataType[];
 }
 
 const MyPage = () => {
-  const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>([]);
-  
+  const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>(
+    []
+  );
+
   const [mail, setMail] = useState({});
   const [loadFlag, setLoadFlag] = useState(false);
   const [activeTab, setActiveTab] = useState();
@@ -88,8 +93,12 @@ const MyPage = () => {
   useEffect(() => {
     let sub = handleSubscribe();
     sub.then((result: any) => {
-      setNewsLetters(result);
-      setActiveTab(result[0].id);
+      if (result.length > 0) {
+        setNewsLetters(result);
+        setActiveTab(result[0].id);
+      } else {
+        navigate("/subscribe");
+      }
     });
   }, []);
 
@@ -124,7 +133,7 @@ const MyPage = () => {
             setActiveMail={setActiveMail}
             handleGetMailDetailData={handleGetMailDetailData}
           ></List>
-          <Main detailmail={detailmail} newsLetters={newsLetters} ></Main>
+          <Main detailmail={detailmail} newsLetters={newsLetters}></Main>
         </div>
       </div>
       {openModal === true ? (
@@ -389,7 +398,10 @@ const Main = ({ detailmail, newsLetters }: MailType) => {
     <div className="flex-[70%] h-full">
       <div className="max-w-[700px] mx-auto mt-[30px]">
         <div>
-          <MainHeader detailmail={detailmail} newsLetters={newsLetters}></MainHeader>
+          <MainHeader
+            detailmail={detailmail}
+            newsLetters={newsLetters}
+          ></MainHeader>
         </div>
       </div>
     </div>
@@ -399,7 +411,10 @@ const Main = ({ detailmail, newsLetters }: MailType) => {
 const MainHeader = ({ detailmail, newsLetters }: MailType) => {
   return (
     <div className="flex flex-col gap-[10px] font-bold border-b-[1px] border-b-#E8E8E8 pb-[30px]">
-      <MySummary summaryNewsLetterData={detailmail} newslettersubscribe={newsLetters} />
+      <MySummary
+        summaryNewsLetterData={detailmail}
+        newslettersubscribe={newsLetters}
+      />
       {detailmail.map((data) => {
         return data.html_body !== null ? (
           <div
