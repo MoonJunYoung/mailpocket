@@ -36,12 +36,6 @@ export const isMobile =
 
 function App() {
   const [amplitudeInitialized, setAmplitudeInitialized] = useState(false);
-  if (
-    parser.getDevice().type === "mobile" &&
-    !window.location.pathname.includes("mobile")
-  ) {
-    window.location.href = `/mobile${window.location.pathname}${window.location.search}`;
-  }
 
   useEffect(() => {
     const initializeAndSetUserId = async () => {
