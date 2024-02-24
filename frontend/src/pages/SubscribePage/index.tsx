@@ -231,7 +231,7 @@ const Subscribe = () => {
 
   useEffect(() => {
     handleGetNewsLetterData();
-  }, [subscriptionStatusMap]);
+  }, []);
 
   const handleModalOpen = () => {
     setOpenModal(true);
