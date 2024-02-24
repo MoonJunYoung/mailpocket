@@ -1,4 +1,5 @@
 import datetime
+import json
 from email import policy
 from email.parser import BytesParser
 
@@ -22,8 +23,19 @@ class Mail:
         self.subject = subject
         self.read_link = f"https://mailpocket.site/read?mail={self.s3_object_key}"
         self.summary_list = summary_list
+        if self.summary_list:
+            self.share_text = self._make_share_text()
         self.newsletter_id = newsletter_id
         self.recv_at = recv_at
+
+    def _make_share_text(self):
+        text = ""
+        text += self.subject + "\n\n"
+        for k, v in self.summary_list.items():
+            text += k + "\n"
+            text += v + "\n\n"
+        text = text.rstrip("\n\n")
+        return text
 
     def parser_eamil(self):
         parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)

@@ -66,6 +66,7 @@ class MailRepository(S3Connector):
             self.mail.id = mail_model.id
             self.mail.subject = mail_model.subject
             self.mail.summary_list = mail_model.summary_list
+            self.mail.share_text = self.mail._make_share_text()
             self.mail.newsletter_id = mail_model.newsletter_id
             return True
 
