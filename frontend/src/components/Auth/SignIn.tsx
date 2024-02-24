@@ -31,7 +31,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (authToken) {
-      navigate("/");
+      isMobile ? navigate("/mobileSubscribe") : navigate("/subscribe");
     } else {
       sendEventToAmplitude('view sign in', '');
     }
