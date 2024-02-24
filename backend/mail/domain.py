@@ -32,7 +32,7 @@ class Mail:
         text = ""
         text += self.subject + "\n\n"
         for k, v in self.summary_list.items():
-            text += k + "\n"
+            text += "#" + k + "\n"
             text += v + "\n\n"
         text = text.rstrip("\n\n")
         return text
