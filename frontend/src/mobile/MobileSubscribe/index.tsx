@@ -382,7 +382,7 @@ const NewsLetter = ({ data, setActiveMailData, setIsActiveMailModal }: any) => {
       <div className="flex flex-col items-center min-h-[100px]">
         <div>
           <img
-            src={"images/" + data.id + ".png"}
+            src={"../images/" + data.id + ".png"}
             className="size-[40px] m-[9px] rounded-full "
             alt=""
           />
@@ -446,7 +446,7 @@ const MailModal = ({
                 <div className="">
                   <img
                     className="size-[40px] rounded-full border-1 border-black"
-                    src={"images/" + acitveMailData.id + ".png"}
+                    src={"../images/" + acitveMailData.id + ".png"}
                     alt=""
                   />
                 </div>

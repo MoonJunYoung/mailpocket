@@ -1,5 +1,10 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import MyPage from "./pages/MyPage";
 import MobileReadPage from "./mobile/MobileReadPage";
 import Subscribe from "./pages/SubscribePage";
@@ -9,10 +14,12 @@ import RedirectMypage from "./components/RedirectMypage";
 import ReadPage from "./pages/ReadPage";
 import LandingPage from "./pages/LandingPage";
 import { useEffect, useState } from "react";
-import { initializeAmplitude } from "./components/Amplitude";
+import {
+  AmplitudeSetUserId,
+  initializeAmplitude,
+} from "./components/Amplitude";
 import PageLoding from "./components/PageLoding";
 import { Token, getUserData } from "./api/api";
-import amplitude from "amplitude-js";
 import {
   GooglesRedirect,
   KakaoRedirect,
@@ -21,25 +28,27 @@ import {
 import MobileMyPage from "./mobile/MobileMyPage";
 import MobileSubscribe from "./mobile/MobileSubscribe";
 
-
 export const isMobile =
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
 
+
 function App() {
   const [amplitudeInitialized, setAmplitudeInitialized] = useState(false);
+  if (
+    parser.getDevice().type === "mobile" &&
+    !window.location.pathname.includes("mobile")
+  ) {
+    window.location.href = `/mobile${window.location.pathname}${window.location.search}`;
+  }
 
   useEffect(() => {
     const initializeAndSetUserId = async () => {
       try {
         await initializeAmplitude();
         setAmplitudeInitialized(true);
-        const authToken = Token();
-        if (authToken) {
-          const userInfo = await getUserData();
-          amplitude.getInstance().setUserId(userInfo.data.id);
-        }
+        await AmplitudeSetUserId();
       } catch (error) {
         console.error("Error in initialization:", error);
       }
@@ -68,9 +77,9 @@ function App() {
             <Route path="/read" element={<ReadPage />} />
             <Route path="/subscribe" element={<Subscribe />} />
             <Route path="/landingpage" element={<LandingPage />} />
-            <Route path="/mobilereadpage" element={<MobileReadPage />} />
-            <Route path="/mobilemypage" element={<MobileMyPage />} />
-            <Route path="/mobileSubscribe" element={<MobileSubscribe />} />
+            <Route path="/mobile/read" element={<MobileReadPage />} />
+            <Route path="/mobile" index element={<MobileMyPage />} />
+            <Route path="/mobile/subscribe" element={<MobileSubscribe />} />
           </Routes>
         </Router>
       ) : (
