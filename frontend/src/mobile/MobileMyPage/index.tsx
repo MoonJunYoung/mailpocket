@@ -35,15 +35,6 @@ const MobileMyPage = () => {
   const authToken = Token();
 
   useEffect(() => {
-    if (mynewsletter.length === 0) {
-      navigate("/mobileSubscribe");
-    } else {
-      sendEventToAmplitude("view my page", "");
-    }
-  }, [mynewsletter]);
-  
-
-  useEffect(() => {
     if (!authToken) {
       navigate("/landingpage");
     } else {
@@ -65,7 +56,7 @@ const MobileMyPage = () => {
         );
         setMyNewsLetterDetail([responseNewsLetterDetail.data]);
       } else {
-        navigate("/mobile/subscribe");
+        navigate("/mobilemypage");
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패", error);
@@ -75,6 +66,7 @@ const MobileMyPage = () => {
   useEffect(() => {
     handlegetData();
   }, [selectedItem]);
+
 
   return (
     <div>

@@ -37,14 +37,15 @@ export type NewsLetterDataType = {
 const Subscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
   const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([]);
-  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>(
-    {}
-  );
+  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>({});
   const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
-
   const [activeCategory, setActiveCategory] = useState("전체");
+
+
+
+
   const categories = [
     {
       id: 1,
@@ -193,9 +194,8 @@ const Subscribe = () => {
     }
   };
 
-  const handleNewsLetterSelected = async (newsletterId: number, bool:boolean, newslettername:string) => {
+  const handleNewsLetterSelected = async (newsletterId: number, bool: boolean, newslettername: string) => {
     try {
-      console.log(newslettername)
       const response = await readPageSubscribe(newsletterId);
       if (response.status === 201) {
         setSubscriptionStatusMap((prevMap) => ({
@@ -203,6 +203,7 @@ const Subscribe = () => {
           [newsletterId]: bool,
         }));
       }
+      handleGetNewsLetterData();
       sendEventToAmplitude("select article", {
         "article name": newslettername,
       });
@@ -211,16 +212,17 @@ const Subscribe = () => {
     }
   };
 
-  const handleNewsLetterUnSelected = async (newsletterId: number, bool:boolean, newslettername:string) => {
+  const handleNewsLetterUnSelected = async (newsletterId: number, bool: boolean, newslettername: string) => {
     try {
-      console.log(newslettername)
       const response = await readPageUnSubscribe(newsletterId);
       if (response.status === 204) {
-        setSubscriptionStatusMap((prevMap) => ({
-          ...prevMap,
-          [newsletterId]: bool,
-        }));
+        setSubscriptionStatusMap((prevMap) => {
+          const newMap = { ...prevMap };
+          delete newMap[newsletterId];
+          return newMap;
+        });
       }
+      handleGetNewsLetterData();
       sendEventToAmplitude("select article", {
         "unselect article": newslettername,
       });
@@ -228,6 +230,7 @@ const Subscribe = () => {
       console.log("Api 데이터 불러오기 실패");
     }
   };
+
 
   useEffect(() => {
     handleGetNewsLetterData();
@@ -265,22 +268,10 @@ const Subscribe = () => {
             <button
               className="h-[45px]  rounded-3xl border-none bg-customPurple text-white text-base font-bold w-[150px] md:w-[90px] hover:scale-110 transition-transform"
               style={{ boxShadow: "0px 1px black" }}
-              onClick={handlePostNewsLetterData}
+              onClick={handleModalOpen}
             >
               선택 완료
             </button>
-          </div>
-        </div>
-        <div className="flex items-center mt-8">
-          <div className="flex gap-[10px]">
-            <Category
-              fetchNewsletter={fetchNewsletter}
-              activeCategory={activeCategory}
-              setActiveCategory={setActiveCategory}
-              categories={categories}
-              setSubscribeable={setSubscribeable}
-              newslettersubscribe={newslettersubscribe}
-            ></Category>
           </div>
         </div>
         <div className="mt-6">
@@ -312,8 +303,8 @@ const Subscribe = () => {
                             </p>
                           </div>
                           <div
-                            className={`h-[250px] w-[285px] ${seeMoreStates[data.id]
-                              ? "overflow-auto"
+                            className={`h-[250px] w-[285px] mb-7 ${seeMoreStates[data.id]
+                              ? "overflow-y-auto"
                               : "overflow-hidden"
                               } text-ellipsis custom-scrollbar px-5`}
                           >
@@ -370,12 +361,7 @@ const Subscribe = () => {
                               {data.name}
                             </span>
                           </div>
-                          {
-                            subscriptionStatusMap[data.id] ?
-                              (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.id , false, data.name)}>구독하기</span>)
-                              :
-                              (<span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.id, true, data.name)}>구독해제</span>)
-                          }
+                          <span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.id, false, data.name)}>구독해제</span>
                         </div>
                       </div>
                     ))}
@@ -384,6 +370,18 @@ const Subscribe = () => {
               ) : (
                 ""
               )}
+            </div>
+            <div className="flex items-center mt-8">
+              <div className="flex gap-[10px]">
+                <Category
+                  fetchNewsletter={fetchNewsletter}
+                  activeCategory={activeCategory}
+                  setActiveCategory={setActiveCategory}
+                  categories={categories}
+                  setSubscribeable={setSubscribeable}
+                  newslettersubscribe={newslettersubscribe}
+                ></Category>
+              </div>
             </div>
             <h1 className="my-5 text-lg font-extrabold md:p-3">
               구독 가능한 뉴스레터
@@ -395,7 +393,7 @@ const Subscribe = () => {
                   style={{ boxShadow: "-1px 5px 11px 1px lightgray" }}
                   key={data.id}
                 >
-                  <div className=" relative">
+                  <div className="relative">
                     <div className="border-b h-[65px]">
                       <p className="font-extrabold p-3">
                         {data.mail
@@ -404,7 +402,7 @@ const Subscribe = () => {
                       </p>
                     </div>
                     <div
-                      className={`h-[250px] ${seeMoreStates[data.id]
+                      className={`h-[250px] mb-7 ${seeMoreStates[data.id]
                         ? "overflow-auto"
                         : "overflow-hidden"
                         } custom-scrollbar px-5`}
@@ -463,7 +461,6 @@ const Subscribe = () => {
                         (<span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.id, false, data.name)}>구독해제</span>)
                         :
                         (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.id, true, data.name)}>구독하기</span>)
-
                     }
                   </div>
                 </div>
@@ -480,16 +477,18 @@ const Subscribe = () => {
           </div>
         </div>
       </div>
-      {openModal && (
-        <SlackGuideModal
-          setOpenModal={setOpenModal}
-          handlePostNewsLetterData={handlePostNewsLetterData}
-          newslettersubscribe={newslettersubscribe}
-        />
-      )}
+      {
+        openModal && (
+          <SlackGuideModal
+            setOpenModal={setOpenModal}
+            handlePostNewsLetterData={handlePostNewsLetterData}
+            newslettersubscribe={newslettersubscribe}
+          />
+        )
+      }
       <div className="w-full  touch-none h-10 mb-10" ref={ref}></div>
       {isFetching && hasNextPage && <Loader />}
-    </div>
+    </div >
   );
 };
 

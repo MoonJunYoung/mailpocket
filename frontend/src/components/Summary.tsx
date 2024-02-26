@@ -4,7 +4,6 @@ import Symbol from './Symbol';
 import UrlShare from './Shared/UrlShare';
 import { SummaryNewsLetterDataType } from '../pages/ReadPage';
 import { readPageSubscribe, readPageUnSubscribe, Token } from '../api/api';
-import { sendEventToAmplitude } from './Amplitude';
 
 export interface SubscribeNewsLetterDataType {
   id: number;
@@ -107,7 +106,7 @@ export const Summary = ({ summaryNewsLetterData, newslettersubscribe }: SummaryP
             </div>
           </div>
           {summaryNewsLetterData.map((data) => (
-            <div key={data.id} className={`p-3 flex flex-col items-start text-start  border-b h-[280px] ${expandedSummaries[data.id] ? 'h-auto' : 'overflow-hidden'} custom-scrollbar`}>
+            <div key={data.id} className={`p-3 flex flex-col items-start text-start  border-b h-[280px] ${expandedSummaries[data.id] ? 'h-auto' : 'h-[280px] overflow-hidden'} custom-scrollbar`}>
               {data.summary_list ? (
                 Object.entries(data.summary_list).map(([key, value]) => (
                   <div className='my-1' key={key}>
@@ -122,14 +121,16 @@ export const Summary = ({ summaryNewsLetterData, newslettersubscribe }: SummaryP
               )}
             </div>
           ))}
-
           {summaryNewsLetterData.map((data) => (
             <div key={data.id} className='p-3 cursor-pointer text-center'>
+
               <span className='text-lg text-customPurple font-bold' onClick={() => toggleSummaryExpansion(data.id)}>
                 {expandedSummaries[data.id] ? '닫기' : '펼치기'}
               </span>
+
             </div>
           ))}
+
         </div>
       </div>
     </div>
@@ -216,7 +217,7 @@ export const MySummary = ({ summaryNewsLetterData }: SummaryProps) => {
             </div>
           </div>
           {summaryNewsLetterData.map((data) => (
-            <div key={data.id} className={`p-3 flex flex-col items-start text-start  border-b h-[280px] ${expandedSummaries[data.id] ? 'h-auto' : 'overflow-hidden'} custom-scrollbar`}>
+            <div key={data.id} className={`p-3 flex flex-col items-start text-start  border-b h-[280px] ${expandedSummaries[data.id] ? 'h-auto' : 'h-[280px] overflow-hidden'} custom-scrollbar`}>
               {data.summary_list ? (
                 Object.entries(data.summary_list).map(([key, value]) => (
                   <div className='my-1' key={key}>
@@ -233,7 +234,7 @@ export const MySummary = ({ summaryNewsLetterData }: SummaryProps) => {
           ))}
 
           {summaryNewsLetterData.map((data) => (
-            <div key={data.id} className='p-3 cursor-pointer text-center'  onClick={() => toggleSummaryExpansion(data.id)}>
+            <div key={data.id} className='p-3 cursor-pointer text-center' onClick={() => toggleSummaryExpansion(data.id)}>
               <span className='text-lg text-customPurple font-bold'>
                 {expandedSummaries[data.id] ? '닫기' : '펼치기'}
               </span>

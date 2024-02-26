@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom'
-
 import { getReadMailData, getSubscribeData, Token } from "../../api/api";
 import { isMobile } from "../../App";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import PageLoding from "../../components/PageLoding";
 import { SubscribeNewsLetterDataType, Summary } from "../../components/Summary";
-import { NewsLetterDataType, SummaryItem } from "../SubscribePage";
+import { SummaryItem } from "../SubscribePage";
 
 export interface SummaryNewsLetterDataType {
   id: number,
@@ -37,7 +36,7 @@ const ReadPage = () => {
 
   useEffect(() => {
     if (isMobile) {
-      navigate(`/mobilereadpage?mail=${mail}`);
+      navigate(`/mobileread?mail=${mail}`);
     } 
   }, [isMobile]);
 
