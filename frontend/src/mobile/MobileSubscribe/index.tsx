@@ -23,10 +23,11 @@ export type SummaryItem = {
   [key: string]: string;
 };
 
-
 const MobileSubscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
-  const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([]);
+  const [newslettersubscribe, setNewsLettersubscribe] = useState<
+    NewsLetterDataType[]
+  >([]);
   const [newsletterchecked, setNewsLetterChecked] = useState<number[]>([]);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
@@ -86,8 +87,6 @@ const MobileSubscribe = () => {
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, {});
   const isPageEnd = pageRef?.isIntersecting;
-
-
 
   useEffect(() => {
     if (!authToken) {
