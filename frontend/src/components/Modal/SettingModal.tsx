@@ -7,7 +7,6 @@ export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
   useEffect(() => {
     let channelData = getChannelData("/testapi/channel");
     channelData.then((result: any) => {
-      console.log(result.data);
       setChannels(result.data);
     });
   }, [openModal]);

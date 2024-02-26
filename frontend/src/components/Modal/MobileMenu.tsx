@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { NewsLetterDataType } from "../../pages/SubscribePage";
 import { AmplitudeResetUserId } from "../Amplitude";
 import { Link } from "react-router-dom";
+import { SettingModal } from "./SettingModal";
 
 interface MobileMenuType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,10 +20,8 @@ const MobileMenu = ({
   selectItemId,
 }: MobileMenuType) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [selectedItem, setSelectedItem] = useState(
-    selectItemId ? selectItemId : mynewsletter[0].id
-  );
-
+  const [ModalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(selectItemId ? selectItemId : mynewsletter[0].id);
   const navigate = useNavigate();
 
   const closeModal = () => {
@@ -46,13 +45,9 @@ const MobileMenu = ({
   return (
     <div className="z-10 absolute">
       <div className="fixed inset-0 bg-stone-300 bg-opacity-50 flex justify-start">
-        <div
-          className={`h-full relative flex flex-col w-250 bg-white ${
-            isOpen ? "animate-right-to-left" : "animate-left-to-right"
-          }`}
-        >
-          <div className="flex flex-col overflow-auto">
-            <div className=" overflow-auto subscribe-scrollbar w-full flex flex-col items-center gap-3">
+        <div className='h-full relative flex flex-col w-auto bg-white'>
+          <div className="flex flex-col overflow-auto justify-between">
+            <div className="overflow-auto subscribe-scrollbar w-full flex flex-col items-center gap-3">
               {mynewsletter.map((data) => (
                 <div
                   className={`text-center border-b p-3 flex flex-col items-center justify-center`}
@@ -62,46 +57,57 @@ const MobileMenu = ({
                   }}
                 >
                   <img
-                    className="w-[45px]"
+                    className="w-[35px]"
                     src={`/images/${data.id}.png`}
                     alt={String(data.id)}
                   />
                   <p
-                    className={`font-semibold py-3 w-[63px] break-words break-keep ${
-                      selectedItem === data.id
-                        ? "border-customPurple border-solid border-b-4"
-                        : ""
-                    }`}
+                    className={`font-semibold w-[80px] py-2 ${selectedItem === data.id
+                      ? "border-customPurple border-solid border-b-4"
+                      : ""
+                      }`}
                   >
                     {data.name}
                   </p>
                 </div>
               ))}
             </div>
-            <div className="flex flex-col text-center ">
+            <div className="flex flex-col text-center gap-3">
               <ChangeButton></ChangeButton>
-              <Option></Option>
+              <div
+                onClick={() => { setModalOpen(true); }}
+                className="bg-[#EEEEEE]  size-[42px] mx-auto rounded-xl px-[10px] cursor-pointer">
+                <img
+                  className="mx-auto w-[200px] h-full"
+                  src="images\setting.svg"
+                  alt=""
+                />
+              </div>
+              <div className="p-3bg-gray-100 w-full text-center border-t py-3">
+                <span
+                  className="text-gray-500 font-semibold"
+                  onClick={handleLogOut}
+                >
+                  로그아웃
+                </span>
             </div>
-            <div className="p-3 bg-gray-100 absolute bottom-0 w-full text-center border-t">
-              <span
-                className="text-gray-500 font-semibold"
-                onClick={handleLogOut}
-              >
-                로그아웃
-              </span>
+              {ModalOpen && (
+                <SettingModal
+                  setOpenModal={setModalOpen}
+                  newsLetters={mynewsletter}
+                />
+              )}
             </div>
           </div>
         </div>
         <span
-          className={`cursor-pointer pl-2 text-2xl animate-right-to-left ${
-            isOpen ? "animate-right-to-left" : "animate-left-to-right"
-          }`}
+          className='cursor-pointer pl-2 text-2xl'
           onClick={closeModal}
         >
           X
         </span>
       </div>
-    </div>
+    </div >
   );
 };
 
@@ -121,23 +127,5 @@ const ChangeButton = () => {
   );
 };
 
-const Option = ({ setOpenModal }: any) => {
-  return (
-    <div
-      onClick={() => {
-        setOpenModal(true);
-      }}
-      className="mt-[15px] px-[19px] cursor-pointer "
-    >
-      <div className="bg-[#EEEEEE]  size-[42px] mx-auto rounded-xl">
-        <img
-          className="mx-auto size-[20px] h-full"
-          src="images\setting.svg"
-          alt=""
-        />
-      </div>
-    </div>
-  );
-};
 
 export default MobileMenu;
