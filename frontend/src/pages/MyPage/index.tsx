@@ -29,7 +29,6 @@ import {
 } from "../../components/Summary";
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
-import { deflateSync } from "zlib";
 
 export type ChannelDataType = {
   id: number;
@@ -44,7 +43,7 @@ interface MailType {
 }
 
 const MyPage = () => {
-  const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>([]);\
+  const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>([]);
   const [mail, setMail] = useState({});
   const [loadFlag, setLoadFlag] = useState(false);
   const [activeTab, setActiveTab] = useState();

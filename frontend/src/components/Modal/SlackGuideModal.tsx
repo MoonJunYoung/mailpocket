@@ -28,7 +28,7 @@ const SlackGuideModal = ({
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <div
           ref={ref}
-          className="py-3 px-7 rounded-lg relative flex justify-center flex-col max-h-400 w-250 bg-white transition-all ease-in-out animate-fadeIn"
+          className={`py-3 px-7 rounded-lg relative flex justify-center flex-col max-h-400 w-250 bg-white ${isMobile ? "" : "transition-all ease-in-out animate-fadeIn"}`}
         >
           <div className="my-5 w-full flex flex-col items-start gap-2 ">
             <div
