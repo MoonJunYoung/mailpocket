@@ -44,7 +44,9 @@ interface MailType {
 }
 
 const MyPage = () => {
-  const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>([]);  
+  const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>(
+    []
+  );
   const [mail, setMail] = useState({});
   const [loadFlag, setLoadFlag] = useState(false);
   const [activeTab, setActiveTab] = useState();
@@ -53,8 +55,6 @@ const MyPage = () => {
   const [detailmail, setDetailMail] = useState<any[]>([]);
   const navigate = useNavigate();
   const authToken = Token();
-
-
 
   const handleSubscribe = async () => {
     let responesSubscribe = await getSubscribeData(
@@ -414,6 +414,7 @@ const MainHeader = ({ detailmail, newsLetters }: MailType) => {
         summaryNewsLetterData={detailmail}
         newslettersubscribe={newsLetters}
       />
+
       {detailmail.map((data) => {
         return data.html_body !== null ? (
           <div
