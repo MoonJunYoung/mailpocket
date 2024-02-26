@@ -32,7 +32,7 @@ const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
         <div className='border rounded-lg bg-white w-[650px]' style={{ boxShadow: "1px 2px lightgrey" }}>
           <div className='flex items-center justify-between px-2 py-3 border-b'>
             <div className='flex items-center'>
-              <img className='w-10 mx-1' src="/images/MailpocketSymbol.png" alt="MailpocketSymbol" />
+              <img className='w-10 mx-1' src="/images/MailpocketSymbol.png" alt="MailpocketSymbol" onClick={() => (window.location.href = "/mobilemypage")} />
               <p className='font-extrabold'>메일포켓이 요약한 내용이에요</p>
             </div>
             <div className='flex gap-3'>
@@ -58,7 +58,7 @@ const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
           ))}
 
           {summaryNewsLetterData.map((data) => (
-            <div key={data.id} className='p-3 cursor-pointer text-center'  onClick={() => toggleSummaryExpansion(data.id)}>
+            <div key={data.id} className='p-3 cursor-pointer text-center' onClick={() => toggleSummaryExpansion(data.id)}>
               <span className='text-lg text-customPurple font-bold'>
                 {expandedSummaries[data.id] ? '닫기' : '펼치기'}
               </span>
