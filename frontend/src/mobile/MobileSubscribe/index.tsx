@@ -417,20 +417,32 @@ const MailModal = ({
                 </div>
                 <div className="">{acitveMailData.name}</div>
               </div>
-              <div className="pt-[20px] overflow-hidden h-full ">
+              <div
+                className={`pt-[20px] ${
+                  acitveMailData.mail ? "overflow-auto" : "overflow-hidden"
+                } h-full `}
+              >
                 <div className="font-extrabold text-base mb-3">
-                  {acitveMailData.mail.subject}
+                  {acitveMailData.mail
+                    ? acitveMailData.mail.subject
+                    : "해당 뉴스레터의 새 소식을 기다리고 있어요."}
                 </div>
-                <div className="flex overflow-auto h-full items-start gap-[15px] flex-col">
-                  {Object.entries(acitveMailData.mail.summary_list).map(
-                    ([key, value]: any) => {
-                      return (
-                        <div>
-                          <div className="font-extrabold mb-3">{key}</div>
-                          <div className="font-bold text-sm">{value}</div>
-                        </div>
-                      );
-                    }
+                <div className="flex  h-full items-start gap-[15px] flex-col">
+                  {acitveMailData.mail ? (
+                    Object.entries(acitveMailData.mail.summary_list).map(
+                      ([key, value]: any) => {
+                        return (
+                          <div>
+                            <div className="font-extrabold mb-3">{key}</div>
+                            <div className="font-bold text-sm">{value}</div>
+                          </div>
+                        );
+                      }
+                    )
+                  ) : (
+                    <div className="font-bold text-sm">
+                      소식이 생기면 메일포켓이 빠르게 요약해서 전달해드릴게요
+                    </div>
                   )}
                 </div>
               </div>
@@ -475,28 +487,26 @@ const MailModal = ({
                   </button>
                 ) : (
                   <button
-                    onClick={
-                      async () => {
-                        setIsActiveMailModal(false);
-                        setIsSub(true);
-                        try {
-                          let response = await readPageSubscribe(
-                            acitveMailData.id
-                          );
-                          const result = deleteSubscribe(
-                            acitveMailData,
-                            subscribeable
-                          );
-                          setSubscribeable(result);
-                          setNewsLettersubscribe((prev: any) => [
-                            acitveMailData,
-                            ...prev,
-                          ]);
-                        } catch (error) {
-                          console.log(error);
-                        }
+                    onClick={async () => {
+                      setIsActiveMailModal(false);
+                      setIsSub(true);
+                      try {
+                        let response = await readPageSubscribe(
+                          acitveMailData.id
+                        );
+                        const result = deleteSubscribe(
+                          acitveMailData,
+                          subscribeable
+                        );
+                        setSubscribeable(result);
+                        setNewsLettersubscribe((prev: any) => [
+                          acitveMailData,
+                          ...prev,
+                        ]);
+                      } catch (error) {
+                        console.log(error);
                       }
-                    }
+                    }}
                     className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[10px] rounded-md font-semibold"
                   >
                     구독하기
@@ -507,7 +517,7 @@ const MailModal = ({
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 

@@ -56,7 +56,7 @@ const MobileMyPage = () => {
         );
         setMyNewsLetterDetail([responseNewsLetterDetail.data]);
       } else {
-        navigate("/mobilemypage");
+        navigate("/mobileSubscribe");
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패", error);
@@ -66,7 +66,6 @@ const MobileMyPage = () => {
   useEffect(() => {
     handlegetData();
   }, [selectedItem]);
-
 
   return (
     <div>
