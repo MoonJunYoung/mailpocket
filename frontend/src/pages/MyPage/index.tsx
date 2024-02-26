@@ -394,7 +394,7 @@ const Column = ({
 
 const Main = ({ detailmail, newsLetters }: MailType) => {
   return (
-    <div className="flex-[70%] h-full">
+    <div className="flex-[70%] h-[100vh] overflow-auto custom-scrollbar">
       <div className="max-w-[700px] mx-auto mt-[30px]">
         <div>
           <MainHeader

@@ -486,6 +486,12 @@ const Subscribe = () => {
           />
         )
       }
+      {openModal && (
+        <SlackGuideModal
+          setOpenModal={setOpenModal}
+          handlePostNewsLetterData={handlePostNewsLetterData}
+          newslettersubscribe={newslettersubscribe}
+        />
       <div className="w-full  touch-none h-10 mb-10" ref={ref}></div>
       {isFetching && hasNextPage && <Loader />}
     </div >
