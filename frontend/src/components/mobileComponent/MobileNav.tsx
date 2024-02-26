@@ -1,25 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
-import { NamedImportBindings } from 'typescript';
-import { readPageSubscribe, readPageUnSubscribe, Token } from '../../api/api';
-import { NavNewsLetterDataType } from '../../mobile/MobileMyPage';
-import { SummaryNewsLetterDataType } from '../../pages/ReadPage';
-import { NewsLetterDataType } from '../../pages/SubscribePage';
-import MobileMenu from '../Modal/MobileMenu';
-import { SubscribeNewsLetterDataType } from '../Summary';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { NamedImportBindings } from "typescript";
+import { readPageSubscribe, readPageUnSubscribe, Token } from "../../api/api";
+import { NavNewsLetterDataType } from "../../mobile/MobileMyPage";
+import { SummaryNewsLetterDataType } from "../../pages/ReadPage";
+import { NewsLetterDataType } from "../../pages/SubscribePage";
+import MobileMenu from "../Modal/MobileMenu";
+import { SubscribeNewsLetterDataType } from "../Summary";
 
 interface ReadNavNewsLetterDataType {
-  ReadNavNewsLetterData: SummaryNewsLetterDataType[]
-  newslettersubscribe: SubscribeNewsLetterDataType[]
+  ReadNavNewsLetterData: SummaryNewsLetterDataType[];
+  newslettersubscribe: SubscribeNewsLetterDataType[];
 }
 
-export const MobileReadNav = ({ ReadNavNewsLetterData, newslettersubscribe }: ReadNavNewsLetterDataType) => {
+export const MobileReadNav = ({
+  ReadNavNewsLetterData,
+  newslettersubscribe,
+}: ReadNavNewsLetterDataType) => {
   const authToken = Token();
-  const [subscribestatus, setSubscribeStatus] = useState(true)
+  const [subscribestatus, setSubscribeStatus] = useState(true);
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substring(0, n) + "..." : str;
-  }
-  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
+  };
+  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<
+    Record<number, boolean>
+  >({});
 
   useEffect(() => {
     if (newslettersubscribe) {
@@ -61,47 +66,75 @@ export const MobileReadNav = ({ ReadNavNewsLetterData, newslettersubscribe }: Re
     }
   };
 
-
-
-
   return (
     <div>
       {ReadNavNewsLetterData.map((data) => (
-        <div key={data.id} className={`bg-white p-3 flex items-center justify-center gap-4 ${authToken ? "" : "mb-4"}`}>
-          <div className='flex items-center justify-center gap-3'>
-            <img className='w-8' src={`/images/${data.newsletter_id}.png`} alt={String(data.newsletter_id)} />
-            <span className='text-sm font-semibold'>{truncate(data.subject, 18)}</span>
+        <div
+          key={data.id}
+          className={`bg-white p-3 flex items-center justify-center gap-4 ${
+            authToken ? "" : "mb-4"
+          }`}
+        >
+          <div className="flex items-center justify-center gap-3">
+            <img
+              className="w-8"
+              src={`/images/${data.newsletter_id}.png`}
+              alt={String(data.newsletter_id)}
+            />
+            <span className="text-sm font-semibold">
+              {truncate(data.subject, 18)}
+            </span>
           </div>
           {authToken ? (
-            subscriptionStatusMap[data.newsletter_id] ?
-              (<span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}>구독해제</span>)
-              :
-              (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.newsletter_id)}>구독하기</span>)
-          ) : (<Link className='text-sm border rounded-2xl py-2 px-3 bg-gray-100 font-semibold text-gray-500' to='/landingpage'>구독하기</Link>
-          )
-          }
+            subscriptionStatusMap[data.newsletter_id] ? (
+              <span
+                className="p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold"
+                onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}
+              >
+                구독해제
+              </span>
+            ) : (
+              <span
+                className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton"
+                onClick={() => handleNewsLetterSelected(data.newsletter_id)}
+              >
+                구독하기
+              </span>
+            )
+          ) : (
+            <Link
+              className="text-sm border rounded-2xl py-2 px-3 bg-gray-100 font-semibold text-gray-500"
+              to="/landingpage"
+            >
+              구독하기
+            </Link>
+          )}
         </div>
-      ))
-      }
-    </div >
-  );}
-
+      ))}
+    </div>
+  );
+};
 
 interface MobileMayPageNavType {
-  MayPageNavNewsLetterData: NavNewsLetterDataType[]
-  mynewsletter: NewsLetterDataType[]
+  MayPageNavNewsLetterData: NavNewsLetterDataType[];
+  mynewsletter: NewsLetterDataType[];
   onSelectItem: React.Dispatch<React.SetStateAction<number>>;
-  selectItemId: number
+  selectItemId: number;
 }
 
-
-
-export const MobileMyPageNav = ({ MayPageNavNewsLetterData, mynewsletter, onSelectItem, selectItemId }: MobileMayPageNavType) => {
+export const MobileMyPageNav = ({
+  MayPageNavNewsLetterData,
+  mynewsletter,
+  onSelectItem,
+  selectItemId,
+}: MobileMayPageNavType) => {
   const [openModal, setOpenModal] = useState(false);
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substring(0, n) + "..." : str;
   };
-  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
+  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<
+    Record<number, boolean>
+  >({});
 
   useEffect(() => {
     if (mynewsletter) {
@@ -149,19 +182,42 @@ export const MobileMyPageNav = ({ MayPageNavNewsLetterData, mynewsletter, onSele
   return (
     <div>
       {MayPageNavNewsLetterData.map((data) => (
-        <div key={data.newsletter_id} className='bg-white border-b p-3 flex items-center justify-around gap-4 mb-3'>
-          <img className='w-5' src="/images/menu.png" alt="menu" onClick={handleModalOpen} />
-          <div className='flex items-center justify-center gap-2'>
-            <img className='w-8' src={`/images/${data.newsletter_id}.png`} alt={String(data.newsletter_id)} />
-            <span className='text-sm font-semibold'>{truncate(data.subject, 16)}</span>
+        <div
+          key={data.newsletter_id}
+          className="bg-white border-b p-3 flex items-center justify-around gap-4 mb-3"
+        >
+          <img
+            className="w-5"
+            src="/images/menu.png"
+            alt="menu"
+            onClick={handleModalOpen}
+          />
+          <div className="flex items-center justify-center gap-2">
+            <img
+              className="w-8"
+              src={`/images/${data.newsletter_id}.png`}
+              alt={String(data.newsletter_id)}
+            />
+            <span className="text-sm font-semibold">
+              {truncate(data.subject, 16)}
+            </span>
           </div>
           {subscriptionStatusMap[data.newsletter_id] ? (
-            <span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}>구독해제</span>
+            <span
+              className="p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold"
+              onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}
+            >
+              구독해제
+            </span>
           ) : (
-            <span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.newsletter_id)}>구독하기</span>
+            <span
+              className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton"
+              onClick={() => handleNewsLetterSelected(data.newsletter_id)}
+            >
+              구독하기
+            </span>
           )}
         </div>
-
       ))}
       {openModal && (
         <MobileMenu
@@ -174,5 +230,3 @@ export const MobileMyPageNav = ({ MayPageNavNewsLetterData, mynewsletter, onSele
     </div>
   );
 };
-
-

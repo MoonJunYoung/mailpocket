@@ -36,15 +36,18 @@ export type NewsLetterDataType = {
 
 const Subscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
-  const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([]);
-  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>({});
-  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
+  const [newslettersubscribe, setNewsLettersubscribe] = useState<
+    NewsLetterDataType[]
+  >([]);
+  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>(
+    {}
+  );
+  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<
+    Record<number, boolean>
+  >({});
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [activeCategory, setActiveCategory] = useState("전체");
-
-
-
 
   const categories = [
     {
@@ -194,7 +197,11 @@ const Subscribe = () => {
     }
   };
 
-  const handleNewsLetterSelected = async (newsletterId: number, bool: boolean, newslettername: string) => {
+  const handleNewsLetterSelected = async (
+    newsletterId: number,
+    bool: boolean,
+    newslettername: string
+  ) => {
     try {
       const response = await readPageSubscribe(newsletterId);
       if (response.status === 201) {
@@ -212,7 +219,11 @@ const Subscribe = () => {
     }
   };
 
-  const handleNewsLetterUnSelected = async (newsletterId: number, bool: boolean, newslettername: string) => {
+  const handleNewsLetterUnSelected = async (
+    newsletterId: number,
+    bool: boolean,
+    newslettername: string
+  ) => {
     try {
       const response = await readPageUnSubscribe(newsletterId);
       if (response.status === 204) {
@@ -231,7 +242,6 @@ const Subscribe = () => {
     }
   };
 
-
   useEffect(() => {
     handleGetNewsLetterData();
   }, []);
@@ -239,7 +249,6 @@ const Subscribe = () => {
   const handleModalOpen = () => {
     setOpenModal(true);
   };
-
 
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substring(0, n) + "..." : str;
@@ -275,7 +284,7 @@ const Subscribe = () => {
           </div>
         </div>
         <div className="mt-6">
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto  ">
             <div className="md:p-3">
               {Object.keys(newslettersubscribe).length > 0 ? (
                 <div>
@@ -283,10 +292,11 @@ const Subscribe = () => {
                     구독중인 뉴스레터
                   </h1>
                   <div
-                    className={`${newslettersubscribe.length > 4
-                      ? "flex"
-                      : "grid grid-cols-4"
-                      } overflow-x-auto  gap-4`}
+                    className={`${
+                      newslettersubscribe.length > 4
+                        ? "flex"
+                        : "grid grid-cols-4"
+                    } overflow-x-auto  gap-4 custom-scrollbar pb-[15px]`}
                   >
                     {newslettersubscribe.map((data) => (
                       <div
@@ -303,10 +313,11 @@ const Subscribe = () => {
                             </p>
                           </div>
                           <div
-                            className={`h-[250px] w-[285px] mb-7 ${seeMoreStates[data.id]
-                              ? "overflow-y-auto"
-                              : "overflow-hidden"
-                              } text-ellipsis custom-scrollbar px-5`}
+                            className={`h-[250px] w-[285px] mb-7 ${
+                              seeMoreStates[data.id]
+                                ? "overflow-y-auto"
+                                : "overflow-hidden"
+                            } text-ellipsis custom-scrollbar px-5`}
                           >
                             {data.mail && data.mail.summary_list ? (
                               Object.entries(data.mail.summary_list).map(
@@ -361,7 +372,18 @@ const Subscribe = () => {
                               {data.name}
                             </span>
                           </div>
-                          <span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.id, false, data.name)}>구독해제</span>
+                          <span
+                            className="p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold"
+                            onClick={() =>
+                              handleNewsLetterUnSelected(
+                                data.id,
+                                false,
+                                data.name
+                              )
+                            }
+                          >
+                            구독해제
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -402,10 +424,11 @@ const Subscribe = () => {
                       </p>
                     </div>
                     <div
-                      className={`h-[250px] mb-7 ${seeMoreStates[data.id]
-                        ? "overflow-auto"
-                        : "overflow-hidden"
-                        } custom-scrollbar px-5`}
+                      className={`h-[250px] mb-7 ${
+                        seeMoreStates[data.id]
+                          ? "overflow-auto"
+                          : "overflow-hidden"
+                      } custom-scrollbar px-5`}
                     >
                       {data.mail && data.mail.summary_list ? (
                         Object.entries(data.mail.summary_list).map(
@@ -456,12 +479,25 @@ const Subscribe = () => {
                         {data.name}
                       </span>
                     </div>
-                    {
-                      subscriptionStatusMap[data.id] ?
-                        (<span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.id, false, data.name)}>구독해제</span>)
-                        :
-                        (<span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.id, true, data.name)}>구독하기</span>)
-                    }
+                    {subscriptionStatusMap[data.id] ? (
+                      <span
+                        className="p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold"
+                        onClick={() =>
+                          handleNewsLetterUnSelected(data.id, false, data.name)
+                        }
+                      >
+                        구독해제
+                      </span>
+                    ) : (
+                      <span
+                        className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton"
+                        onClick={() =>
+                          handleNewsLetterSelected(data.id, true, data.name)
+                        }
+                      >
+                        구독하기
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
@@ -477,18 +513,16 @@ const Subscribe = () => {
           </div>
         </div>
       </div>
-      {
-        openModal && (
-          <SlackGuideModal
-            setOpenModal={setOpenModal}
-            handlePostNewsLetterData={handlePostNewsLetterData}
-            newslettersubscribe={newslettersubscribe}
-          />
-        )
-      }
+      {openModal && (
+        <SlackGuideModal
+          setOpenModal={setOpenModal}
+          handlePostNewsLetterData={handlePostNewsLetterData}
+          newslettersubscribe={newslettersubscribe}
+        />
+      )}
       <div className="w-full  touch-none h-10 mb-10" ref={ref}></div>
       {isFetching && hasNextPage && <Loader />}
-    </div >
+    </div>
   );
 };
 
