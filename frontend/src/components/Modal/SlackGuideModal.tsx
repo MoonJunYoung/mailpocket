@@ -1,6 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import { NewsLetterDataType } from '../../pages/SubscribePage';
+import { Link } from "react-router-dom";
+import { isMobile } from '../../App';
 
 interface SlackGuideModalType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,6 +13,7 @@ interface SlackGuideModalType {
 const SlackGuideModal = ({ setOpenModal, handlePostNewsLetterData, newslettersubscribe }: SlackGuideModalType) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
+
   useOnClickOutside(ref, () => {
     setOpenModal(false);
   });
@@ -19,7 +22,8 @@ const SlackGuideModal = ({ setOpenModal, handlePostNewsLetterData, newslettersub
     <div className='z-10 absolute'>
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <div ref={ref} className="py-3 px-7 rounded-lg relative flex justify-center flex-col max-h-400 w-250 bg-white transition-all ease-in-out animate-fadeIn">
-          <div className='my-5 w-full flex flex-col items-start gap-2'>
+          <div className='my-5 w-full flex flex-col items-start gap-2 '>
+            <div className='absolute top-1 right-3 cursor-pointer text-xl font-extrabold' onClick={() => setOpenModal(false)}>X</div>
             <p className='font-extrabold text-xl'>
               {`${newslettersubscribe.length}개 뉴스레터 구독 완료`}
             </p>
@@ -32,7 +36,7 @@ const SlackGuideModal = ({ setOpenModal, handlePostNewsLetterData, newslettersub
           </div>
           <div className='w-full flex items-center justify-end mb-3'>
             <div className='flex items-center justify-center gap-1'>
-              <button className='cursor-pointer w-[100px] text-base text-customPurple font-extrabold' onClick={() => setOpenModal(false)}>다음에 하기</button>
+              <Link className='cursor-pointer w-[100px] text-base text-customPurple font-extrabold' to={isMobile ? '/mobilemypage':'/'}>다음에 하기</Link>
               <button className='cursor-pointer w-[100px] rounded-2xl h-[40px]  border-none bg-customPurple text-white text-base font-bold' onClick={handlePostNewsLetterData} >연동하기</button>
             </div>
           </div>

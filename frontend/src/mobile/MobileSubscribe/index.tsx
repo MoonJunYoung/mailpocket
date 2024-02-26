@@ -18,42 +18,21 @@ import { Loader } from "../../components/Loader";
 import SlackGuideModal from "../../components/Modal/SlackGuideModal";
 import { Category } from "../../components/Category";
 import "../../index.css";
-import { Link } from "react-router-dom";
-import { subscribe } from "diagnostics_channel";
-import { Subscribable } from "react-query/types/core/subscribable";
+import { NewsLetterDataType } from "../../pages/SubscribePage";
 export type SummaryItem = {
   [key: string]: string;
 };
 
-export type NewsLetterDataType = {
-  id: number;
-  name: string;
-  category: string;
-  mail: {
-    id: number;
-    subject: string;
-    summary_list: SummaryItem;
-    s3_object_key: string;
-  };
-};
 
 const MobileSubscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
-  const [newslettersubscribe, setNewsLettersubscribe] = useState<
-    NewsLetterDataType[]
-  >([]);
+  const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([]);
   const [newsletterchecked, setNewsLetterChecked] = useState<number[]>([]);
-  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: string]: boolean }>(
-    {}
-  );
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
-
   const [isActiveMailModal, setIsActiveMailModal] = useState(false);
   const [acitveMailData, setActiveMailData] = useState();
-
   const [activeCategory, setActiveCategory] = useState("전체");
-
   const [isLoading, setIsLoading] = useState(false);
 
   const categories = [
@@ -108,12 +87,7 @@ const MobileSubscribe = () => {
   const pageRef = useIntersectionObserver(ref, {});
   const isPageEnd = pageRef?.isIntersecting;
 
-  const handleNewsLetterSeeMoreSelect = (newsletterid: string) => {
-    setSeeMoreStates((prevStates) => ({
-      ...prevStates,
-      [newsletterid]: !prevStates[newsletterid],
-    }));
-  };
+
 
   useEffect(() => {
     if (!authToken) {
@@ -279,15 +253,6 @@ const MobileSubscribe = () => {
               </p>
             </div>
           </div>
-          <div>
-            <button
-              className="h-[45px]  rounded-3xl border-none bg-customPurple text-white text-base font-bold w-[150px] md:w-[90px] hover:scale-110 transition-transform"
-              style={{ boxShadow: "0px 1px black" }}
-              onClick={handlePostNewsLetterData}
-            >
-              선택 완료
-            </button>
-          </div>
         </div>
         <div className="flex items-center mt-8 whitespace-nowrap overflow-auto subscribe-scrollbar">
           <div className="flex gap-[10px] mx-2">
@@ -355,13 +320,13 @@ const MobileSubscribe = () => {
           </div>
         </div>
       </div>
-      {/* {openModal && (
+      {openModal && (
         <SlackGuideModal
           setOpenModal={setOpenModal}
           handlePostNewsLetterData={handlePostNewsLetterData}
-          newsletterchecked={newsletterchecked}
+          newslettersubscribe={newslettersubscribe}
         />
-      )} */}
+      )}
       <div className="w-full  touch-none h-10 mb-10" ref={ref}></div>
       {isFetching && hasNextPage && <Loader />}
     </div>

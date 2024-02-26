@@ -12,14 +12,17 @@ const RedirectMypage = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const accessCode = queryParams.get("code");
+''
+
     if (accessCode) {
+
       const sendAccessToken = async () => {
         try {
           const response = await postSlackToken({ code: accessCode });
           const responseHeaders = (response.headers as AxiosHeaders).get?.("Location");
           if (response.status === 201) {
             const responseAmplitudeData = await getSlackToken(responseHeaders)
-            sendEventToAmplitude("complete to add destination", { "workspace": responseAmplitudeData.data.team_name, "channel": responseAmplitudeData.data.name })
+            sendEventToAmplitude("complete to add destination", {"workspace" : responseAmplitudeData.data.team_name , "channel" : responseAmplitudeData.data.name})
             navigate("/");
           } else {
             console.log("API 서버로 전송 중 오류가 발생했습니다.");
