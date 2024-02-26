@@ -75,17 +75,19 @@ const MobileMyPage = () => {
         onSelectItem={setSelectedItem}
         selectItemId={selectedItem}
       />
-      <MobileSummary summaryNewsLetterData={mynewsletterdetail} />
-      {mynewsletterdetail.map((data) => {
-        return data.html_body !== null ? (
-          <div
-            className="mt-10"
-            dangerouslySetInnerHTML={{ __html: data.html_body }}
-          />
-        ) : (
-          <PageLoding />
-        );
-      })}
+      <div className="mx-3">
+        <MobileSummary summaryNewsLetterData={mynewsletterdetail} />
+        {mynewsletterdetail.map((data) => {
+          return data.html_body !== null ? (
+            <div
+              className="mt-10"
+              dangerouslySetInnerHTML={{ __html: data.html_body }}
+            />
+          ) : (
+            <PageLoding />
+          );
+        })}
+      </div>
     </div>
   );
 };
