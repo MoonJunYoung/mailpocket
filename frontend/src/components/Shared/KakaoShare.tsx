@@ -13,51 +13,37 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     initKakao();
   }, []);
 
-  const readLinks = summaryNewsLetterData?.map((data) => data.read_link);
   const initKakao = () => {
     //@ts-ignore
-    if (window.Kakao) {
+    if (!window.Kakao.isInitialized()) {
       //@ts-ignore
-      const kakao = window.Kakao;
-      if (!kakao.isInitialized()) {
-        kakao.init("09f25cccf0a9707d66c323f542cbdd41");
-      }
+      window.Kakao.init("09f25cccf0a9707d66c323f542cbdd41");
     }
   };
 
-  const shareKakao = () => {
+
+  const shareKakaoLink = () => {
+    const readLinks = summaryNewsLetterData?.map((data) => data.read_link);
     //@ts-ignore
     window.Kakao.Link.sendDefault({
-      objectType: "feed",
-      content: {
-        title: "MailPocket",
-        description: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.\n${summaryNewsLetterData?.map((data) => data.share_text)}`,
-        imageUrl: "",
-        link: {
-          webUrl: readLinks?.join(''),
-          mobileWebUrl: readLinks?.join(''),
-        },
+      objectType: "text",
+      text: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.\n${summaryNewsLetterData?.map((data) => data.share_text)}`,
+      link: {
+        webUrl: readLinks?.join(''),
+        mobileWebUrl: readLinks?.join(''),
       },
-      buttons: [
-        {
-          title: "뉴스레터 확인하러가기",
-          link: {
-            webUrl: readLinks?.join(''),
-            mobileWebUrl: readLinks?.join(''),
-          },
-        },
-      ],
     });
   };
 
   return (
     <div>
-      <div className={containerstyle} onClick={shareKakao}>
+      <div className={containerstyle} onClick={shareKakaoLink}>
         <img className={imgstyle} src="/images/kakao.png" alt="카카오톡 공유" />
         <span className="font-extrabold text-sm">{text}</span>
       </div>
     </div>
   );
 };
+
 
 export default KakaoShare;

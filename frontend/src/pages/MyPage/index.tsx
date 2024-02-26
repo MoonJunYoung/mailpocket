@@ -44,9 +44,7 @@ interface MailType {
 }
 
 const MyPage = () => {
-  const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>(
-    []
-  );
+  const [newsLetters, setNewsLetters] = useState<SubscribeNewsLetterDataType[]>([]);\
   const [mail, setMail] = useState({});
   const [loadFlag, setLoadFlag] = useState(false);
   const [activeTab, setActiveTab] = useState();
@@ -56,96 +54,96 @@ const MyPage = () => {
   const navigate = useNavigate();
   const authToken = Token();
 
-  const handleSubscribe = async () => {
-    let responesSubscribe = await getSubscribeData(
-      "/testapi/newsletter?&subscribe_status=subscribed&sort_type=recent"
-    );
-    let test = responesSubscribe.data;
-    return test;
-  };
-
-  const handleMail = async (id: any) => {
-    let responseMail = await getMail(id);
-    return responseMail.data;
-  };
-
-  const handleLogOut = async () => {
-    Cookies.remove("authToken");
-    await AmplitudeResetUserId();
-    navigate("/sign-in");
-  };
-
-  const itemClick = async (id: any) => {
-    let responseMail = await handleMail(id);
-    setActiveTab(id);
-    setMail(responseMail);
-  };
 
   useEffect(() => {
     if (!authToken) {
       navigate("/landingpage");
     } else {
       sendEventToAmplitude("view my page", "");
+      const sub = handleSubscribe();
+      sub.then((result: any) => {
+        if (result.length > 0) {
+          setNewsLetters(result);
+          setActiveTab(result[0].id);
+        } else {
+          navigate("/subscribe");
+        }
+      });
     }
   }, [authToken, navigate]);
 
-  useEffect(() => {
-    let sub = handleSubscribe();
-    sub.then((result: any) => {
-      if (result.length > 0) {
-        setNewsLetters(result);
-        setActiveTab(result[0].id);
-      } else {
-        navigate("/subscribe");
-      }
-    });
-  }, []);
 
-  const handleGetMailDetailData = async (s3_object_key: string) => {
-    try {
-      const response = await getMailDetail(s3_object_key);
-      setDetailMail([response.data]);
-    } catch (error) {
-      console.log("Api 데이터 불러오기 실패", error);
-    }
-  };
-
-  return (
-    <div className="bg-whitesmoke h-screen">
-      <div className="text-center mx-auto max-w-[1300px] h-auto bg-white">
-        {/* 마이페이지 요소들의 display 요소 설정 */}
-        <div className="flex relative">
-          <NavBar
-            newsLetters={newsLetters}
-            onClick={itemClick}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            handleLogOut={handleLogOut}
-            setOpenModal={setOpenModal}
-          ></NavBar>
-          <List
-            mail={mail}
-            setMail={setMail}
-            handleMail={handleMail}
-            newsLetters={newsLetters}
-            activeMail={activeMail}
-            setActiveMail={setActiveMail}
-            handleGetMailDetailData={handleGetMailDetailData}
-          ></List>
-          <Main detailmail={detailmail} newsLetters={newsLetters}></Main>
-        </div>
-      </div>
-      {openModal === true ? (
-        <SettingModal
-          setOpenModal={setOpenModal}
-          openModal={openModal}
-          newsLetters={newsLetters}
-        ></SettingModal>
-      ) : (
-        ""
-      )}
-    </div>
+const handleSubscribe = async () => {
+  let responesSubscribe = await getSubscribeData(
+    "/testapi/newsletter?&subscribe_status=subscribed&sort_type=recent"
   );
+  let test = responesSubscribe.data;
+  return test;
+};
+
+const handleMail = async (id: any) => {
+  let responseMail = await getMail(id);
+  return responseMail.data;
+};
+
+const handleLogOut = async () => {
+  Cookies.remove("authToken");
+  await AmplitudeResetUserId();
+  navigate("/sign-in");
+};
+
+const itemClick = async (id: any) => {
+  let responseMail = await handleMail(id);
+  setActiveTab(id);
+  setMail(responseMail);
+};
+
+
+const handleGetMailDetailData = async (s3_object_key: string) => {
+  try {
+    const response = await getMailDetail(s3_object_key);
+    setDetailMail([response.data]);
+  } catch (error) {
+    console.log("Api 데이터 불러오기 실패", error);
+  }
+};
+
+return (
+  <div className="bg-whitesmoke h-screen">
+    <div className="text-center mx-auto max-w-[1300px] h-auto bg-white">
+      {/* 마이페이지 요소들의 display 요소 설정 */}
+      <div className="flex relative">
+        <NavBar
+          newsLetters={newsLetters}
+          onClick={itemClick}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          handleLogOut={handleLogOut}
+          setOpenModal={setOpenModal}
+        ></NavBar>
+        <List
+          mail={mail}
+          setMail={setMail}
+          handleMail={handleMail}
+          newsLetters={newsLetters}
+          activeMail={activeMail}
+          setActiveMail={setActiveMail}
+          handleGetMailDetailData={handleGetMailDetailData}
+        ></List>
+        <Main detailmail={detailmail} newsLetters={newsLetters}></Main>
+      </div>
+    </div>
+    {openModal === true ? (
+      <SettingModal
+        setOpenModal={setOpenModal}
+        openModal={openModal}
+        newsLetters={newsLetters}
+      ></SettingModal>
+    ) : (
+      ""
+    )}
+  </div>
+);
 };
 
 const NavBar = ({
@@ -352,9 +350,8 @@ const ListItem = ({ item, activeMail, id, setActiveMail }: any) => {
           setActiveMail(id);
         }
       }}
-      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${
-        id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
-      }`}
+      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
+        }`}
     >
       <div className="ml-[20px] focus:bg-slate-100 min-h-[inherit]">{item}</div>
     </div>
