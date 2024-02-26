@@ -309,7 +309,7 @@ const MobileSubscribe = () => {
               ))}
             </div>
           </div>
-          <div className="fixed  bottom-[0px]">
+          <div className="fixed bottom-[0px]">
             <button
               className="h-[60px] w-svw border-2 bg-customPurple text-white text-base font-bold  hover:scale-110 transition-transform"
               onClick={handleModalOpen}
