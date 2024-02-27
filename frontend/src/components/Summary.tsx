@@ -101,8 +101,8 @@ export const Summary = ({ summaryNewsLetterData, newslettersubscribe }: SummaryP
           <div className='flex items-center justify-between px-4 py-3 border-b'>
             <p className='font-extrabold'>메일포켓이 요약한 내용이에요</p>
             <div className='flex gap-3'>
-              <UrlShare summaryNewsLetterData={summaryNewsLetterData} text={"URL 복사하기"} containerstyle={"p-2 w-full bg-gray-200 flex gap-1 rounded-lg hover:scale-110 transition-transform"} imgstyle={'w-6'} />
-              <KakaoShare summaryNewsLetterData={summaryNewsLetterData} text={"카카오톡으로 공유하기"} containerstyle={"share-node py-2 px-2 bg-kakaoBgColor flex items-center justify-center gap-1 rounded-lg cursor-pointer hover:scale-110 transition-transform"} imgstyle={'w-6'} />
+              <UrlShare summaryNewsLetterData={summaryNewsLetterData} text={"URL 복사하기"} containerstyle={"p-2 w-full h-[36px] bg-gray-200 flex gap-1 rounded-lg hover:scale-110 transition-transform"} imgstyle={'w-6'} />
+              <KakaoShare summaryNewsLetterData={summaryNewsLetterData} text={"카카오톡으로 공유하기"} containerstyle={"py-2 px-2 bg-kakaoBgColor flex items-center justify-center gap-1 rounded-lg cursor-pointer hover:scale-110 transition-transform"} imgstyle={'w-6'} />
             </div>
           </div>
           {summaryNewsLetterData.map((data) => (
@@ -212,7 +212,7 @@ export const MySummary = ({ summaryNewsLetterData }: SummaryProps) => {
           <div className='flex items-center justify-between px-4 py-3 border-b'>
             <p className='font-extrabold'>메일포켓이 요약한 내용이에요</p>
             <div className='flex gap-3'>
-              <UrlShare summaryNewsLetterData={summaryNewsLetterData} text={"URL 복사하기"} containerstyle={"p-2 w-full bg-gray-200 flex gap-1 rounded-lg hover:scale-110 transition-transform"} imgstyle={'w-6'} />
+              <UrlShare summaryNewsLetterData={summaryNewsLetterData} text={"URL 복사하기"} containerstyle={"p-2 h-[36px] w-full bg-gray-200 flex gap-1 rounded-lg hover:scale-110 transition-transform"} imgstyle={'w-6'} />
               <KakaoShare summaryNewsLetterData={summaryNewsLetterData} text={"카카오톡으로 공유하기"} containerstyle={"share-node py-2 px-2 bg-kakaoBgColor flex items-center justify-center gap-1 rounded-lg cursor-pointer hover:scale-110 transition-transform"} imgstyle={'w-6'} />
             </div>
           </div>

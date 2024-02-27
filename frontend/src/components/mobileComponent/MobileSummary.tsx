@@ -36,8 +36,8 @@ const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
               <p className='font-extrabold'>메일포켓이 요약한 내용이에요</p>
             </div>
             <div className='flex gap-3'>
-              <UrlShare summaryNewsLetterData={summaryNewsLetterData} text={""} containerstyle={"p-2 w-full bg-gray-200 flex gap-1 rounded-lg hover:scale-110 transition-transform"} imgstyle={'w-6'} />
-              <KakaoShare summaryNewsLetterData={summaryNewsLetterData} text={""} containerstyle={"share-node py-2 px-2 bg-kakaoBgColor flex items-center justify-center gap-1 rounded-lg cursor-pointer hover:scale-110 transition-transform"} imgstyle={'w-6'} />
+              <UrlShare summaryNewsLetterData={summaryNewsLetterData} text={""} containerstyle={"py-2 px-2 h-10 bg-gray-200  rounded-lg"} imgstyle={'w-6'} />
+              <KakaoShare summaryNewsLetterData={summaryNewsLetterData} text={""} containerstyle={"py-2 px-2 h-10 bg-kakaoBgColor rounded-lg"} imgstyle={'w-6'} />
             </div>
           </div>
           {summaryNewsLetterData.map((data) => (
@@ -56,7 +56,6 @@ const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
               )}
             </div>
           ))}
-
           {summaryNewsLetterData.map((data) => (
             <div key={data.id} className='p-3 cursor-pointer text-center' onClick={() => toggleSummaryExpansion(data.id)}>
               <span className='text-lg text-customPurple font-bold'>

@@ -16,7 +16,6 @@ const UrlShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: Url
       const summaryList = summaryNewsLetterData?.map((data) => data.share_text);
       const combinedValues = [...fromName ,'\t' , ...summaryList,'\t' , ...readLinks];
       const textToCopy = combinedValues.join("\n");
-      console.log(textToCopy)
       await navigator.clipboard.writeText(textToCopy);
       alert("텍스트가 클립보드에 복사되었습니다.");
     } catch (error) {

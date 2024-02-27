@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { NewsLetterDataType } from "../../pages/SubscribePage";
 import { AmplitudeResetUserId } from "../Amplitude";
 import { Link } from "react-router-dom";
-import { SettingModal } from "./SettingModal";
+import { SettingModal } from "./settingModalForMobile";
 
 interface MobileMenuType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -72,7 +72,7 @@ const MobileMenu = ({
                 </div>
               ))}
             </div>
-            <div className="flex flex-col text-center gap-3 absolute  bottom-0 left-0">
+            <div className="flex flex-col w-full text-center gap-3 absolute  bottom-0 left-0">
               <ChangeButton></ChangeButton>
               <div
                 onClick={() => { setModalOpen(true); }}
