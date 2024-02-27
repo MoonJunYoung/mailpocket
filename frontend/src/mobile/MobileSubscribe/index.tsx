@@ -469,13 +469,9 @@ const MailModal = ({
                             acitveMailData,
                           ]);
                         }
-
-                        if (response.status === 201) {
-                          sendEventToAmplitude(
-                            "complete to select article",
-                            ""
-                          );
-                        }
+                        sendEventToAmplitude("select article", {
+                          "unselect article": acitveMailData.name,
+                        });
                       } catch (error) {
                         setIsSub(true);
                       }
@@ -502,6 +498,9 @@ const MailModal = ({
                           acitveMailData,
                           ...prev,
                         ]);
+                        sendEventToAmplitude("select article", {
+                          "article name": acitveMailData.name,
+                        });
                       } catch (error) {
                         console.log(error);
                       }
