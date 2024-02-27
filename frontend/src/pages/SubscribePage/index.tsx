@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  getCategory,
   getNewsletterData,
   getSubscribeData,
   Params,
@@ -244,7 +245,13 @@ const Subscribe = () => {
 
   useEffect(() => {
     handleGetNewsLetterData();
+    handleCategory();
   }, []);
+
+  const handleCategory = async () => {
+    let response = await getCategory();
+    console.log(response.data);
+  };
 
   const handleModalOpen = () => {
     setOpenModal(true);

@@ -114,3 +114,9 @@ export const getMyPageNewsLetterDetail = (query: string) => {
 export const getMyPageSubscribeData = (query: string) => {
   return axiosData().get(query);
 };
+
+// category
+
+export const getCategory = () => {
+  return axiosData().get("/testapi/newsletter/categories ");
+};
