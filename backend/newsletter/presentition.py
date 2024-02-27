@@ -27,19 +27,6 @@ class SortType(str, Enum):
     recent = "recent"
 
 
-class Category(str, Enum):
-    IT_Tech = "IT/테크"
-    Health_Medical = "건강/의학"
-    Design = "디자인"
-    Business_Finance = "비즈/제테크"
-    CurrentAffairs_Society = "시사/사회"
-    Entertainment = "엔터테이먼트"
-    Travel = "여행"
-    Hobby_SelfImprovement = "취미/자기계발"
-    Trend_Lifestyle = "트렌드/라이프"
-    Food = "푸드"
-
-
 class NewsLetterPresentation:
     router = APIRouter(prefix="/newsletter")
 
@@ -50,13 +37,13 @@ class NewsLetterPresentation:
         sort_type: SortType,
         in_mail: bool = False,
         cursor: int = None,
-        category: Category = None,
+        category_id: int = None,
         Authorization=Header(None),
     ):
         try:
             user_id = Token.get_user_id_by_token(Authorization)
             newsletters = newsletter_service.get_newsletters(
-                user_id, subscribe_status, sort_type, in_mail, cursor, category
+                user_id, subscribe_status, sort_type, in_mail, cursor, category_id
             )
             return newsletters
         except Exception as e:
@@ -128,5 +115,15 @@ class NewsLetterPresentation:
                 user_id, newsletter_id
             )
             return mail
+        except Exception as e:
+            catch_exception(e, request)
+
+    @router.get("/categories", status_code=200)
+    async def get_category_list(
+        request: Request,
+    ):
+        try:
+            category_list = newsletter_service.get_category_list()
+            return category_list
         except Exception as e:
             catch_exception(e, request)

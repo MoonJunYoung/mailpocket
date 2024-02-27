@@ -4,6 +4,7 @@ from sqlalchemy import func
 
 from backend.common.database.connector import MysqlCRUDTemplate
 from backend.common.database.model import (
+    CategoryModel,
     MailModel,
     NewsletterEmailAddressesModel,
     NewsLetterModel,
@@ -12,7 +13,7 @@ from backend.common.database.model import (
 )
 from backend.common.exceptions import UnknownFromEamilException
 from backend.mail.domain import Mail
-from backend.newsletter.domain import NewsLetter
+from backend.newsletter.domain import Category, NewsLetter
 from backend.user.domain import User
 
 
@@ -37,7 +38,7 @@ class NewsLetterRepository:
             newsletter = NewsLetter(
                 id=newsletter_model.id,
                 name=newsletter_model.name,
-                category=newsletter_model.category,
+                category_id=newsletter_model.category_id,
                 send_date=newsletter_model.send_date,
             )
             return newsletter
@@ -76,13 +77,29 @@ class NewsLetterRepository:
             newsletter = NewsLetter(
                 id=newsletter_model.id,
                 name=newsletter_model.name,
-                category=newsletter_model.category,
+                category_id=newsletter_model.category_id,
                 send_date=newsletter_model.send_date,
                 mails=mail_list,
             )
             return newsletter
 
-    class ReadNewsletters(MysqlCRUDTemplate):
+    class ReadAllNewsletters(MysqlCRUDTemplate):
+        def execute(self):
+            newsletter_list = list()
+            newsletter_models = self.session.query(NewsLetterModel).all()
+            for newsletter_model in newsletter_models:
+                newsletter_list.append(
+                    NewsLetter(
+                        id=newsletter_model.id,
+                        name=newsletter_model.name,
+                        category_id=newsletter_model.category_id,
+                        send_date=newsletter_model.send_date,
+                        operating_status=newsletter_model.operating_status,
+                    )
+                )
+            return newsletter_list
+
+    class ReadFilteredNewsletters(MysqlCRUDTemplate):
         def __init__(
             self,
             user: User,
@@ -90,7 +107,7 @@ class NewsLetterRepository:
             sort_type,
             in_mail,
             cursor,
-            category,
+            category_id,
             size=8,
         ) -> None:
             super().__init__()
@@ -112,9 +129,9 @@ class NewsLetterRepository:
                     )
                     .order_by(SubscribeRankingModel.id)
                 )
-            if category:
+            if category_id:
                 self.table_model = self.table_model.filter(
-                    NewsLetterModel.category == category
+                    NewsLetterModel.category_id == category_id
                 )
 
             subscribe_models = (
@@ -171,7 +188,7 @@ class NewsLetterRepository:
                 newsletter = NewsLetter(
                     id=newsletter_model.id,
                     name=newsletter_model.name,
-                    category=newsletter_model.category,
+                    category_id=newsletter_model.category_id,
                     send_date=newsletter_model.send_date,
                     mail=mail,
                 )
@@ -191,7 +208,7 @@ class NewsLetterRepository:
                     NewsLetterModel.id,
                     func.count(SubscribeModel.newsletter_id),
                 )
-                .join(
+                .outerjoin(
                     SubscribeModel,
                     NewsLetterModel.id == SubscribeModel.newsletter_id,
                 )
@@ -223,3 +240,11 @@ class NewsLetterRepository:
             )
             newsletter_model.last_recv_at = datetime.datetime.now()
             self.session.commit()
+
+    class ReadCategoriesOfNewsletter(MysqlCRUDTemplate):
+        def execute(self):
+            category_list = list()
+            category_models = self.session.query(CategoryModel).all()
+            for category_model in category_models:
+                category_list.append(Category(category_model.id, category_model.name))
+            return category_list

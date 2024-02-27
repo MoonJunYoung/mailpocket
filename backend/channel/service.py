@@ -31,15 +31,17 @@ class ChannelService:
         self.channel_repository.Create(channel).run()
         if channel.id:
             self.slack_api.sending_welcome_message(channel=channel)
-            subscribed_newsletter_list = self.newsletter_repository.ReadNewsletters(
-                user=user,
-                subscribe_status="subscribed",
-                sort_type="resent",
-                in_mail=True,
-                cursor=None,
-                category=None,
-                size=3,
-            ).run()
+            subscribed_newsletter_list = (
+                self.newsletter_repository.ReadFilteredNewsletters(
+                    user=user,
+                    subscribe_status="subscribed",
+                    sort_type="resent",
+                    in_mail=True,
+                    cursor=None,
+                    category=None,
+                    size=3,
+                ).run()
+            )
             for subscribed_newsletter in subscribed_newsletter_list:
                 self.mail_repository.load_by_s3_object_key(subscribed_newsletter.mail)
                 self.slack_api.sending_mail_recv_notification(
