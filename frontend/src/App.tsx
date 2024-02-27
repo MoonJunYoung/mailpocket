@@ -40,8 +40,8 @@ function App() {
     const initializeAndSetUserId = async () => {
       try {
         await initializeAmplitude();
-        setAmplitudeInitialized(true);
         await AmplitudeSetUserId();
+        setAmplitudeInitialized(true);
       } catch (error) {
         console.error("Error in initialization:", error);
       }

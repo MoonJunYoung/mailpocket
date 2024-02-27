@@ -296,7 +296,7 @@ const Subscribe = () => {
                       newslettersubscribe.length > 4
                         ? "flex"
                         : "grid grid-cols-4"
-                    } overflow-x-auto  gap-4 custom-scrollbar pb-[15px]`}
+                    } overflow-x-auto  gap-4 custom-scrollbar pb-[15px] cursor-pointer`}
                   >
                     {newslettersubscribe.map((data) => (
                       <div

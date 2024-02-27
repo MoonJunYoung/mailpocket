@@ -4,10 +4,11 @@ import { NavigateFunction } from "react-router-dom";
 import { AmplitudeSetUserId, sendEventToAmplitude } from "../Amplitude";
 
 
-export const sendAccessToken = async(accessToken:string, apiUrl:string, type:string, navigate: NavigateFunction) => {
+export const sendAccessToken = async (accessToken: string, apiUrl: string, type: string, navigate: NavigateFunction) => {
   try {
     const response = await axios.post(apiUrl, { token: accessToken });
     if (response.status === 201) {
+      console.log(response.data)
       Cookies.set("authToken", response.data, { expires: 30 });
       await AmplitudeSetUserId()
       sendEventToAmplitude("complete 3rd party sign in", { "provider type": type })
