@@ -358,7 +358,6 @@ const ListItem = ({ item, activeMail, id, setActiveMail }: any) => {
 };
 
 const Column = ({
-  key,
   subject,
   name,
   recv_at,
@@ -414,6 +413,7 @@ const MainHeader = ({ detailmail, newsLetters }: MailType) => {
       {detailmail.map((data) => {
         return data.html_body !== null ? (
           <div
+            key={data.id}
             className="mt-10"
             dangerouslySetInnerHTML={{ __html: data.html_body }}
           />
