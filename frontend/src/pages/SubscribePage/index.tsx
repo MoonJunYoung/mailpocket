@@ -284,7 +284,7 @@ const Subscribe = () => {
           </div>
         </div>
         <div className="mt-6">
-          <div className="overflow-y-auto  ">
+          <div className="overflow-y-auto">
             <div className="md:p-3">
               {Object.keys(newslettersubscribe).length > 0 ? (
                 <div>

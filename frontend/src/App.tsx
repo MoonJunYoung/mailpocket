@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  useLocation,
 } from "react-router-dom";
 import MyPage from "./pages/MyPage";
 import MobileReadPage from "./mobile/MobileReadPage";

@@ -9,17 +9,17 @@ const devAmplitudeApiKey = "a64d3e4d62617b1eca2b9ab4864cb072";
 const ampKey =
   process.env.NODE_ENV === "development" ? devAmplitudeApiKey : amplitudeApiKey;
 
-export const initializeAmplitude = async () => {
-  amplitude.init(ampKey, {
-    defaultTracking: {
-      attribution: true,
-      pageViews: false,
-      sessions: true,
-      formInteractions: false,
-      fileDownloads: false,
-    },
-  });
-};
+  export const initializeAmplitude = async () => {
+    return amplitude.init(ampKey, {
+      defaultTracking: {
+        attribution: true,
+        pageViews: false,
+        sessions: true,
+        formInteractions: false,
+        fileDownloads: false,
+      },
+    });
+  };
 
 export const AmplitudeSetUserId = async () => {
   const authToken = Token();
@@ -46,9 +46,9 @@ export const sendEventToAmplitude = async (
   properties: any
 ) => {
   try {
-    // // if (process.env.NODE_ENV === 'development') {
-    // //   console.log(`${eventName}: ${JSON.stringify(properties || {})}`)
-    // // }
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`${eventName}: ${JSON.stringify(properties || {})}`)
+    }
     amplitude.track(eventName, properties);
   } catch (error) {
     console.error("Amplitude 초기화 중 오류 발생:", error);
