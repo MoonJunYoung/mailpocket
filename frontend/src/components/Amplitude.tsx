@@ -10,7 +10,7 @@ const ampKey =
   process.env.NODE_ENV === "development" ? devAmplitudeApiKey : amplitudeApiKey;
 
 export const initializeAmplitude = async () => {
-  amplitude.init(ampKey, {
+  return amplitude.init(ampKey, {
     defaultTracking: {
       attribution: true,
       pageViews: false,
@@ -26,7 +26,7 @@ export const AmplitudeSetUserId = async () => {
   try {
     if (authToken) {
       const userInfo = await getUserData();
-      amplitude.setUserId(userInfo.data.id);
+      return amplitude.setUserId(`${userInfo.data.identifier ? userInfo.data.identifier : userInfo.data.platform}_${userInfo.data.id}`);
     }
   } catch (error) {
     console.error("Amplitude 초기화 중 오류 발생:", error);
@@ -46,9 +46,9 @@ export const sendEventToAmplitude = async (
   properties: any
 ) => {
   try {
-    // // if (process.env.NODE_ENV === 'development') {
-    // //   console.log(`${eventName}: ${JSON.stringify(properties || {})}`)
-    // // }
+    // if (process.env.NODE_ENV === 'development') {
+    //   console.log(`${eventName}: ${JSON.stringify(properties || {})}`)
+    // }
     amplitude.track(eventName, properties);
   } catch (error) {
     console.error("Amplitude 초기화 중 오류 발생:", error);

@@ -155,7 +155,8 @@ code {
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  height: 8px;
+  width: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -171,7 +172,7 @@ code {
 }
 
 .subscribe-scrollbar::-webkit-scrollbar {
-  width: 0px;
+  width: 4px;
 }
 
 /* menu */

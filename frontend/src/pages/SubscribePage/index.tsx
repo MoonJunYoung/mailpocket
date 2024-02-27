@@ -284,7 +284,7 @@ const Subscribe = () => {
           </div>
         </div>
         <div className="mt-6">
-          <div className="overflow-y-auto  ">
+          <div className="overflow-y-auto">
             <div className="md:p-3">
               {Object.keys(newslettersubscribe).length > 0 ? (
                 <div>
@@ -296,7 +296,7 @@ const Subscribe = () => {
                       newslettersubscribe.length > 4
                         ? "flex"
                         : "grid grid-cols-4"
-                    } overflow-x-auto  gap-4 custom-scrollbar pb-[15px]`}
+                    } overflow-x-auto  gap-4 custom-scrollbar pb-[15px] cursor-pointer`}
                   >
                     {newslettersubscribe.map((data) => (
                       <div

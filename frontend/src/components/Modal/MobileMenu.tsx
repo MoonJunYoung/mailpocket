@@ -45,8 +45,8 @@ const MobileMenu = ({
   return (
     <div className="z-10 absolute">
       <div className="fixed inset-0 bg-stone-300 bg-opacity-50 flex justify-start">
-        <div className='h-full relative flex flex-col w-auto bg-white'>
-          <div className="flex flex-col overflow-auto justify-between">
+        <div className='h-full flex flex-col w-auto bg-white relative'>
+          <div className="flex flex-col overflow-auto justify-between mb-[180px]">
             <div className="overflow-auto subscribe-scrollbar w-full flex flex-col items-center gap-3">
               {mynewsletter.map((data) => (
                 <div
@@ -62,7 +62,7 @@ const MobileMenu = ({
                     alt={String(data.id)}
                   />
                   <p
-                    className={`font-semibold w-[80px] py-2 ${selectedItem === data.id
+                    className={`font-semibold w-[65px] py-2 ${selectedItem === data.id
                       ? "border-customPurple border-solid border-b-4"
                       : ""
                       }`}
@@ -72,7 +72,7 @@ const MobileMenu = ({
                 </div>
               ))}
             </div>
-            <div className="flex flex-col text-center gap-3">
+            <div className="flex flex-col text-center gap-3 absolute  bottom-0 left-0">
               <ChangeButton></ChangeButton>
               <div
                 onClick={() => { setModalOpen(true); }}
@@ -113,7 +113,7 @@ const MobileMenu = ({
 
 const ChangeButton = () => {
   return (
-    <Link to="/subscribe">
+    <Link to="/mobilesubscribe">
       <div className="mt-[15px] px-[19px] cursor-pointer">
         <div className="bg-[#EEEEEE]  size-[42px] mx-auto rounded-xl">
           <img

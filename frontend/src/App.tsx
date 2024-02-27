@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  useLocation,
 } from "react-router-dom";
 import MyPage from "./pages/MyPage";
 import MobileReadPage from "./mobile/MobileReadPage";
@@ -41,8 +40,8 @@ function App() {
     const initializeAndSetUserId = async () => {
       try {
         await initializeAmplitude();
-        setAmplitudeInitialized(true);
         await AmplitudeSetUserId();
+        setAmplitudeInitialized(true);
       } catch (error) {
         console.error("Error in initialization:", error);
       }
