@@ -28,6 +28,7 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
       window.Kakao.Link.sendDefault({
         objectType: "text",
         text: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.\n\n${summaryNewsLetterData?.map((data) => data.share_text)}`,
+        title: "뉴스레터 확인하러가기",
         link: {
           webUrl: firstNewsLetterLink,
           mobileWebUrl: firstNewsLetterLink,

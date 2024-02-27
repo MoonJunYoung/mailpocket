@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getChannelData, deleteChannelData } from "../../api/api";
 import { Link } from "react-router-dom";
+import { sendEventToAmplitude } from "../Amplitude";
 
 export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
   const [channels, setChannels] = useState([]);
   useEffect(() => {
     let channelData = getChannelData("/testapi/channel");
     channelData.then((result: any) => {
-      console.log(result.data);
       setChannels(result.data);
     });
   }, [openModal]);
@@ -25,31 +25,32 @@ export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
           </span>
           <div className="p-[40px] h-full">
             <div className="flex flex-col h-full">
-              <div className="flex flex-col gap-2 text-[20px] font-extrabold">
+              <div className="flex flex-col gap-2 text-[20px] text-left font-extrabold">
                 <div>{newsLetters.length}개의 뉴스레터 소식을</div>
                 <div>{channels.length}개의 채널에 전달하고 있어요.</div>
               </div>
               <div className="pt-[30px] overflow-hidden h-full ">
-                <div className="flex overflow-auto h-full items-start gap-[15px] flex-col">
+                <div className="flex overflow-auto h-full items-start gap-[15px] flex-col custom-scrollbar ">
                   {channels.map((channel: any) => {
                     return (
                       <>
-                        <div className="w-full">
-                          <div className="flex items-center w-full">
-                            <div className="flex-[10%]">
-                              <img src={channel.team_icon} alt="" />
-                            </div>
-
-                            <div className="flex flex-col flex-[80%] pl-[20px]">
-                              <span className="font-extrabold">
-                                {channel.name}
-                              </span>
-                              <span className="font-bold text-[#666666]">
-                                {channel.team_name} 워크스페이스
-                              </span>
+                        <div className="w-full p-1">
+                          <div className="flex items-center w-full justify-between">
+                            <div className="flex items-center">
+                              <div className="">
+                                <img className="w-10" src={channel.team_icon} alt="" />
+                              </div>
+                              <div className="flex flex-col flex-[80%] pl-[20px]">
+                                <span className="font-extrabold">
+                                  {channel.name}
+                                </span>
+                                <span className="font-bold text-[#666666]">
+                                  {channel.team_name} 워크스페이스
+                                </span>
+                              </div>
                             </div>
                             <div
-                              className="flex-[10%] cursor-pointer"
+                              className="w-10 cursor-pointer"
                               onClick={async () => {
                                 await deleteChannelData(channel.id);
                                 let channelData = await getChannelData(
@@ -68,8 +69,8 @@ export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
                 </div>
               </div>
               <div className="">
-                <Link to="https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=">
-                  <button className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[20px] rounded-md font-semibold">
+                <Link onClick={() => sendEventToAmplitude("click add destination", "")} to="https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=">
+                  <button className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[15px] rounded-md font-semibold">
                     채널 추가하기
                   </button>
                 </Link>
@@ -78,6 +79,6 @@ export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };

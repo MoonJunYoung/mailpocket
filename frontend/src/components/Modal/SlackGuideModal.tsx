@@ -3,6 +3,7 @@ import useOnClickOutside from "../../hooks/useOnClickOutside";
 import { NewsLetterDataType } from "../../pages/SubscribePage";
 import { Link } from "react-router-dom";
 import { isMobile } from "../../App";
+import { sendEventToAmplitude } from "../Amplitude";
 
 interface SlackGuideModalType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,20 +53,22 @@ const SlackGuideModal = ({
               <Link
                 className="cursor-pointer w-[100px] text-base text-customPurple font-extrabold"
                 to={isMobile ? "/mobilemypage" : "/"}
+                onClick={() => sendEventToAmplitude("complete to select article", "")}
               >
                 다음에 하기
               </Link>
               <button
-                className="cursor-pointer w-[100px] rounded-2xl h-[40px]  border-none bg-customPurple text-white text-base font-bold"
+                className="cursor-pointer w-[100px] rounded-2xl h-[40px] border-none bg-customPurple text-white text-base font-bold"
                 onClick={handlePostNewsLetterData}
               >
                 연동하기
               </button>
+
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

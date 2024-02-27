@@ -200,21 +200,7 @@ const MobileSubscribe = () => {
     setNewsLetterChecked([...newslettersubscribeId]);
   };
 
-  const handleNewsLetterSelected = (newsletterid: number) => {
-    setNewsLetterChecked((prevChecked) => {
-      const newsletters = subscribeable.find(
-        (item) => item.id === newsletterid
-      );
-      if (prevChecked.includes(newsletterid)) {
-        return prevChecked.filter((id) => id !== newsletterid);
-      } else {
-        sendEventToAmplitude("select article", {
-          "article name": newsletters?.name,
-        });
-        return [...prevChecked, newsletterid];
-      }
-    });
-  };
+ 
 
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substring(0, n) + "..." : str;
