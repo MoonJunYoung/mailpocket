@@ -37,7 +37,7 @@ export type NewsLetterDataType = {
 const Subscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
   const [newslettersubscribe, setNewsLettersubscribe] = useState<
-NewsLetterDataType[]
+    NewsLetterDataType[]
   >([]);
   const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>(
     {}
@@ -148,6 +148,7 @@ NewsLetterDataType[]
           const lastItem = lastPage[lastPage.length - 1];
           return lastItem ? lastItem.id : null;
         },
+        refetchOnWindowFocus: false,
       }
     );
 
@@ -293,8 +294,8 @@ NewsLetterDataType[]
                   </h1>
                   <div
                     className={`${newslettersubscribe.length > 4
-                        ? "flex"
-                        : "grid grid-cols-4"
+                      ? "flex"
+                      : "grid grid-cols-4"
                       } overflow-x-auto  gap-4 custom-scrollbar pb-[15px] cursor-pointer`}
                   >
                     {newslettersubscribe.map((data) => (
@@ -313,8 +314,8 @@ NewsLetterDataType[]
                           </div>
                           <div
                             className={`h-[250px] w-[285px] mb-7 ${seeMoreStates[data.id]
-                                ? "overflow-y-auto"
-                                : "overflow-hidden"
+                              ? "overflow-y-auto"
+                              : "overflow-hidden"
                               } text-ellipsis custom-scrollbar px-5`}
                           >
                             {data.mail && data.mail.summary_list ? (
@@ -423,8 +424,8 @@ NewsLetterDataType[]
                     </div>
                     <div
                       className={`h-[250px] mb-7 ${seeMoreStates[data.id]
-                          ? "overflow-auto"
-                          : "overflow-hidden"
+                        ? "overflow-auto"
+                        : "overflow-hidden"
                         } custom-scrollbar px-5`}
                     >
                       {data.mail && data.mail.summary_list ? (
