@@ -84,7 +84,14 @@ class NewsLetterRepository:
 
     class ReadNewsletters(MysqlCRUDTemplate):
         def __init__(
-            self, user: User, subscribe_status, sort_type, in_mail, cursor, category
+            self,
+            user: User,
+            subscribe_status,
+            sort_type,
+            in_mail,
+            cursor,
+            category,
+            size=8,
         ) -> None:
             super().__init__()
             self.user = user
@@ -129,7 +136,7 @@ class NewsLetterRepository:
                 )
 
             if in_mail and not cursor and subscribe_status == "subscribable":
-                self.newsletter_models = self.newsletter_models.limit(8)
+                self.newsletter_models = self.newsletter_models.limit(size)
 
             elif in_mail and cursor and subscribe_status == "subscribable":
                 cursor_row = (
@@ -139,7 +146,7 @@ class NewsLetterRepository:
                 )
                 self.newsletter_models = self.newsletter_models.filter(
                     SubscribeRankingModel.id > cursor_row.id
-                ).limit(8)
+                ).limit(size)
 
             else:
                 self.newsletter_models = self.newsletter_models.all()
@@ -199,6 +206,9 @@ class NewsLetterRepository:
             ]
             self.session.add_all(subscribe_ranking_models)
             self.session.commit()
+
+        def run(self) -> list[NewsLetter]:
+            return super().run()
 
     class UpdateNewsletterLastRecvDateTime(MysqlCRUDTemplate):
         def __init__(self, newsletter: NewsLetter) -> None:

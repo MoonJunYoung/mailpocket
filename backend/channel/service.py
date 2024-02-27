@@ -3,6 +3,8 @@ from backend.channel.repository import ChannelRepository
 from backend.common.slack_api import SlackAPI
 from backend.mail.domain import Mail
 from backend.mail.repository import MailRepository
+from backend.newsletter.domain import NewsLetter
+from backend.newsletter.repository import NewsLetterRepository
 from backend.user.domain import User
 from backend.user.repository import UserRepository
 
@@ -20,13 +22,32 @@ class ChannelService:
         self.mail_repository = MailRepository()
         self.user_repository = UserRepository()
         self.channel_repository = ChannelRepository()
+        self.newsletter_repository = NewsLetterRepository()
         self.slack_api = SlackAPI()
 
     def add_channel(self, code, user_id):
+        user = self.user_repository.ReadByID(user_id)
         channel = self.slack_api.connect_workspace(code, user_id)
         self.channel_repository.Create(channel).run()
         if channel.id:
-            channel.welcome_message_sending()
+            self.slack_api.sending_welcome_message(channel=channel)
+            subscribed_newsletter_list = self.newsletter_repository.ReadNewsletters(
+                user=user,
+                subscribe_status="subscribed",
+                sort_type="resent",
+                in_mail=True,
+                cursor=None,
+                category=None,
+                size=3,
+            ).run()
+            for subscribed_newsletter in subscribed_newsletter_list:
+                self.mail_repository.load_by_s3_object_key(subscribed_newsletter.mail)
+                self.slack_api.sending_mail_recv_notification(
+                    channel=channel,
+                    mail=subscribed_newsletter.mail,
+                    newsletter=subscribed_newsletter,
+                )
+
             return channel.id
 
     def get_channels(self, user_id):
