@@ -25,7 +25,7 @@ const SlackGuideModal = ({
   });
 
   useEffect(() => {
-    sendEventToAmplitude("view select article", "");
+    sendEventToAmplitude("view suggest to add destination", "");
   }, []);
 
   return (
