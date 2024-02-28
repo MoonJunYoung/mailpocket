@@ -29,7 +29,6 @@ import {
 } from "../../components/Summary";
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
-import { isMobile } from "../../App";
 
 export type ChannelDataType = {
   id: number;
@@ -55,13 +54,6 @@ const MyPage = () => {
   const [detailmail, setDetailMail] = useState<any[]>([]);
   const navigate = useNavigate();
   const authToken = Token();
-
-  useEffect(() => {
-    if (isMobile) {
-      navigate("/mobilemypage");
-    }
-  }, [isMobile]);
-
 
   useEffect(() => {
     if (!authToken) {
@@ -101,6 +93,10 @@ const MyPage = () => {
 
   const itemClick = async (id: any) => {
     let responseMail = await handleMail(id);
+    sendEventToAmplitude("view article detail", {
+      "article name": responseMail.name,
+      "post name": responseMail.mails[0].subject,
+    });
     setActiveTab(id);
     setMail(responseMail);
   };
@@ -291,6 +287,10 @@ const List = ({
       let data = handleMail(newsLetters[0].id);
       data.then((result: any) => {
         setMail(result);
+        sendEventToAmplitude("view article detail", {
+          "article name": result.name,
+          "post name": result.mails[0].subject,
+        });
       });
     }
   }, [newsLetters]);
@@ -321,6 +321,8 @@ const List = ({
               key={item.id}
               activeMail={activeMail}
               id={item.id}
+              subeject={item.subject}
+              mail={mail}
               setActiveMail={setActiveMail}
               item={
                 <Column
@@ -348,16 +350,28 @@ const Header = () => {
   );
 };
 
-const ListItem = ({ item, activeMail, id, setActiveMail }: any) => {
+const ListItem = ({
+  item,
+  activeMail,
+  id,
+  subeject,
+  mail,
+  setActiveMail,
+}: any) => {
   return (
     <div
       onClick={() => {
         if (id) {
           setActiveMail(id);
+          sendEventToAmplitude("view article detail", {
+            "article name": mail.name,
+            "post name": subeject,
+          });
         }
       }}
-      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
-        }`}
+      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${
+        id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
+      }`}
     >
       <div className="ml-[20px] focus:bg-slate-100 min-h-[inherit]">{item}</div>
     </div>
