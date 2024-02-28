@@ -10,7 +10,7 @@ const GooglesRedirect = () => {
     if (accessToken) {
       sendAccessToken(
         accessToken,
-        "https://mailpocket.site/testapi/user/google-login",
+        "https://mailpocket.site/api/user/google-login",
         "google",
         navigate
       );
@@ -28,7 +28,7 @@ const NaverRedirect = () => {
     if (accessToken) {
       sendAccessToken(
         accessToken,
-        "https://mailpocket.site/testapi/user/naver-login",
+        "https://mailpocket.site/api/user/naver-login",
         "naver",
         navigate
       );
@@ -47,7 +47,7 @@ const KakaoRedirect = () => {
     if (accessToken) {
       sendAccessToken(
         accessToken,
-        "https://mailpocket.site/testapi/user/kakao-login",
+        "https://mailpocket.site/api/user/kakao-login",
         "kakao",
         navigate
       );

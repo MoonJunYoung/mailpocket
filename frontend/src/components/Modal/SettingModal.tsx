@@ -6,7 +6,7 @@ import { sendEventToAmplitude } from "../Amplitude";
 export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
   const [channels, setChannels] = useState([]);
   useEffect(() => {
-    let channelData = getChannelData("/testapi/channel");
+    let channelData = getChannelData("/api/channel");
     channelData.then((result: any) => {
       setChannels(result.data);
     });
@@ -53,7 +53,7 @@ export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
                               onClick={async () => {
                                 await deleteChannelData(channel.id);
                                 let channelData = await getChannelData(
-                                  "/testapi/channel"
+                                  "/api/channel"
                                 );
                                 setChannels(channelData.data);
                               }}

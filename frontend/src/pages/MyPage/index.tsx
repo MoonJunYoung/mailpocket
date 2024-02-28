@@ -84,7 +84,7 @@ const MyPage = () => {
 
   const handleSubscribe = async () => {
     let responesSubscribe = await getSubscribeData(
-      "/testapi/newsletter?&subscribe_status=subscribed&sort_type=recent"
+      "/api/newsletter?&subscribe_status=subscribed&sort_type=recent"
     );
     let test = responesSubscribe.data;
     return test;

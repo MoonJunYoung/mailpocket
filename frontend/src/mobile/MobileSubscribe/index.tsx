@@ -70,7 +70,7 @@ const MobileSubscribe = () => {
       params.category_id = category;
     }
 
-    const { data } = await getNewsletterData("/testapi/newsletter", params);
+    const { data } = await getNewsletterData("/api/newsletter", params);
 
     setSubscribeable((prevData) => [...prevData, ...data]);
 
@@ -111,7 +111,7 @@ const MobileSubscribe = () => {
   const handleGetNewsLetterData = async () => {
     try {
       const responesSubscribe = await getSubscribeData(
-        "testapi/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
+        "/api/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
       );
       setNewsLettersubscribe(responesSubscribe.data);
     } catch (error) {
@@ -122,7 +122,7 @@ const MobileSubscribe = () => {
   const handleGetNewsLetterLengthData = async () => {
     try {
       const responesSubscribe = await getSubscribeData(
-        "testapi/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
+        "/api/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
       );
       setNewsLettersubscribeLength(responesSubscribe.data.length);
     } catch (error) {
