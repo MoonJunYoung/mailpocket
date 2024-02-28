@@ -108,7 +108,7 @@ class NewsLetterRepository:
             in_mail,
             cursor,
             category_id,
-            size=8,
+            size=None,
         ) -> None:
             super().__init__()
             self.user = user
@@ -152,7 +152,7 @@ class NewsLetterRepository:
                 )
 
             if in_mail and not cursor and subscribe_status == "subscribable":
-                self.newsletter_models = self.newsletter_models.limit(size)
+                self.newsletter_models = self.newsletter_models.limit(8)
 
             elif in_mail and cursor and subscribe_status == "subscribable":
                 cursor_row = (
@@ -162,7 +162,10 @@ class NewsLetterRepository:
                 )
                 self.newsletter_models = self.newsletter_models.filter(
                     SubscribeRankingModel.id > cursor_row.id
-                ).limit(size)
+                ).limit(8)
+
+            elif size:
+                self.newsletter_models = self.newsletter_models.limit(size)
 
             else:
                 self.newsletter_models = self.newsletter_models.all()

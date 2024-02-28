@@ -35,10 +35,10 @@ class ChannelService:
                 self.newsletter_repository.ReadFilteredNewsletters(
                     user=user,
                     subscribe_status="subscribed",
-                    sort_type="resent",
+                    sort_type="recent",
                     in_mail=True,
                     cursor=None,
-                    category=None,
+                    category_id=None,
                     size=3,
                 ).run()
             )

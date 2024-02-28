@@ -48,8 +48,7 @@ class MailService:
         mail.parser_eamil()
         return mail
 
-    def get_last_mail_of_newsletter_by_newsletter_id(self, user_id, newsletter_id):
-        user = self.user_repository.ReadByID(user_id).run()
+    def get_last_mail_of_newsletter_by_newsletter_id(self, newsletter_id):
         mail = self.mail_repository.ReadLastMailOfNewsltterByNewsletterID(
             newsletter_id
         ).run()

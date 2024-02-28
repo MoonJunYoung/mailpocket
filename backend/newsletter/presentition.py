@@ -110,9 +110,9 @@ class NewsLetterPresentation:
         Authorization=Header(None),
     ):
         try:
-            user_id = Token.get_user_id_by_token(Authorization)
+            Token.get_user_id_by_token(Authorization)
             mail = mail_service.get_last_mail_of_newsletter_by_newsletter_id(
-                user_id, newsletter_id
+                newsletter_id
             )
             return mail
         except Exception as e:
