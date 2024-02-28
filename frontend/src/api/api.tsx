@@ -28,7 +28,7 @@ export interface Params {
   subscribe_status: string;
   sort_type: string;
   cursor?: string;
-  category?: string;
+  category_id?: number;
 }
 
 // Read
