@@ -26,7 +26,7 @@ const SlackGuideModal = ({
 
   useEffect(() => {
     sendEventToAmplitude("view select article", "");
-  }, [,]);
+  }, []);
 
   return (
     <div className="z-10 absolute ">
