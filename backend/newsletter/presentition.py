@@ -95,9 +95,9 @@ class NewsLetterPresentation:
         Authorization=Header(None),
     ):
         try:
-            user_id = Token.get_user_id_by_token(Authorization)
+            Token.get_user_id_by_token(Authorization)
             newsltter = newsletter_service.get_newsletter_with_previous_mail_list_by_newsletter_id(
-                user_id, newsletter_id
+                newsletter_id
             )
             return newsltter
         except Exception as e:
