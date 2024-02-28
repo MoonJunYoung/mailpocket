@@ -1,11 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
 const Category = ({
-  fetchNewsletter,
   activeCategory,
   setActiveCategory,
   categories,
-  subscribeable,
   setSubscribeable,
 }: any) => {
   useEffect(() => {
@@ -14,24 +12,26 @@ const Category = ({
 
   return (
     <>
-      {categories.map((category: any) => {
-        return (
-          <button
-            key={category.id}
-            onClick={function () {
-              setActiveCategory(category.name);
-            }}
-            className={`${
-              activeCategory === category.name ||
-              (!activeCategory && category.name === "전체")
-                ? "bg-[#635C6D] text-white"
-                : "bg-[#EBEBEB]"
-            } p-2 rounded-xl font-bold text-xs`}
-          >
-            {category.name}
-          </button>
-        );
-      })}
+      {categories
+        .filter((category: any) => category.operating_status === true)
+        .map((category: any) => {
+          return (
+            <button
+              key={category.id}
+              onClick={function () {
+                setActiveCategory(category.id);
+              }}
+              className={`${
+                activeCategory === category.id ||
+                (!activeCategory && category.id === 0)
+                  ? "bg-[#635C6D] text-white"
+                  : "bg-[#EBEBEB]"
+              } p-2 rounded-xl font-bold text-xs`}
+            >
+              {category.name}
+            </button>
+          );
+        })}
     </>
   );
 };
