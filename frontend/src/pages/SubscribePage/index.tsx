@@ -47,6 +47,7 @@ const Subscribe = () => {
   const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<
     Record<number, boolean>
   >({});
+  console.log(subscriptionStatusMap)
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [activeCategory, setActiveCategory] = useState(0);
@@ -63,11 +64,11 @@ const Subscribe = () => {
       [newsletterid]: !prevStates[newsletterid],
     }));
   };
-  
+
   useEffect(() => {
     if (isMobile) {
       navigate("/mobileSubscribe");
-    } 
+    }
   }, [isMobile]);
 
 
@@ -175,7 +176,6 @@ const Subscribe = () => {
           [newsletterId]: bool,
         }));
       }
-      handleGetNewsLetterData();
       sendEventToAmplitude("select article", {
         "article name": newslettername,
       });
@@ -192,20 +192,24 @@ const Subscribe = () => {
     try {
       const response = await readPageUnSubscribe(newsletterId);
       if (response.status === 204) {
-        setSubscriptionStatusMap((prevMap) => {
-          const newMap = { ...prevMap };
-          delete newMap[newsletterId];
-          return newMap;
-        });
+        setSubscriptionStatusMap((prevMap) => ({
+          ...prevMap,
+          [newsletterId]: true,
+        }));
       }
-      handleGetNewsLetterData();
       sendEventToAmplitude("unselect article", {
         "article name": newslettername,
       });
+
+      setSubscriptionStatusMap((prevMap) => ({
+        ...prevMap,
+        [newsletterId]: true,
+      }));
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
     }
   };
+
 
   useEffect(() => {
     handleGetNewsLetterData();
@@ -341,18 +345,25 @@ const Subscribe = () => {
                               {data.name}
                             </span>
                           </div>
-                          <span
-                            className="p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold"
-                            onClick={() =>
-                              handleNewsLetterUnSelected(
-                                data.id,
-                                false,
-                                data.name
-                              )
-                            }
-                          >
-                            구독해제
-                          </span>
+                          {subscriptionStatusMap[data.id] ? (
+                            <span
+                              className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton"
+                              onClick={() =>
+                                handleNewsLetterSelected(data.id, false, data.name)
+                              }
+                            >
+                              구독하기
+                            </span>
+                          ) : (
+                            <span
+                              className="p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold"
+                              onClick={() =>
+                                handleNewsLetterUnSelected(data.id, true, data.name)
+                              }
+                            >
+                              구독해제
+                            </span>
+                          )}
                         </div>
                       </div>
                     ))}
