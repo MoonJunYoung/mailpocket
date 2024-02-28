@@ -194,7 +194,7 @@ const Subscribe = () => {
       if (response.status === 204) {
         setSubscriptionStatusMap((prevMap) => ({
           ...prevMap,
-          [newsletterId]: true,
+          [newsletterId]: bool,
         }));
       }
       sendEventToAmplitude("unselect article", {
@@ -203,7 +203,7 @@ const Subscribe = () => {
 
       setSubscriptionStatusMap((prevMap) => ({
         ...prevMap,
-        [newsletterId]: true,
+        [newsletterId]: bool,
       }));
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
