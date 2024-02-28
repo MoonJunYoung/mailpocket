@@ -27,6 +27,7 @@ class MailService:
             mail.from_email
         ).run()
         mail.set_newsletter_id(newsletter.id)
+
         mail.summary()
         self.mail_repository.CreateMail(mail).run()
         self.newsletter_repository.UpdateNewsletterLastRecvDateTime(newsletter).run()

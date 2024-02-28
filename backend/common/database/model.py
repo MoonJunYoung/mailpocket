@@ -54,6 +54,7 @@ class NewsLetterModel(Base):
     operating_status = Column(Boolean)
     category_id = Column(Integer)
 
+
     def __init__(self, id, name, from_email, send_date, category_id=None):
         self.id = id
         self.name = name
@@ -86,6 +87,7 @@ class SubscribeModel(Base):
         self.user_id = user_id
 
 
+
 class SubscribeRankingModel(Base):
     __tablename__ = "subscribe_ranking"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
@@ -105,6 +107,7 @@ class MailModel(Base):
     subject = Column(String)
     summary_list = Column(JSON)
     newsletter_id = Column(Integer)
+
     recv_at = Column(DATETIME)
 
     def __init__(
