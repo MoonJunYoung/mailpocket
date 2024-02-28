@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import { NewsLetterDataType } from "../../pages/SubscribePage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { isMobile } from "../../App";
 import { sendEventToAmplitude } from "../Amplitude";
 
@@ -19,10 +19,15 @@ const SlackGuideModal = ({
   newslettersubscribe,
 }: SlackGuideModalType) => {
   const ref = useRef<HTMLDivElement | null>(null);
-
+  const navigate = useNavigate();
   useOnClickOutside(ref, () => {
     setOpenModal(false);
   });
+
+
+  useEffect(() => {
+    sendEventToAmplitude("view select article", "");
+  }, [,]);
 
   return (
     <div className="z-10 absolute ">
