@@ -29,6 +29,7 @@ import {
 } from "../../components/Summary";
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
+import { isMobile } from "../../App";
 
 export type ChannelDataType = {
   id: number;
@@ -54,6 +55,13 @@ const MyPage = () => {
   const [detailmail, setDetailMail] = useState<any[]>([]);
   const navigate = useNavigate();
   const authToken = Token();
+
+  useEffect(() => {
+    if (isMobile) {
+      navigate("/mobilemypage");
+    }
+  }, [isMobile]);
+
 
   useEffect(() => {
     if (!authToken) {
@@ -348,9 +356,8 @@ const ListItem = ({ item, activeMail, id, setActiveMail }: any) => {
           setActiveMail(id);
         }
       }}
-      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${
-        id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
-      }`}
+      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
+        }`}
     >
       <div className="ml-[20px] focus:bg-slate-100 min-h-[inherit]">{item}</div>
     </div>

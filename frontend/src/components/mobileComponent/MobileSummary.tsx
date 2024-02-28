@@ -13,8 +13,6 @@ interface SummaryProps {
 
 
 const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
-
-
   const [newslettemoresee, setNewsLetteMoreSee] = useState(true);
   const [expandedSummaries, setExpandedSummaries] = useState<Record<number, boolean>>({});
 

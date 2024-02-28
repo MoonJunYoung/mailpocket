@@ -30,8 +30,8 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
         objectType: "text",
         text: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.\n\n${summaryNewsLetterData?.map((data) => data.share_text)}`,
         link: {
-          webUrl: "https://test.mailpocket.site/read?mail=csrn8r15675ghdibdifkogekema2a3emnu41k901",
-          mobileWebUrl: "https://test.mailpocket.site/read?mail=csrn8r15675ghdibdifkogekema2a3emnu41k901"
+          webUrl: firstNewsLetterLink,
+          mobileWebUrl: firstNewsLetterLink
         },
       });
     }
