@@ -58,11 +58,10 @@ const MyPage = () => {
   const navigate = useNavigate();
   const authToken = Token();
 
-
   useEffect(() => {
     if (isMobile) {
       navigate("/mobilemypage");
-    } 
+    }
   }, [isMobile]);
 
   useEffect(() => {
@@ -76,6 +75,7 @@ const MyPage = () => {
           setNewsLetters(result);
           setActiveTab(result[0].id);
         } else {
+          window.alert("구독중인 뉴스레터가 없습니다.");
           navigate("/subscribe");
         }
       });
