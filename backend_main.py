@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import APIRouter, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.channel.presentation import ChannelPresentation
@@ -7,8 +7,7 @@ from backend.newsletter.presentition import NewsLetterPresentation
 from backend.user.presentation import UserPresentation
 
 app = FastAPI()
-
-
+main_router = APIRouter(prefix="/api")
 origins = ["*"]
 
 app.add_middleware(
@@ -20,12 +19,13 @@ app.add_middleware(
 )
 
 
-@app.get("/api/haelth-check", status_code=200)
+@main_router.get("/haelth-check", status_code=200)
 def haelth_check():
     return "haelth_check"
 
 
-app.include_router(MailPresentation.router)
-app.include_router(UserPresentation.router)
-app.include_router(ChannelPresentation.router)
-app.include_router(NewsLetterPresentation.router)
+main_router.include_router(MailPresentation.router)
+main_router.include_router(UserPresentation.router)
+main_router.include_router(ChannelPresentation.router)
+main_router.include_router(NewsLetterPresentation.router)
+app.include_router(main_router)

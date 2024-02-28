@@ -8,7 +8,6 @@ import { sendEventToAmplitude } from "./Amplitude";
 
 const RedirectMypage = () => {
   const navigate = useNavigate();
-
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const accessCode = queryParams.get("code");

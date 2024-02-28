@@ -11,19 +11,25 @@ const axiosData = () =>
   });
 
 interface postAuthDataType {
-  identifier: string,
-  password: string
+  identifier: string;
+  password: string;
 }
 
-
 interface SlackTokenType {
-  code: string
+  code: string;
 }
 
 interface postSubscribeType {
-  ids: string[]
+  ids: number[];
 }
 
+export interface Params {
+  in_mail: boolean;
+  subscribe_status: string;
+  sort_type: string;
+  cursor?: string;
+  category_id?: number;
+}
 
 // Read
 
@@ -34,7 +40,6 @@ export const getReadMailData = (data: string | null) => {
 export const getUserData = () => {
   return axiosData().get("/api/user");
 };
-
 
 // Auth
 
@@ -56,7 +61,6 @@ export const getSlackToken = (data: any) => {
   return axiosData().get(`/api/${data}`);
 };
 
-
 // Channle
 
 export const getChannelData = (query: string) => {
@@ -68,8 +72,10 @@ export const deleteChannelData = (data: number) => {
 
 // Subscribe
 
-export const getNewsletterData = (query: string) => {
-  return axiosData().get(query);
+export const getNewsletterData = (query: string, params: Params) => {
+  return axiosData().get(query, {
+    params: params,
+  });
 };
 
 export const putSubscribe = (data: postSubscribeType) => {
@@ -80,3 +86,37 @@ export const getSubscribeData = (query: string) => {
   return axiosData().get(query);
 };
 
+// Mail
+export const getMail = (newsletter_id: any) => {
+  return axiosData().get(`/api/newsletter/${newsletter_id}/mail`);
+};
+
+export const getMailDetail = (s3_object_key: string) => {
+  return axiosData().get(`/api/mail?key=${s3_object_key}`);
+};
+
+// read
+
+export const readPageSubscribe = (newsletterId: number) => {
+  return axiosData().post(`/api/newsletter/${newsletterId}/subscribe`);
+};
+
+export const readPageUnSubscribe = (newsletterId: number) => {
+  return axiosData().delete(`/api/newsletter/${newsletterId}/subscribe`);
+};
+
+// mobilemypage
+
+export const getMyPageNewsLetterDetail = (query: string) => {
+  return axiosData().get(query);
+};
+
+export const getMyPageSubscribeData = (query: string) => {
+  return axiosData().get(query);
+};
+
+// category
+
+export const getCategory = () => {
+  return axiosData().get("/api/newsletter/categories ");
+};

@@ -1,9 +1,8 @@
-from typing import Optional
-
 from fastapi import APIRouter, Header, Request
 from pydantic import BaseModel
 
 from backend.common.exceptions import catch_exception
+from backend.common.oauth import Oauth
 from backend.common.token import Token
 from backend.user.service import UserService
 
@@ -15,8 +14,12 @@ class LogInData(BaseModel):
     password: str
 
 
+class OauthData(BaseModel):
+    token: str
+
+
 class UserPresentation:
-    router = APIRouter(prefix="/api/user")
+    router = APIRouter(prefix="/user")
 
     @router.get("", status_code=200)
     async def read(request: Request, Authorization: str = Header(None)):
@@ -47,5 +50,38 @@ class UserPresentation:
                 password=login_data.password,
             )
             return Token.create_token_by_user_id(user_id)
+        except Exception as e:
+            catch_exception(e, request)
+
+    @router.post("/google-login", status_code=201)
+    async def google_login(request: Request, oauth: OauthData):
+        try:
+            platform = "google"
+            platform_id = Oauth.get_user_platform_id_by_google_oauth(oauth.token)
+            user_id = user_service.oauth_login(platform_id, platform)
+            return Token.create_token_by_user_id(user_id)
+
+        except Exception as e:
+            catch_exception(e, request)
+
+    @router.post("/kakao-login", status_code=201)
+    async def kakao_login(request: Request, oauth: OauthData):
+        try:
+            platform = "kakao"
+            platform_id = Oauth.get_user_platform_id_by_kakao_oauth(oauth.token)
+            user_id = user_service.oauth_login(platform_id, platform)
+            return Token.create_token_by_user_id(user_id)
+
+        except Exception as e:
+            catch_exception(e, request)
+
+    @router.post("/naver-login", status_code=201)
+    async def naver_login(request: Request, oauth: OauthData):
+        try:
+            platform = "naver"
+            platform_id = Oauth.get_user_platform_id_by_naver_oauth(oauth.token)
+            user_id = user_service.oauth_login(platform_id, platform)
+            return Token.create_token_by_user_id(user_id)
+
         except Exception as e:
             catch_exception(e, request)
