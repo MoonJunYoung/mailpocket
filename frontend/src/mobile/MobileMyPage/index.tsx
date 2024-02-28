@@ -48,11 +48,11 @@ const MobileMyPage = () => {
       setMyNewsLetter(responseNewsLetterList.data);
       if (responseNewsLetterList.data.length > 0) {
         const responseNewsLetterDetail = await getMyPageNewsLetterDetail(
-          `testapi/newsletter/${
-            selectedItem ? selectedItem : responseNewsLetterList.data[0].id
+          `testapi/newsletter/${selectedItem ? selectedItem : responseNewsLetterList.data[0].id
           }/last-mail`
         );
         setMyNewsLetterDetail([responseNewsLetterDetail.data]);
+        sendEventToAmplitude("view article detail", { "article name": responseNewsLetterDetail.data.from_name, "post name": responseNewsLetterDetail.data.subject });
       } else {
         navigate("/mobileSubscribe");
       }
