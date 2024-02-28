@@ -162,7 +162,7 @@ const Subscribe = () => {
   ) => {
     e.preventDefault();
     try {
-      if (newslettersubscribe.length <= 0) {
+      if (subscribelength <= 0) {
         alert("뉴스레터를 구독해주세요");
       } else {
         sendEventToAmplitude("complete to select article", "")
