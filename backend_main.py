@@ -7,7 +7,7 @@ from backend.newsletter.presentition import NewsLetterPresentation
 from backend.user.presentation import UserPresentation
 
 app = FastAPI()
-main_router = APIRouter(prefix="/testapi")
+main_router = APIRouter(prefix="/api")
 origins = ["*"]
 
 app.add_middleware(
