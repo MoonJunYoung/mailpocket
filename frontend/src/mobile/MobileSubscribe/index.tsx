@@ -36,7 +36,7 @@ const MobileSubscribe = () => {
   const [acitveMailData, setActiveMailData] = useState();
   const [activeCategory, setActiveCategory] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [subscribelength, setNewsLettersubscribeLength] = useState(0)
   const [categories, setCategories] = useState([]);
 
   const authToken = Token();
@@ -119,6 +119,17 @@ const MobileSubscribe = () => {
     }
   };
 
+  const handleGetNewsLetterLengthData = async () => {
+    try {
+      const responesSubscribe = await getSubscribeData(
+        "testapi/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
+      );
+      setNewsLettersubscribeLength(responesSubscribe.data.length);
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패");
+    }
+  };
+
   const handlePostNewsLetterData = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -129,7 +140,8 @@ const MobileSubscribe = () => {
       } else {
         const responesPut = await putSubscribe({ ids: newsletterchecked });
         if (responesPut.status === 201) {
-          sendEventToAmplitude("complete to select article", "");
+          sendEventToAmplitude("complete to select article", "")
+          sendEventToAmplitude("click add destination", "");
           window.location.href =
             "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
         }
@@ -162,7 +174,7 @@ const MobileSubscribe = () => {
     setNewsLetterChecked([...newslettersubscribeId]);
   };
 
- 
+
 
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substring(0, n) + "..." : str;
@@ -271,7 +283,7 @@ const MobileSubscribe = () => {
         <SlackGuideModal
           setOpenModal={setOpenModal}
           handlePostNewsLetterData={handlePostNewsLetterData}
-          newslettersubscribe={newslettersubscribe}
+          subscribelength={newslettersubscribe.length}
         />
       )}
       <div className="w-full  touch-none h-10 mb-10" ref={ref}></div>
@@ -365,9 +377,8 @@ const MailModal = ({
                 <div className="">{acitveMailData.name}</div>
               </div>
               <div
-                className={`pt-[20px] ${
-                  acitveMailData.mail ? "overflow-auto" : "overflow-hidden"
-                } h-full `}
+                className={`pt-[20px] ${acitveMailData.mail ? "overflow-auto" : "overflow-hidden"
+                  } h-full `}
               >
                 <div className="font-extrabold text-base mb-3">
                   {acitveMailData.mail

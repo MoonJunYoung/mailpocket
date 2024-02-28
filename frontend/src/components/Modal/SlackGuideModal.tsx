@@ -10,20 +10,19 @@ interface SlackGuideModalType {
   handlePostNewsLetterData: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => Promise<void>;
-  newslettersubscribe: NewsLetterDataType[];
+  subscribelength: number
 }
 
 const SlackGuideModal = ({
   setOpenModal,
   handlePostNewsLetterData,
-  newslettersubscribe,
+  subscribelength,
 }: SlackGuideModalType) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   useOnClickOutside(ref, () => {
     setOpenModal(false);
   });
-
 
   useEffect(() => {
     sendEventToAmplitude("view select article", "");
@@ -44,7 +43,7 @@ const SlackGuideModal = ({
               X
             </div>
             <p className="font-extrabold text-xl">
-              {`${newslettersubscribe.length}개 뉴스레터 구독 완료`}
+              {`${subscribelength}개 뉴스레터 구독 완료`}
             </p>
             <span className="font-bold text-gray-500">
               슬랙을 연동하면 3줄 요약된 뉴스레터를 편하게 받아보실 수 있어요.
