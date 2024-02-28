@@ -30,6 +30,7 @@ import {
 } from "../../components/Summary";
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
+import { isMobile } from "../../App";
 
 export type ChannelDataType = {
   id: number;
@@ -56,6 +57,13 @@ const MyPage = () => {
   const [detailmail, setDetailMail] = useState<any[]>([]);
   const navigate = useNavigate();
   const authToken = Token();
+
+
+  useEffect(() => {
+    if (isMobile) {
+      navigate("/mobilemypage");
+    } 
+  }, [isMobile]);
 
   useEffect(() => {
     if (!authToken) {

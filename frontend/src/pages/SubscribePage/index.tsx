@@ -17,6 +17,7 @@ import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import { Loader } from "../../components/Loader";
 import SlackGuideModal from "../../components/Modal/SlackGuideModal";
 import { Category } from "../../components/Category";
+import { isMobile } from "../../App";
 
 export type SummaryItem = {
   [key: string]: string;
@@ -62,6 +63,13 @@ const Subscribe = () => {
       [newsletterid]: !prevStates[newsletterid],
     }));
   };
+  
+  useEffect(() => {
+    if (isMobile) {
+      navigate("/mobileSubscribe");
+    } 
+  }, [isMobile]);
+
 
   useEffect(() => {
     if (!authToken) {
@@ -144,6 +152,7 @@ const Subscribe = () => {
       if (newslettersubscribe.length <= 0) {
         alert("뉴스레터를 구독해주세요");
       } else {
+        sendEventToAmplitude("complete to select article", "")
         sendEventToAmplitude("click add destination", "");
         window.location.href =
           "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
@@ -190,8 +199,8 @@ const Subscribe = () => {
         });
       }
       handleGetNewsLetterData();
-      sendEventToAmplitude("select article", {
-        "unselect article": newslettername,
+      sendEventToAmplitude("unselect article", {
+        "article name": newslettername,
       });
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");

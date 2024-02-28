@@ -176,8 +176,8 @@ export const MobileMyPageNav = ({
           ...prevMap,
           [newsletterId]: false,
         }));
-        sendEventToAmplitude("select article", {
-          "unselect article": newslettername,
+        sendEventToAmplitude("unselect article", {
+          "article name": newslettername,
         });
       }
     } catch (error) {
