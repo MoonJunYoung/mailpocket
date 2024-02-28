@@ -48,7 +48,7 @@ const Subscribe = () => {
   >({});
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("전체");
+  const [activeCategory, setActiveCategory] = useState(0);
   const [categories, setCategories] = useState([]);
 
   const authToken = Token();
@@ -73,7 +73,7 @@ const Subscribe = () => {
 
   const fetchNewsletter = async (
     lastId: string | undefined,
-    category: string | undefined = "전체"
+    category: number | undefined = 0
   ) => {
     let params: Params = {
       in_mail: true,
@@ -85,8 +85,8 @@ const Subscribe = () => {
       params.cursor = lastId;
     }
 
-    if (category !== "전체") {
-      params.category = category;
+    if (category !== 0) {
+      params.category_id = category;
     }
 
     const { data } = await getNewsletterData("/testapi/newsletter", params);
@@ -204,8 +204,7 @@ const Subscribe = () => {
 
   const handleCategory = async () => {
     let response = await getCategory();
-    
-    console.log(response.data);
+    setCategories(response.data);
   };
 
   const handleModalOpen = () => {
@@ -358,12 +357,10 @@ const Subscribe = () => {
             <div className="flex items-center mt-8">
               <div className="flex gap-[10px]">
                 <Category
-                  fetchNewsletter={fetchNewsletter}
                   activeCategory={activeCategory}
                   setActiveCategory={setActiveCategory}
                   categories={categories}
                   setSubscribeable={setSubscribeable}
-                  newslettersubscribe={newslettersubscribe}
                 ></Category>
               </div>
             </div>
