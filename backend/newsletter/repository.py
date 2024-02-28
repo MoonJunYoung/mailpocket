@@ -133,7 +133,6 @@ class NewsLetterRepository:
                 self.table_model = self.table_model.filter(
                     NewsLetterModel.category_id == category_id
                 )
-
             subscribe_models = (
                 self.session.query(SubscribeModel.newsletter_id)
                 .filter(SubscribeModel.user_id == self.user.id)
