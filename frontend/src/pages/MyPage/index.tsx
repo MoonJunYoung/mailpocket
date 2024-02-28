@@ -3,6 +3,7 @@ import React, {
   ReactComponentElement,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
@@ -40,6 +41,7 @@ export type ChannelDataType = {
 interface MailType {
   detailmail: SummaryNewsLetterDataType[];
   newsLetters: SubscribeNewsLetterDataType[];
+  activeMail?: number;
 }
 
 const MyPage = () => {
@@ -132,7 +134,11 @@ const MyPage = () => {
             setActiveMail={setActiveMail}
             handleGetMailDetailData={handleGetMailDetailData}
           ></List>
-          <Main detailmail={detailmail} newsLetters={newsLetters}></Main>
+          <Main
+            detailmail={detailmail}
+            newsLetters={newsLetters}
+            activeMail={activeMail}
+          ></Main>
         </div>
       </div>
       {openModal === true ? (
@@ -408,9 +414,18 @@ const Column = ({
   );
 };
 
-const Main = ({ detailmail, newsLetters }: MailType) => {
+const Main = ({ detailmail, newsLetters, activeMail }: MailType) => {
+  const main = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (main?.current?.scrollTop) {
+      main.current.scrollTop = 0;
+    }
+  }, [activeMail]);
   return (
-    <div className="flex-[70%] h-[100vh] overflow-auto custom-scrollbar">
+    <div
+      className="flex-[70%] h-[100vh] overflow-auto custom-scrollbar"
+      ref={main}
+    >
       <div className="max-w-[700px] mx-auto mt-[30px]">
         <div>
           <MainHeader
