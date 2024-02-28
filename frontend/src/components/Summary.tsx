@@ -72,9 +72,9 @@ export const Summary = ({
           ...prevMap,
           [newsletterId]: false,
         }));
-        sendEventToAmplitude("select article", {
-          "unselect article": newslettername,
-        });
+        sendEventToAmplitude("unselect article", {
+        "article name": newslettername,
+      });
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
@@ -259,9 +259,9 @@ export const MySummary = ({ summaryNewsLetterData }: SummaryProps) => {
           ...prevMap,
           [newsletterId]: true,
         }));
-        sendEventToAmplitude("select article", {
-          "unselect article": newslettername,
-        });
+        sendEventToAmplitude("unselect article", {
+        "article name": newslettername,
+      });
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
