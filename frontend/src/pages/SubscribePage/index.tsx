@@ -41,13 +41,13 @@ const Subscribe = () => {
   const [newslettersubscribe, setNewsLettersubscribe] = useState<
     NewsLetterDataType[]
   >([]);
+  const [subscribelength, setNewsLettersubscribeLength] = useState(0)
   const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>(
     {}
   );
   const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<
     Record<number, boolean>
   >({});
-  console.log(subscriptionStatusMap)
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [activeCategory, setActiveCategory] = useState(0);
@@ -145,6 +145,18 @@ const Subscribe = () => {
     }
   };
 
+
+  const handleGetNewsLetterLengthData = async () => {
+    try {
+      const responesSubscribe = await getSubscribeData(
+        "testapi/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
+      );
+      setNewsLettersubscribeLength(responesSubscribe.data.length);
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패");
+    }
+  };
+
   const handlePostNewsLetterData = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -176,6 +188,7 @@ const Subscribe = () => {
           [newsletterId]: bool,
         }));
       }
+      handleGetNewsLetterLengthData()
       sendEventToAmplitude("select article", {
         "article name": newslettername,
       });
@@ -197,6 +210,7 @@ const Subscribe = () => {
           [newsletterId]: bool,
         }));
       }
+      handleGetNewsLetterLengthData()
       sendEventToAmplitude("unselect article", {
         "article name": newslettername,
       });
@@ -214,6 +228,7 @@ const Subscribe = () => {
   useEffect(() => {
     handleGetNewsLetterData();
     handleCategory();
+    handleGetNewsLetterLengthData()
   }, []);
 
   const handleCategory = async () => {
@@ -497,7 +512,7 @@ const Subscribe = () => {
         <SlackGuideModal
           setOpenModal={setOpenModal}
           handlePostNewsLetterData={handlePostNewsLetterData}
-          newslettersubscribe={newslettersubscribe}
+          subscribelength={subscribelength}
         />
       )}
       <div className="w-full  touch-none h-10 mb-10" ref={ref}></div>
