@@ -38,7 +38,7 @@ const MobileReadPage = () => {
 
   const handleGetNewsLetterData = async () => {
     try {
-      const responesSubscribe = await getSubscribeData("testapi/newsletter?&subscribe_status=subscribed&sort_type=recent")
+      const responesSubscribe = await getSubscribeData("/api/newsletter?&subscribe_status=subscribed&sort_type=recent")
       setNewsLettersubscribe(responesSubscribe.data)
     } catch (error) {
       console.log("Api 데이터 불러오기 실패")
