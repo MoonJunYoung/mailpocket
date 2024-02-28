@@ -4,6 +4,7 @@ import Symbol from './Symbol';
 import UrlShare from './Shared/UrlShare';
 import { SummaryNewsLetterDataType } from '../pages/ReadPage';
 import { readPageSubscribe, readPageUnSubscribe, Token } from '../api/api';
+import { sendEventToAmplitude } from './Amplitude';
 
 export interface SubscribeNewsLetterDataType {
   id: number;
@@ -33,7 +34,7 @@ export const Summary = ({ summaryNewsLetterData, newslettersubscribe }: SummaryP
     }
   }, [newslettersubscribe, summaryNewsLetterData]);
 
-  const handleNewsLetterSelected = async (newsletterId: number) => {
+  const handleNewsLetterSelected = async (newsletterId: number, newslettername: string) => {
     try {
       const response = await readPageSubscribe(newsletterId);
       if (response.status === 201) {
@@ -41,13 +42,16 @@ export const Summary = ({ summaryNewsLetterData, newslettersubscribe }: SummaryP
           ...prevMap,
           [newsletterId]: true,
         }));
+        sendEventToAmplitude("select article", {
+          "article name": newslettername,
+        });
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
     }
   };
 
-  const handleNewsLetterUnSelected = async (newsletterId: number) => {
+  const handleNewsLetterUnSelected = async (newsletterId: number, newslettername: string) => {
     try {
       const response = await readPageUnSubscribe(newsletterId);
       if (response.status === 204) {
@@ -55,6 +59,9 @@ export const Summary = ({ summaryNewsLetterData, newslettersubscribe }: SummaryP
           ...prevMap,
           [newsletterId]: false,
         }));
+        sendEventToAmplitude("select article", {
+          "unselect article": newslettername,
+        });
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
@@ -80,9 +87,9 @@ export const Summary = ({ summaryNewsLetterData, newslettersubscribe }: SummaryP
                   <span className='font-semibold text-gray-600'>{data.from_name}</span>
                   {authToken ? (
                     subscriptionStatusMap[data.newsletter_id] ? (
-                      <span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}>구독해제</span>
+                      <span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id, data.from_name)}>구독해제</span>
                     ) : (
-                      <span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.newsletter_id)}>구독하기</span>
+                      <span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.newsletter_id, data.from_name)}>구독하기</span>
                     )
                   ) : ""}
                 </div>
@@ -122,12 +129,10 @@ export const Summary = ({ summaryNewsLetterData, newslettersubscribe }: SummaryP
             </div>
           ))}
           {summaryNewsLetterData.map((data) => (
-            <div key={data.id} className='p-3 cursor-pointer text-center'>
-
-              <span className='text-lg text-customPurple font-bold' onClick={() => toggleSummaryExpansion(data.id)}>
+            <div key={data.id} className='p-3 cursor-pointer text-center' onClick={() => toggleSummaryExpansion(data.id)}>
+              <span className='text-lg text-customPurple font-bold'>
                 {expandedSummaries[data.id] ? '닫기' : '펼치기'}
               </span>
-
             </div>
           ))}
 
@@ -143,28 +148,34 @@ export const MySummary = ({ summaryNewsLetterData }: SummaryProps) => {
   const authToken = Token();
 
 
-  const handleNewsLetterSelected = async (newsletterId: number) => {
+  const handleNewsLetterSelected = async (newsletterId: number, newslettername: string) => {
     try {
       const response = await readPageSubscribe(newsletterId);
       if (response.status === 201) {
         setSubscriptionStatusMap((prevMap) => ({
           ...prevMap,
-          [newsletterId]: false,
+          [newsletterId]: true,
         }));
+        sendEventToAmplitude("select article", {
+          "article name": newslettername,
+        });
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
     }
   };
 
-  const handleNewsLetterUnSelected = async (newsletterId: number) => {
+  const handleNewsLetterUnSelected = async (newsletterId: number, newslettername: string) => {
     try {
       const response = await readPageUnSubscribe(newsletterId);
       if (response.status === 204) {
         setSubscriptionStatusMap((prevMap) => ({
           ...prevMap,
-          [newsletterId]: true,
+          [newsletterId]: false,
         }));
+        sendEventToAmplitude("select article", {
+          "unselect article": newslettername,
+        });
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
@@ -190,9 +201,9 @@ export const MySummary = ({ summaryNewsLetterData }: SummaryProps) => {
                   <span className='font-semibold text-gray-600'>{data.from_name}</span>
                   {authToken ? (
                     subscriptionStatusMap[data.newsletter_id] ? (
-                      <span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.newsletter_id)}>구독하기</span>
+                      <span className='p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton' onClick={() => handleNewsLetterSelected(data.newsletter_id, data.from_name)}>구독하기</span>
                     ) : (
-                      <span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}>구독해제</span>
+                      <span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id, data.from_name)}>구독해제</span>
 
                     )
                   ) : ""}

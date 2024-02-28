@@ -5,6 +5,7 @@ import { readPageSubscribe, readPageUnSubscribe, Token } from "../../api/api";
 import { NavNewsLetterDataType } from "../../mobile/MobileMyPage";
 import { SummaryNewsLetterDataType } from "../../pages/ReadPage";
 import { NewsLetterDataType } from "../../pages/SubscribePage";
+import { sendEventToAmplitude } from "../Amplitude";
 import MobileMenu from "../Modal/MobileMenu";
 import { SubscribeNewsLetterDataType } from "../Summary";
 
@@ -71,9 +72,8 @@ export const MobileReadNav = ({
       {ReadNavNewsLetterData.map((data) => (
         <div
           key={data.id}
-          className={`bg-white p-3 flex items-center justify-center gap-4 ${
-            authToken ? "" : "mb-4"
-          }`}
+          className={`bg-white p-3 flex items-center justify-center gap-4 ${authToken ? "" : "mb-4"
+            }`}
         >
           <div className="flex items-center justify-center gap-3">
             <img
@@ -151,7 +151,7 @@ export const MobileMyPageNav = ({
     setOpenModal(true);
   };
 
-  const handleNewsLetterSelected = async (newsletterId: number) => {
+  const handleNewsLetterSelected = async (newsletterId: number, newslettername: string) => {
     try {
       const response = await readPageSubscribe(newsletterId);
       if (response.status === 201) {
@@ -159,13 +159,16 @@ export const MobileMyPageNav = ({
           ...prevMap,
           [newsletterId]: true,
         }));
+        sendEventToAmplitude("select article", {
+          "article name": newslettername,
+        });
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
     }
   };
 
-  const handleNewsLetterUnSelected = async (newsletterId: number) => {
+  const handleNewsLetterUnSelected = async (newsletterId: number, newslettername: string) => {
     try {
       const response = await readPageUnSubscribe(newsletterId);
       if (response.status === 204) {
@@ -173,6 +176,9 @@ export const MobileMyPageNav = ({
           ...prevMap,
           [newsletterId]: false,
         }));
+        sendEventToAmplitude("select article", {
+          "unselect article": newslettername,
+        });
       }
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
@@ -205,14 +211,14 @@ export const MobileMyPageNav = ({
           {subscriptionStatusMap[data.newsletter_id] ? (
             <span
               className="p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold"
-              onClick={() => handleNewsLetterUnSelected(data.newsletter_id)}
+              onClick={() => handleNewsLetterUnSelected(data.newsletter_id, data.from_name)}
             >
               구독해제
             </span>
           ) : (
             <span
               className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton"
-              onClick={() => handleNewsLetterSelected(data.newsletter_id)}
+              onClick={() => handleNewsLetterSelected(data.newsletter_id, data.from_name)}
             >
               구독하기
             </span>

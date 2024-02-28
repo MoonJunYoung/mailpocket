@@ -172,7 +172,7 @@ code {
 }
 
 .subscribe-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 0px;
 }
 
 /* menu */

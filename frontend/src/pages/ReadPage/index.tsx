@@ -67,15 +67,16 @@ const ReadPage = () => {
 
   return (
     <div className="bg-white">
-      {authToken ? "" : (<div className="flex  items-center justify-between border-b p-4">
+      {authToken ? "" : (
+      <div className="flex sticky top-0 z-1 bg-white items-center justify-between border-b p-4">
         <img className="h-6 md:w-[90px] md:mt-[10px] md:ml-[10px] md:h-[20px]"
           src="/images/MailpocketLogo.png"
           alt="Logo"
           onClick={() => (window.location.href = "/landingpage")}
         />
         <div className="flex md:flex-col md:items-end md:mr-2">
-          <span className="text-base font-extrabold">무료 뉴스레터 3줄 요약 서비스 메일 포켓</span>
-          <Link className="font-extrabold text-base underline ml-2 text-customPurple" to="/landingpage">알아보기</Link>
+          <span className="text-base font-extrabold">수백개 넘는 뉴스레터, 골라서 3줄 요약 받아보실래요?</span>
+          <Link className="font-extrabold text-base underline ml-2 text-customPurple" to="/landingpage">메일포켓 알아보기</Link>
         </div>
         <Link className="font-extrabold mr-4 text-base text-customPurple" to="/sign-in">로그인하기</Link>
       </div>)}
