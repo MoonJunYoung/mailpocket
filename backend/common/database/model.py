@@ -49,17 +49,17 @@ class NewsLetterModel(Base):
     id = Column("id", Integer, primary_key=True)
     name = Column(String)
     from_email = Column(String)
-    category = Column(String)
     send_date = Column(String)
     last_recv_at = Column(DATETIME)
     operating_status = Column(Boolean)
+    category_id = Column(Integer)
 
-    def __init__(self, id, name, from_email, category, send_date):
+    def __init__(self, id, name, from_email, send_date, category_id=None):
         self.id = id
         self.name = name
         self.from_email = from_email
-        self.category = category
         self.send_date = send_date
+        self.category_id = category_id
 
 
 class NewsletterEmailAddressesModel(Base):
@@ -116,3 +116,13 @@ class MailModel(Base):
         self.summary_list = summary_list
         self.newsletter_id = newsletter_id
         self.recv_at = recv_at
+
+
+class CategoryModel(Base):
+    __tablename__ = "category"
+    id = Column("id", Integer, primary_key=True)
+    name = Column(String)
+
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
