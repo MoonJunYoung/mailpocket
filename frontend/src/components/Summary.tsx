@@ -237,7 +237,7 @@ export const MySummary = ({ summaryNewsLetterData }: SummaryProps) => {
       if (response.status === 201) {
         setSubscriptionStatusMap((prevMap) => ({
           ...prevMap,
-          [newsletterId]: true,
+          [newsletterId]: false,
         }));
         sendEventToAmplitude("select article", {
           "article name": newslettername,
@@ -257,7 +257,7 @@ export const MySummary = ({ summaryNewsLetterData }: SummaryProps) => {
       if (response.status === 204) {
         setSubscriptionStatusMap((prevMap) => ({
           ...prevMap,
-          [newsletterId]: false,
+          [newsletterId]: true,
         }));
         sendEventToAmplitude("select article", {
           "unselect article": newslettername,
@@ -305,17 +305,7 @@ export const MySummary = ({ summaryNewsLetterData }: SummaryProps) => {
                         구독하기
                       </span>
                     ) : (
-                      <span
-                        className="p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold"
-                        onClick={() =>
-                          handleNewsLetterUnSelected(
-                            data.newsletter_id,
-                            data.from_name
-                          )
-                        }
-                      >
-                        구독해제
-                      </span>
+                      <span className='p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold' onClick={() => handleNewsLetterUnSelected(data.newsletter_id, data.from_name)}>구독해제</span>
                     )
                   ) : (
                     ""
