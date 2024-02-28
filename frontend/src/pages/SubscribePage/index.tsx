@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  getCategory,
   getNewsletterData,
   getSubscribeData,
   Params,
@@ -47,54 +48,8 @@ const Subscribe = () => {
   >({});
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("전체");
-
-  const categories = [
-    {
-      id: 1,
-      name: "전체",
-    },
-    {
-      id: 2,
-      name: "IT/테크",
-    },
-    {
-      id: 3,
-      name: "건강/의학",
-    },
-    {
-      id: 4,
-      name: "디자인",
-    },
-    {
-      id: 5,
-      name: "비즈/제테크",
-    },
-    {
-      id: 6,
-      name: "시사/사회",
-    },
-    {
-      id: 7,
-      name: "엔터테이먼트",
-    },
-    {
-      id: 8,
-      name: "여행",
-    },
-    {
-      id: 9,
-      name: "취미/자기계발",
-    },
-    {
-      id: 10,
-      name: "트렌드/라이프",
-    },
-    {
-      id: 11,
-      name: "푸드",
-    },
-  ];
+  const [activeCategory, setActiveCategory] = useState(0);
+  const [categories, setCategories] = useState([]);
 
   const authToken = Token();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -118,7 +73,7 @@ const Subscribe = () => {
 
   const fetchNewsletter = async (
     lastId: string | undefined,
-    category: string | undefined = "전체"
+    category: number | undefined = 0
   ) => {
     let params: Params = {
       in_mail: true,
@@ -130,8 +85,8 @@ const Subscribe = () => {
       params.cursor = lastId;
     }
 
-    if (category !== "전체") {
-      params.category = category;
+    if (category !== 0) {
+      params.category_id = category;
     }
 
     const { data } = await getNewsletterData("/testapi/newsletter", params);
@@ -245,7 +200,13 @@ const Subscribe = () => {
 
   useEffect(() => {
     handleGetNewsLetterData();
+    handleCategory();
   }, []);
+
+  const handleCategory = async () => {
+    let response = await getCategory();
+    setCategories(response.data);
+  };
 
   const handleModalOpen = () => {
     setOpenModal(true);
@@ -395,12 +356,10 @@ const Subscribe = () => {
             <div className="flex items-center mt-8">
               <div className="flex gap-[10px]">
                 <Category
-                  fetchNewsletter={fetchNewsletter}
                   activeCategory={activeCategory}
                   setActiveCategory={setActiveCategory}
                   categories={categories}
                   setSubscribeable={setSubscribeable}
-                  newslettersubscribe={newslettersubscribe}
                 ></Category>
               </div>
             </div>

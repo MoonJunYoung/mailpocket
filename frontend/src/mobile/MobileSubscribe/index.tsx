@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  getCategory,
   getNewsletterData,
   getSubscribeData,
   Params,
@@ -33,55 +34,10 @@ const MobileSubscribe = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isActiveMailModal, setIsActiveMailModal] = useState(false);
   const [acitveMailData, setActiveMailData] = useState();
-  const [activeCategory, setActiveCategory] = useState("전체");
+  const [activeCategory, setActiveCategory] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const categories = [
-    {
-      id: 1,
-      name: "전체",
-    },
-    {
-      id: 2,
-      name: "IT/테크",
-    },
-    {
-      id: 3,
-      name: "건강/의학",
-    },
-    {
-      id: 4,
-      name: "디자인",
-    },
-    {
-      id: 5,
-      name: "비즈/제테크",
-    },
-    {
-      id: 6,
-      name: "시사/사회",
-    },
-    {
-      id: 7,
-      name: "엔터테이먼트",
-    },
-    {
-      id: 8,
-      name: "여행",
-    },
-    {
-      id: 9,
-      name: "취미/자기계발",
-    },
-    {
-      id: 10,
-      name: "트렌드/라이프",
-    },
-    {
-      id: 11,
-      name: "푸드",
-    },
-  ];
+  const [categories, setCategories] = useState([]);
 
   const authToken = Token();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -98,7 +54,7 @@ const MobileSubscribe = () => {
 
   const fetchNewsletter = async (
     lastId: string | undefined,
-    category: string | undefined = "전체"
+    category: number | undefined = 0
   ) => {
     let params: Params = {
       in_mail: true,
@@ -110,8 +66,8 @@ const MobileSubscribe = () => {
       params.cursor = lastId;
     }
 
-    if (category !== "전체") {
-      params.category = category;
+    if (category !== 0) {
+      params.category_id = category;
     }
 
     const { data } = await getNewsletterData("/testapi/newsletter", params);
@@ -185,7 +141,13 @@ const MobileSubscribe = () => {
 
   useEffect(() => {
     handleGetNewsLetterData();
+    handleCategory();
   }, []);
+
+  const handleCategory = async () => {
+    let response = await getCategory();
+    setCategories(response.data);
+  };
 
   useEffect(() => {
     handleNewsLetterSubcribeDataRenewal();
@@ -447,7 +409,7 @@ const MailModal = ({
 
                         setNewsLettersubscribe(result);
                         if (
-                          activeCategory === "전체" ||
+                          activeCategory === 0 ||
                           activeCategory === acitveMailData.category
                         ) {
                           setSubscribeable((prev: any) => [

@@ -28,7 +28,7 @@ export interface Params {
   subscribe_status: string;
   sort_type: string;
   cursor?: string;
-  category?: string;
+  category_id?: number;
 }
 
 // Read
@@ -113,4 +113,10 @@ export const getMyPageNewsLetterDetail = (query: string) => {
 
 export const getMyPageSubscribeData = (query: string) => {
   return axiosData().get(query);
+};
+
+// category
+
+export const getCategory = () => {
+  return axiosData().get("/testapi/newsletter/categories ");
 };
