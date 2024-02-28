@@ -21,18 +21,33 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     }
   };
 
+  function byteCount(s: string): number {
+    return encodeURI(s).split(/%..|./).length - 1;
+  }
+
   const shareKakaoLink = () => {
     const firstNewsLetterLink = summaryNewsLetterData?.[0].read_link;
-  
+
     if (firstNewsLetterLink) {
       const fullText = summaryNewsLetterData?.map((data) => data.share_text).join('\n\n');
-      const trimmedText = fullText.slice(0, 1100);
-      const textToSend = trimmedText.length < fullText.length ? trimmedText + '...' : trimmedText;
-  
+      let textToSend = fullText;
+
+      if (byteCount(fullText) > 1100) {
+        let bytes = 0;
+        let index = 0;
+        while (bytes <= 1100) {
+          bytes += encodeURI(fullText[index]).split(/%..|./).length - 1;
+          index++;
+        }
+        textToSend = fullText.slice(0, index - 1) + '...';
+      }
+
+      console.log(textToSend);
+
       //@ts-ignore
       window.Kakao.Link.sendDefault({
         objectType: "text",
-        text: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.\n\n${textToSend}`,
+        text: `${summaryNewsLetterData?.[0].from_name}의 뉴스레터 요약 결과입니다.\n\n${textToSend}`,
         link: {
           webUrl: firstNewsLetterLink,
           mobileWebUrl: firstNewsLetterLink
@@ -40,7 +55,8 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
       });
     }
   };
-  
+
+
   return (
     <div>
       <div className={containerstyle} onClick={shareKakaoLink}>
