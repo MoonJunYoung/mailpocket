@@ -22,13 +22,17 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
   };
 
   const shareKakaoLink = () => {
-    const firstNewsLetterLink = summaryNewsLetterData?.[0]?.read_link;
-
+    const firstNewsLetterLink = summaryNewsLetterData?.[0].read_link;
+  
     if (firstNewsLetterLink) {
+      const fullText = summaryNewsLetterData?.map((data) => data.share_text).join('\n\n');
+      const trimmedText = fullText.slice(0, 1100);
+      const textToSend = trimmedText.length < fullText.length ? trimmedText + '...' : trimmedText;
+  
       //@ts-ignore
       window.Kakao.Link.sendDefault({
         objectType: "text",
-        text: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.\n\n${summaryNewsLetterData?.map((data) => data.share_text)}`,
+        text: `${summaryNewsLetterData?.map((data) => data.from_name)}의 뉴스레터 요약 결과 입니다.\n\n${textToSend}`,
         link: {
           webUrl: firstNewsLetterLink,
           mobileWebUrl: firstNewsLetterLink
@@ -36,7 +40,7 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
       });
     }
   };
-
+  
   return (
     <div>
       <div className={containerstyle} onClick={shareKakaoLink}>

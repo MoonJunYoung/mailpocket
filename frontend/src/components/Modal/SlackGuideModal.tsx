@@ -7,10 +7,8 @@ import { sendEventToAmplitude } from "../Amplitude";
 
 interface SlackGuideModalType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  handlePostNewsLetterData: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => Promise<void>;
-  subscribelength: number
+  handlePostNewsLetterData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>;
+  subscribelength: number;
 }
 
 const SlackGuideModal = ({
@@ -19,7 +17,6 @@ const SlackGuideModal = ({
   subscribelength,
 }: SlackGuideModalType) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const navigate = useNavigate();
   useOnClickOutside(ref, () => {
     setOpenModal(false);
   });
