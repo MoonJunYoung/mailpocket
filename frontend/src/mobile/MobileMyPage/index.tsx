@@ -27,7 +27,9 @@ export interface NavNewsLetterDataType {
 
 const MobileMyPage = () => {
   const [mynewsletter, setMyNewsLetter] = useState<NewsLetterDataType[]>([]);
-  const [mynewsletterdetail, setMyNewsLetterDetail] = useState<NavNewsLetterDataType[]>([]);
+  const [mynewsletterdetail, setMyNewsLetterDetail] = useState<
+    NavNewsLetterDataType[]
+  >([]);
   const [selectedItem, setSelectedItem] = useState(0);
   const navigate = useNavigate();
   const authToken = Token();
@@ -48,12 +50,17 @@ const MobileMyPage = () => {
       setMyNewsLetter(responseNewsLetterList.data);
       if (responseNewsLetterList.data.length > 0) {
         const responseNewsLetterDetail = await getMyPageNewsLetterDetail(
-          `testapi/newsletter/${selectedItem ? selectedItem : responseNewsLetterList.data[0].id
+          `testapi/newsletter/${
+            selectedItem ? selectedItem : responseNewsLetterList.data[0].id
           }/last-mail`
         );
         setMyNewsLetterDetail([responseNewsLetterDetail.data]);
-        sendEventToAmplitude("view article detail", { "article name": responseNewsLetterDetail.data.from_name, "post name": responseNewsLetterDetail.data.subject });
+        sendEventToAmplitude("view article detail", {
+          "article name": responseNewsLetterDetail.data.from_name,
+          "post name": responseNewsLetterDetail.data.subject,
+        });
       } else {
+        window.alert("구독중인 뉴스레터가 없습니다.");
         navigate("/mobileSubscribe");
       }
     } catch (error) {
