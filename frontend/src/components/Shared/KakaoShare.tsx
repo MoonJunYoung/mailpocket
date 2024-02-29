@@ -1,6 +1,31 @@
 import { useEffect } from "react";
 import { SummaryNewsLetterDataType } from "../../pages/ReadPage";
 
+function cutStringToByteLimit(str: string, limit: any) {
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder('utf-8', { fatal: true });
+
+  let encoded = encoder.encode(str);
+  if (encoded.length <= limit) {
+    return str;
+  }
+
+  let cutIndex = limit;
+  while (cutIndex > 0 && (encoded[cutIndex] & 0xC0) === 0x80) {
+    cutIndex--;
+  }
+
+  const cutEncoded = encoded.slice(0, cutIndex);
+  try {
+    let cutString = decoder.decode(cutEncoded);
+    cutString += '...';
+    return cutString;
+  } catch (e) {
+    console.error('Error decoding:', e);
+    return '';
+  }
+}
+
 type KakaoShareProps = {
   summaryNewsLetterData?: SummaryNewsLetterDataType[];
   text?: string;
@@ -21,26 +46,12 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     }
   };
 
-  function byteCount(s: string): number {
-    return encodeURI(s).split(/%..|./).length - 1;
-  }
-
   const shareKakaoLink = () => {
     if (summaryNewsLetterData && summaryNewsLetterData.length > 0) {
       const firstNewsLetter = summaryNewsLetterData[0];
       const firstNewsLetterLink = firstNewsLetter.read_link;
       const fullText = summaryNewsLetterData.map(data => data.share_text).join('\n\n');
-      let textToSend = fullText;
-
-      if (byteCount(fullText) > 1100) {
-        let bytes = 0;
-        let index = 0;
-        while (bytes <= 1100 && index < fullText.length) {
-          bytes += encodeURIComponent(fullText[index]).split(/%..|./).length - 1;
-          index++;
-        }
-        textToSend = fullText.slice(0, index) + '...';
-      }
+      const textToSend = cutStringToByteLimit(fullText, 1100);
       //@ts-ignore
       window.Kakao.Link.sendDefault({
         objectType: "text",
