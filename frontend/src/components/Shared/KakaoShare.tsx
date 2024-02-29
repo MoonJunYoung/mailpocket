@@ -1,14 +1,39 @@
 import { useEffect } from "react";
 import { SummaryNewsLetterDataType } from "../../pages/ReadPage";
 
-type KakaoShareType = {
+function cutStringToByteLimit(str: string, limit: any) {
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder('utf-8', { fatal: true });
+
+  let encoded = encoder.encode(str);
+  if (encoded.length <= limit) {
+    return str;
+  }
+
+  let cutIndex = limit;
+  while (cutIndex > 0 && (encoded[cutIndex] & 0xC0) === 0x80) {
+    cutIndex--;
+  }
+
+  const cutEncoded = encoded.slice(0, cutIndex);
+  try {
+    let cutString = decoder.decode(cutEncoded);
+    cutString += '...';
+    return cutString;
+  } catch (e) {
+    console.error('Error decoding:', e);
+    return '';
+  }
+}
+
+type KakaoShareProps = {
+  summaryNewsLetterData?: SummaryNewsLetterDataType[];
   text?: string;
   containerstyle: string;
   imgstyle: string;
-  summaryNewsLetterData?: SummaryNewsLetterDataType[];
 }
 
-const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: KakaoShareType) => {
+const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: KakaoShareProps) => {
   useEffect(() => {
     initKakao();
   }, []);
@@ -21,33 +46,16 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     }
   };
 
-  function byteCount(s: string): number {
-    return encodeURI(s).split(/%..|./).length - 1;
-  }
-
   const shareKakaoLink = () => {
-    const firstNewsLetterLink = summaryNewsLetterData?.[0].read_link;
-
-    if (firstNewsLetterLink) {
-      const fullText = summaryNewsLetterData?.map((data) => data.share_text).join('\n\n');
-      let textToSend = fullText;
-
-      if (byteCount(fullText) > 1100) {
-        let bytes = 0;
-        let index = 0;
-        while (bytes <= 1100) {
-          bytes += encodeURI(fullText[index]).split(/%..|./).length - 1;
-          index++;
-        }
-        textToSend = fullText.slice(0, index - 1) + '...';
-      }
-
-      console.log(textToSend);
-
+    if (summaryNewsLetterData && summaryNewsLetterData.length > 0) {
+      const firstNewsLetter = summaryNewsLetterData[0];
+      const firstNewsLetterLink = firstNewsLetter.read_link;
+      const fullText = summaryNewsLetterData.map(data => data.share_text).join('\n\n');
+      const textToSend = cutStringToByteLimit(fullText, 1100);
       //@ts-ignore
       window.Kakao.Link.sendDefault({
         objectType: "text",
-        text: `${summaryNewsLetterData?.[0].from_name}의 뉴스레터 요약 결과입니다.\n\n${textToSend}`,
+        text: `${firstNewsLetter.from_name}의 뉴스레터 요약 결과입니다.\n\n${textToSend}`,
         link: {
           webUrl: firstNewsLetterLink,
           mobileWebUrl: firstNewsLetterLink
@@ -55,7 +63,6 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
       });
     }
   };
-
 
   return (
     <div>
@@ -66,6 +73,5 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     </div>
   );
 };
-
 
 export default KakaoShare;
