@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { SummaryNewsLetterDataType } from "../../pages/ReadPage";
 
-type KakaoShareType = {
+type KakaoShareProps = {
+  summaryNewsLetterData?: SummaryNewsLetterDataType[];
   text?: string;
   containerstyle: string;
   imgstyle: string;
-  summaryNewsLetterData?: SummaryNewsLetterDataType[];
 }
 
-const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: KakaoShareType) => {
+const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: KakaoShareProps) => {
   useEffect(() => {
     initKakao();
   }, []);
@@ -21,22 +21,30 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     }
   };
 
-  const shareKakaoLink = () => {
-    const firstNewsLetterLink = summaryNewsLetterData?.[0].read_link;
+  function byteCount(s: string): number {
+    return encodeURI(s).split(/%..|./).length - 1;
+  }
 
-    if (firstNewsLetterLink) {
-      const fullText = summaryNewsLetterData?.map((data) => data.share_text).join('\n\n');
+  const shareKakaoLink = () => {
+    if (summaryNewsLetterData && summaryNewsLetterData.length > 0) {
+      const firstNewsLetter = summaryNewsLetterData[0];
+      const firstNewsLetterLink = firstNewsLetter.read_link;
+      const fullText = summaryNewsLetterData.map(data => data.share_text).join('\n\n');
       let textToSend = fullText;
 
-      if (fullText.length > 900) {
-        textToSend = fullText.slice(0, 900) + '...';
-        console.log(textToSend)
+      if (byteCount(fullText) > 1100) {
+        let bytes = 0;
+        let index = 0;
+        while (bytes <= 1100 && index < fullText.length) {
+          bytes += encodeURIComponent(fullText[index]).split(/%..|./).length - 1;
+          index++;
+        }
+        textToSend = fullText.slice(0, index) + '...';
       }
-
       //@ts-ignore
       window.Kakao.Link.sendDefault({
         objectType: "text",
-        text: `${summaryNewsLetterData?.[0].from_name}의 뉴스레터 요약 결과입니다.\n\n${textToSend}`,
+        text: `${firstNewsLetter.from_name}의 뉴스레터 요약 결과입니다.\n\n${textToSend}`,
         link: {
           webUrl: firstNewsLetterLink,
           mobileWebUrl: firstNewsLetterLink
