@@ -21,10 +21,6 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     }
   };
 
-  function byteCount(s: string): number {
-    return encodeURI(s).split(/%..|./).length - 1;
-  }
-
   const shareKakaoLink = () => {
     const firstNewsLetterLink = summaryNewsLetterData?.[0].read_link;
 
@@ -32,17 +28,10 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
       const fullText = summaryNewsLetterData?.map((data) => data.share_text).join('\n\n');
       let textToSend = fullText;
 
-      if (byteCount(fullText) > 1100) {
-        let bytes = 0;
-        let index = 0;
-        while (bytes <= 1100) {
-          bytes += encodeURI(fullText[index]).split(/%..|./).length - 1;
-          index++;
-        }
-        textToSend = fullText.slice(0, index - 1) + '...';
+      if (fullText.length > 900) {
+        textToSend = fullText.slice(0, 900) + '...';
+        console.log(textToSend)
       }
-
-      console.log(textToSend);
 
       //@ts-ignore
       window.Kakao.Link.sendDefault({
@@ -56,7 +45,6 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     }
   };
 
-
   return (
     <div>
       <div className={containerstyle} onClick={shareKakaoLink}>
@@ -66,6 +54,5 @@ const KakaoShare = ({ summaryNewsLetterData, text, containerstyle, imgstyle }: K
     </div>
   );
 };
-
 
 export default KakaoShare;
