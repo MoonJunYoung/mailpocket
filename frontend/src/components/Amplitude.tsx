@@ -27,11 +27,10 @@ export const AmplitudeSetUserId = async () => {
     if (authToken) {
       const userInfo = await getUserData();
       return amplitude.setUserId(
-        `${
-          userInfo.data.identifier
-            ? userInfo.data.identifier
-            : userInfo.data.platform
-        }_${userInfo.data.id}`
+        userInfo.data.identifier ? 
+        userInfo.data.identifier
+          : 
+        `${userInfo.data.platform}_${userInfo.data.id}`
       );
     }
   } catch (error) {
