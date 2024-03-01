@@ -21,7 +21,9 @@ const MobileMenu = ({
 }: MobileMenuType) => {
   const [isOpen, setIsOpen] = useState(true);
   const [ModalOpen, setModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(selectItemId ? selectItemId : mynewsletter[0].id);
+  const [selectedItem, setSelectedItem] = useState(
+    selectItemId ? selectItemId : mynewsletter[0].id
+  );
   const navigate = useNavigate();
 
   const closeModal = () => {
@@ -43,14 +45,15 @@ const MobileMenu = ({
   };
 
   return (
-    <div className="z-10 absolute">
-      <div className="fixed inset-0 bg-stone-300 bg-opacity-50 flex justify-start">
-        <div className='h-full flex flex-col w-auto bg-white relative'>
-          <div className="flex flex-col overflow-auto justify-between mb-[180px]">
-            <div className="overflow-auto subscribe-scrollbar w-full flex flex-col items-center gap-3">
-              {mynewsletter.map((data) => (
+    <div className="fixed inset-0 bg-stone-300 bg-opacity-50  ">
+      {/* 네비게이션 아이템 영역 */}
+      <div className="flex w-full bg-white relative h-screen">
+        <div className="flex flex-col overflow-auto ">
+          <div className="subscribe-scrollbar w-full flex flex-col items-center overflow-auto ">
+            {mynewsletter.map((data) => (
+              <div className="">
                 <div
-                  className={`text-center border-b p-3 flex flex-col items-center justify-center`}
+                  className={`text-center text-[13px] break-words break-keep border-b p-2 flex flex-col items-center justify-center`}
                   key={data.id}
                   onClick={() => {
                     handleItemClick(data.id);
@@ -62,26 +65,34 @@ const MobileMenu = ({
                     alt={String(data.id)}
                   />
                   <p
-                    className={`font-semibold w-[65px] py-2 ${selectedItem === data.id
-                      ? "border-customPurple border-solid border-b-4"
-                      : ""
-                      }`}
+                    className={`font-semibold w-[65px]  ${
+                      selectedItem === data.id
+                        ? "border-customPurple border-solid border-b-4"
+                        : ""
+                    }`}
                   >
                     {data.name}
                   </p>
                 </div>
-              ))}
-            </div>
-            <div className="flex flex-col w-full text-center gap-3 absolute  bottom-0 left-0">
-              <ChangeButton></ChangeButton>
-              <div
-                onClick={() => { setModalOpen(true); }}
-                className="bg-[#EEEEEE]  size-[42px] mx-auto rounded-xl px-[10px] cursor-pointer">
-                <img
-                  className="mx-auto w-[200px] h-full"
-                  src="images\setting.svg"
-                  alt=""
-                />
+              </div>
+            ))}
+          </div>
+          <div className="">
+            <div className="flex flex-col  ">
+              <div className="flex flex-col">
+                <ChangeButton></ChangeButton>
+                <div
+                  onClick={() => {
+                    setModalOpen(true);
+                  }}
+                  className="bg-[#EEEEEE]  size-[42px] mx-auto rounded-xl px-[10px] cursor-pointer"
+                >
+                  <img
+                    className="mx-auto w-[200px] h-full"
+                    src="images\setting.svg"
+                    alt=""
+                  />
+                </div>
               </div>
               <div className="p-3bg-gray-100 w-full text-center border-t py-3">
                 <span
@@ -90,7 +101,7 @@ const MobileMenu = ({
                 >
                   로그아웃
                 </span>
-            </div>
+              </div>
               {ModalOpen && (
                 <SettingModal
                   setOpenModal={setModalOpen}
@@ -100,14 +111,11 @@ const MobileMenu = ({
             </div>
           </div>
         </div>
-        <span
-          className='cursor-pointer pl-2 text-2xl'
-          onClick={closeModal}
-        >
-          X
-        </span>
       </div>
-    </div >
+      {/* <span className="cursor-pointer pl-2 text-2xl" onClick={closeModal}>
+          <img src="images/close.svg" className="size-[30px]" alt="닫기" />
+        </span> */}
+    </div>
   );
 };
 
@@ -126,6 +134,5 @@ const ChangeButton = () => {
     </Link>
   );
 };
-
 
 export default MobileMenu;
