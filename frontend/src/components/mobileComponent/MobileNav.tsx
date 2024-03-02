@@ -72,8 +72,9 @@ export const MobileReadNav = ({
       {ReadNavNewsLetterData.map((data) => (
         <div
           key={data.id}
-          className={`bg-white p-3 flex items-center justify-center gap-4 ${authToken ? "" : "mb-4"
-            }`}
+          className={`bg-white p-3 flex items-center justify-center gap-4 ${
+            authToken ? "" : "mb-4"
+          }`}
         >
           <div className="flex items-center justify-center gap-3">
             <img
@@ -151,7 +152,10 @@ export const MobileMyPageNav = ({
     setOpenModal(true);
   };
 
-  const handleNewsLetterSelected = async (newsletterId: number, newslettername: string) => {
+  const handleNewsLetterSelected = async (
+    newsletterId: number,
+    newslettername: string
+  ) => {
     try {
       const response = await readPageSubscribe(newsletterId);
       if (response.status === 201) {
@@ -168,7 +172,10 @@ export const MobileMyPageNav = ({
     }
   };
 
-  const handleNewsLetterUnSelected = async (newsletterId: number, newslettername: string) => {
+  const handleNewsLetterUnSelected = async (
+    newsletterId: number,
+    newslettername: string
+  ) => {
     try {
       const response = await readPageUnSubscribe(newsletterId);
       if (response.status === 204) {
@@ -211,14 +218,18 @@ export const MobileMyPageNav = ({
           {subscriptionStatusMap[data.newsletter_id] ? (
             <span
               className="p-2 rounded-xl border border-gray-200 bg-gray-200 text-gray-400 cursor-pointer text-xs font-bold"
-              onClick={() => handleNewsLetterUnSelected(data.newsletter_id, data.from_name)}
+              onClick={() =>
+                handleNewsLetterUnSelected(data.newsletter_id, data.from_name)
+              }
             >
               구독해제
             </span>
           ) : (
             <span
               className="p-2 rounded-xl border border-customPurple text-customPurple text-xs font-bold cursor-pointer bg-subscribebutton"
-              onClick={() => handleNewsLetterSelected(data.newsletter_id, data.from_name)}
+              onClick={() =>
+                handleNewsLetterSelected(data.newsletter_id, data.from_name)
+              }
             >
               구독하기
             </span>

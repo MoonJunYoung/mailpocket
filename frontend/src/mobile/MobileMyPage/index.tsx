@@ -73,19 +73,19 @@ const MobileMyPage = () => {
   }, [selectedItem]);
 
   return (
-    <div>
+    <div className="">
       <MobileMyPageNav
         MayPageNavNewsLetterData={mynewsletterdetail}
         mynewsletter={mynewsletter}
         onSelectItem={setSelectedItem}
         selectItemId={selectedItem}
       />
-      <div className="mx-3">
+      <div className="mx-3 overflow-x-hidden">
         <MobileSummary summaryNewsLetterData={mynewsletterdetail} />
         {mynewsletterdetail.map((data) => {
           return data.html_body !== null ? (
             <div
-              className="mt-10"
+              className="mt-10 overflow-x-auto"
               dangerouslySetInnerHTML={{ __html: data.html_body }}
             />
           ) : (
