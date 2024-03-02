@@ -5,8 +5,12 @@
     "main.js": "/static/js/main.25794382.js",
 =======
     "main.css": "/static/css/main.108e8dce.css",
+<<<<<<< HEAD
     "main.js": "/static/js/main.1a9b4b42.js",
 >>>>>>> 37183d7 (.)
+=======
+    "main.js": "/static/js/main.05984424.js",
+>>>>>>> 09633b8 (빌드)
     "static/js/27.ae27880b.chunk.js": "/static/js/27.ae27880b.chunk.js",
     "index.html": "/index.html"
   },
@@ -16,7 +20,11 @@
     "static/js/main.25794382.js"
 =======
     "static/css/main.108e8dce.css",
+<<<<<<< HEAD
     "static/js/main.1a9b4b42.js"
 >>>>>>> 37183d7 (.)
+=======
+    "static/js/main.05984424.js"
+>>>>>>> 09633b8 (빌드)
   ]
 }
