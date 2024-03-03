@@ -135,7 +135,7 @@ class SlackAPI:
         self,
         mail: Mail,
     ):
-        mrkdwn_text = f"{mail.from_email} is unknown email address\n{mail.from_name}\n{mail.subject}\n{mail.read_link}\n{mail.s3_object_key}"
+        mrkdwn_text = f"{mail.from_email}\nis unknown email address\n뉴스레터: {mail.from_name}\n제목: {mail.subject}\n링크: {mail.read_link}\nS3 OBJ KEY: {mail.s3_object_key}"
         data = self.__make_one_slack_message_blocks(mrkdwn_text)
 
         requests.post(
