@@ -2,7 +2,7 @@
 
 [https://mailpocket.site/](https://mailpocket.site/)
 <p align="center">
-  <img src="https://github.com/moonjunyoung/mailpocket/assets/110980148/fdbe591d-7e82-4f3c-8c0c-cb8a781e720b" alt="mailpocket_Logo">
+  <img src="https://github.com/moonjunyoung/mailpocket/assets/110980148/66e862d4-7fd7-46da-9cd0-7c2d478ac0fd" alt="mailpocket_Logo">
 </p>
 
 # 프로젝트 비전
