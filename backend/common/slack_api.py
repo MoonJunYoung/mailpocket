@@ -13,6 +13,10 @@ client_id = os.environ.get("SLACK_CLIENT_ID")
 client_secret = os.environ.get("SLACK_CLIENT_SECRET")
 slack_logging_channel_webhook_url = os.environ.get("SLACK_LOGGING_CHANNEL_WEBHOOK_URL")
 
+slack_logging_unknown_email_address_webhook_url = os.environ.get(
+    "SLACK_UNKNOWN_EMAIL_ADDRESS_WEBHOOK_URL"
+)
+
 
 class SlackAPI:
     def connect_workspace(self, code, user_id):
@@ -126,3 +130,32 @@ class SlackAPI:
                 )
             notification_text += summary_news_slack_notification_text_list
         return notification_text
+
+    def loging_unknown_email_address(
+        self,
+        mail: Mail,
+    ):
+        mrkdwn_text = f"{mail.from_email}\nis unknown email address\n뉴스레터: {mail.from_name}\n제목: {mail.subject}\n링크: {mail.read_link}\nS3 OBJ KEY: {mail.s3_object_key}"
+        data = self.__make_one_slack_message_blocks(mrkdwn_text)
+
+        requests.post(
+            url=slack_logging_unknown_email_address_webhook_url,
+            data=data,
+        )
+
+    def __make_one_slack_message_blocks(self, mrkdwn_text):
+        slack_message_block = {
+            "blocks": [
+                {
+                    "type": "section",
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": mrkdwn_text,
+                        }
+                    ],
+                },
+            ]
+        }
+        data = json.dumps(slack_message_block)
+        return data
