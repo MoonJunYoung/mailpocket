@@ -1,4 +1,5 @@
 from backend.channel.repository import ChannelRepository
+from backend.common.exceptions import UnknownFromEamilException
 from backend.common.slack_api import SlackAPI
 from backend.mail.domain import Mail
 from backend.mail.repository import MailRepository
@@ -26,6 +27,9 @@ class MailService:
         newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(
             mail.from_email
         ).run()
+        if not newsletter:
+            self.slack_api.loging_unknown_email_address(mail)
+            raise UnknownFromEamilException(mail.from_email)
         mail.set_newsletter_id(newsletter.id)
 
         mail.summary()
