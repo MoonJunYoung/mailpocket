@@ -52,9 +52,14 @@ def mail_summary(from_email, subject, html):
             content = content.replace("{", "").replace("}", "")
             content = "{" + content + "}"
             summary_list = json.loads(content)
+
             for value in summary_list.values():
                 if not isinstance(value, str):
                     raise Exception
+
+            if not summary_list:
+                raise Exception
+
             return summary_list
         except Exception as e:
             print(e)
