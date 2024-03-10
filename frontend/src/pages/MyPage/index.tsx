@@ -31,6 +31,8 @@ import {
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
 import { isMobile } from "../../App";
+import { Sheet } from "../../components/BottomSheet/BottomSheet";
+import { format, isSameDay } from "date-fns";
 
 export type ChannelDataType = {
   id: number;
@@ -423,12 +425,46 @@ const Column = ({
 };
 
 const Main = ({ detailmail, newsLetters, activeMail }: MailType) => {
+  const [open, setOpen] = useState(false);
   const main = useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    let lastDate = localStorage.getItem("lastDate");
+    const today = format(new Date(), "yyyy-MM-dd");
+    const scrollContainer = main.current;
+
+    if (!lastDate) {
+      lastDate = "empty";
+    }
+    if (!isSameDay(today, lastDate)) {
+      if (!scrollContainer) return;
+      if (
+        scrollContainer?.scrollTop /
+          (scrollContainer.scrollHeight - scrollContainer.clientHeight) >=
+        0.2
+      ) {
+        setOpen(true);
+        localStorage.setItem("lastDate", JSON.stringify(today));
+      }
+    }
+  };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      main?.current?.addEventListener("scroll", handleScroll);
+    }, 2000);
+    return () => {
+      clearInterval(timer);
+      main?.current?.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   useEffect(() => {
     if (main?.current?.scrollTop) {
       main.current.scrollTop = 0;
     }
   }, [activeMail]);
+
   return (
     <div
       className="flex-[70%] h-[100vh] overflow-auto custom-scrollbar"
@@ -442,6 +478,7 @@ const Main = ({ detailmail, newsLetters, activeMail }: MailType) => {
           ></MainHeader>
         </div>
       </div>
+      <Sheet open={open} setOpen={setOpen}></Sheet>
     </div>
   );
 };
