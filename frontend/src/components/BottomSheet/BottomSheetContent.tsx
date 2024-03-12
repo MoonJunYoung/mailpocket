@@ -1,4 +1,7 @@
-export const BottomSheetContent = ({ setOpen }: any) => {
+import { Link } from "react-router-dom";
+import { sendEventToAmplitude } from "../Amplitude";
+
+export const BottomSheetContent = ({ setOpen, data }: any) => {
   return (
     <>
       <div className="flex flex-col max-w-80 mx-auto">
@@ -22,20 +25,29 @@ export const BottomSheetContent = ({ setOpen }: any) => {
         </div>
         <div className="flex flex-col mb-4">
           <div className=" ">
-            <button className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[15px] rounded-md font-semibold">
-              알아보기
-            </button>
-          </div>
-          <div>
-            <button
+            <Link
+              to="/landingpage"
               onClick={() => {
-                setOpen(false);
+                sendEventToAmplitude("view suggest service", {
+                  "article name": `${data.from_name}`,
+                  "post name": `${data.subject}`,
+                });
               }}
-              className=" w-full p-[15px] rounded-md font-semibold"
             >
-              닫기
-            </button>
+              <button className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[15px] rounded-md font-semibold">
+                알아보기
+              </button>
+            </Link>
           </div>
+
+          <button
+            onClick={() => {
+              setOpen(false);
+            }}
+            className=" w-full p-[15px] rounded-md font-semibold"
+          >
+            닫기
+          </button>
         </div>
       </div>
     </>
