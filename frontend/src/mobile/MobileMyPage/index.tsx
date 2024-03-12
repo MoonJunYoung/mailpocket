@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Sheet } from "../../components/BottomSheet/BottomSheet";
 import {
   getMyPageNewsLetterDetail,
   getMyPageSubscribeData,
@@ -11,6 +12,7 @@ import { MobileMyPageNav } from "../../components/mobileComponent/MobileNav";
 import MobileSummary from "../../components/mobileComponent/MobileSummary";
 import PageLoding from "../../components/PageLoding";
 import { NewsLetterDataType, SummaryItem } from "../../pages/SubscribePage";
+import { format, isSameDay } from "date-fns";
 
 export interface NavNewsLetterDataType {
   id: number;
@@ -33,6 +35,7 @@ const MobileMyPage = () => {
   const [selectedItem, setSelectedItem] = useState(0);
   const navigate = useNavigate();
   const authToken = Token();
+  const main = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!authToken) {
@@ -80,7 +83,7 @@ const MobileMyPage = () => {
         onSelectItem={setSelectedItem}
         selectItemId={selectedItem}
       />
-      <div className="mx-3 overflow-x-hidden">
+      <div className="mx-3 overflow-x-hidden h-[100vh]" ref={main}>
         <MobileSummary summaryNewsLetterData={mynewsletterdetail} />
         {mynewsletterdetail.map((data) => {
           return data.html_body !== null ? (

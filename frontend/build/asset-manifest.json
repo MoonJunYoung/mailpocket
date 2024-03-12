@@ -5,8 +5,5 @@
     "static/js/27.ae27880b.chunk.js": "/static/js/27.ae27880b.chunk.js",
     "index.html": "/index.html"
   },
-  "entrypoints": [
-    "static/css/main.108e8dce.css",
-    "static/js/main.b6193666.js"
-  ]
+  "entrypoints": ["static/css/main.108e8dce.css", "static/js/main.b6193666.js"]
 }

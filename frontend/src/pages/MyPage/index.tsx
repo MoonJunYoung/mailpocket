@@ -31,6 +31,10 @@ import {
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
 import { isMobile } from "../../App";
+import { Sheet } from "../../components/BottomSheet/BottomSheet";
+import { format, isSameDay } from "date-fns";
+import useScrollController from "../../hooks/useScrollController";
+import useSaveLastViewDate from "../../hooks/useSaveLastVIewDate";
 
 export type ChannelDataType = {
   id: number;
@@ -423,16 +427,18 @@ const Column = ({
 };
 
 const Main = ({ detailmail, newsLetters, activeMail }: MailType) => {
-  const main = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (main?.current?.scrollTop) {
-      main.current.scrollTop = 0;
+    if (mainRef?.current?.scrollTop) {
+      mainRef.current.scrollTop = 0;
     }
   }, [activeMail]);
+
   return (
     <div
       className="flex-[70%] h-[100vh] overflow-auto custom-scrollbar"
-      ref={main}
+      ref={mainRef}
     >
       <div className="max-w-[700px] mx-auto mt-[30px]">
         <div>
