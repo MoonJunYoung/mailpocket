@@ -30,19 +30,26 @@
     "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
-
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
       "react-app",
-      "react-app/jest",
-      "some-existing-config",
-      "plugin:@typescript-eslint/recommended"
+      "react-app/jest"
     ],
     "rules": {
-      "@typescript-eslint/no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }]
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "vars": "all",
+          "args": "after-used",
+          "ignoreRestSiblings": true
+        }
+      ]
     }
   },
   "browserslist": {
@@ -58,9 +65,13 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/react-router-dom": "^5.3.3",
     "@types/ua-parser-js": "^0.7.39",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
     "autoprefixer": "^10.4.16",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.0",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1"
   }
