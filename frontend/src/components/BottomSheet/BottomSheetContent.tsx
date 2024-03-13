@@ -24,8 +24,9 @@ export const BottomSheetContent = ({ setOpen, data }: any) => {
           <img src="/images/MailpocketSymbol.png" alt="" />
         </div>
         <div className="flex flex-col mb-4">
-          <div className=" ">
+          <div className="">
             <Link
+              className="outline-none"
               to="/landingpage"
               // onClick={() => {
               //   sendEventToAmplitude("view suggest service", {
