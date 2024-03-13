@@ -33,7 +33,7 @@ const MobileMyPage = () => {
   const [selectedItem, setSelectedItem] = useState(0);
   const navigate = useNavigate();
   const authToken = Token();
-  const s =""
+  // const s =''
 
   useEffect(() => {
     if (!authToken) {
