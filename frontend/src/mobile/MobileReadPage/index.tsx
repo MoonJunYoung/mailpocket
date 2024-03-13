@@ -45,7 +45,7 @@ const MobileReadPage = () => {
     if (
       container?.scrollTop /
         (container?.scrollHeight - container?.clientHeight) >=
-      0.4
+      0.2
     ) {
       scrollPosition = true;
     }
