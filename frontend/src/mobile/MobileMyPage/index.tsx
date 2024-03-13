@@ -34,7 +34,6 @@ const MobileMyPage = () => {
   const navigate = useNavigate();
   const authToken = Token();
 
-  const s = ""
 
   useEffect(() => {
     if (!authToken) {
