@@ -20,7 +20,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '21.6.2'
-        cache: 'yarn'
     - name: Install dependencies (frontend)
       run: |
         cd frontend
@@ -40,12 +39,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '21.6.2'
-        cache: 'yarn'
-
-    - name: Check current directory and list files
-      run: |
-        pwd
-        ls -la
     - name: Install dependencies (frontend)
       run: |
         cd frontend
