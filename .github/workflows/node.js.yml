@@ -41,6 +41,11 @@ jobs:
       with:
         node-version: '21.6.2'
         cache: 'yarn'
+
+    - name: Check current directory and list files
+      run: |
+        pwd
+        ls -la
     - name: Install dependencies (frontend)
       run: |
         cd frontend
