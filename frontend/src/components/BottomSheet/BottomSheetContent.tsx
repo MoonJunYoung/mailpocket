@@ -24,15 +24,16 @@ export const BottomSheetContent = ({ setOpen, data }: any) => {
           <img src="/images/MailpocketSymbol.png" alt="" />
         </div>
         <div className="flex flex-col mb-4">
-          <div className=" ">
+          <div className="">
             <Link
+              className="outline-none"
               to="/landingpage"
-              onClick={() => {
-                sendEventToAmplitude("view suggest service", {
-                  "article name": `${data.from_name}`,
-                  "post name": `${data.subject}`,
-                });
-              }}
+              // onClick={() => {
+              //   sendEventToAmplitude("view suggest service", {
+              //     "article name": `${data.from_name}`,
+              //     "post name": `${data.subject}`,
+              //   });
+              // }}
             >
               <button className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[15px] rounded-md font-semibold">
                 알아보기

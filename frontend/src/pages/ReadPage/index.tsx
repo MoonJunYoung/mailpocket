@@ -48,7 +48,7 @@ const ReadPage = () => {
     if (
       container?.scrollTop /
         (container?.scrollHeight - container?.clientHeight) >=
-      0.2
+      0.4
     ) {
       scrollPosition = true;
     }
