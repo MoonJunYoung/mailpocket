@@ -30,7 +30,7 @@ const MobileMyPage = () => {
   const [mynewsletterdetail, setMyNewsLetterDetail] = useState<
     NavNewsLetterDataType[]
   >([]);
-  console.log('dddss')
+  console.log('ddds')
   const [selectedItem, setSelectedItem] = useState(0);
   const navigate = useNavigate();
   const authToken = Token();
