@@ -37,6 +37,8 @@ const MobileMyPage = () => {
   const authToken = Token();
   const main = useRef<HTMLDivElement>(null);
 
+  const s = ""
+
   useEffect(() => {
     if (!authToken) {
       navigate("/landingpage");
