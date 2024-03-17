@@ -4,7 +4,7 @@ import axios from "axios";
 export let Token = () => Cookies.get("authToken");
 const axiosData = () =>
   axios.create({
-    baseURL: "https://mailpocket.site/",
+    baseURL: "https://api.mailpocket.me",
     headers: {
       Authorization: Token(),
     },
@@ -34,31 +34,31 @@ export interface Params {
 // Read
 
 export const getReadMailData = (data: string | null) => {
-  return axiosData().get(`/api/mail?key=${data}`);
+  return axiosData().get(`/mail?key=${data}`);
 };
 
 export const getUserData = () => {
-  return axiosData().get("/api/user");
+  return axiosData().get("/user");
 };
 
 // Auth
 
 export const postSignInData = (data: postAuthDataType) => {
-  return axiosData().post("/api/user/sign-in", data);
+  return axiosData().post("/user/sign-in", data);
 };
 
 export const postSignUpData = (data: postAuthDataType) => {
-  return axiosData().post("/api/user/sign-up", data);
+  return axiosData().post("/user/sign-up", data);
 };
 
 //slack
 
 export const postSlackToken = (data: SlackTokenType) => {
-  return axiosData().post("/api/channel", data);
+  return axiosData().post("/channel", data);
 };
 
 export const getSlackToken = (data: any) => {
-  return axiosData().get(`/api/${data}`);
+  return axiosData().get(`/${data}`);
 };
 
 // Channle
@@ -67,7 +67,7 @@ export const getChannelData = (query: string) => {
   return axiosData().get(query);
 };
 export const deleteChannelData = (data: number) => {
-  return axiosData().delete(`/api/channel/${data}`);
+  return axiosData().delete(`/channel/${data}`);
 };
 
 // Subscribe
@@ -79,7 +79,7 @@ export const getNewsletterData = (query: string, params: Params) => {
 };
 
 export const putSubscribe = (data: postSubscribeType) => {
-  return axiosData().put("/api/newsletter/subscribe", data);
+  return axiosData().put("/newsletter/subscribe", data);
 };
 
 export const getSubscribeData = (query: string) => {
@@ -88,21 +88,21 @@ export const getSubscribeData = (query: string) => {
 
 // Mail
 export const getMail = (newsletter_id: any) => {
-  return axiosData().get(`/api/newsletter/${newsletter_id}/mail`);
+  return axiosData().get(`/newsletter/${newsletter_id}/mail`);
 };
 
 export const getMailDetail = (s3_object_key: string) => {
-  return axiosData().get(`/api/mail?key=${s3_object_key}`);
+  return axiosData().get(`/mail?key=${s3_object_key}`);
 };
 
 // read
 
 export const readPageSubscribe = (newsletterId: number) => {
-  return axiosData().post(`/api/newsletter/${newsletterId}/subscribe`);
+  return axiosData().post(`/newsletter/${newsletterId}/subscribe`);
 };
 
 export const readPageUnSubscribe = (newsletterId: number) => {
-  return axiosData().delete(`/api/newsletter/${newsletterId}/subscribe`);
+  return axiosData().delete(`/newsletter/${newsletterId}/subscribe`);
 };
 
 // mobilemypage
@@ -118,5 +118,5 @@ export const getMyPageSubscribeData = (query: string) => {
 // category
 
 export const getCategory = () => {
-  return axiosData().get("/api/newsletter/categories ");
+  return axiosData().get("/newsletter/categories ");
 };
