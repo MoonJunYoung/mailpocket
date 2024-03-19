@@ -41,3 +41,12 @@ class MailPresentation:
             return mail
         except Exception as e:
             catch_exception(e, request)
+
+    @router.patch("summary-again", status_code=204)
+    async def summary_again(request: Request, key: str):
+        try:
+            mail_service.summary_again(
+                s3_object_key=key,
+            )
+        except Exception as e:
+            catch_exception(e, request)
