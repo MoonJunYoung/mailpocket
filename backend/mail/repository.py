@@ -6,7 +6,7 @@ from backend.newsletter.domain import NewsLetter
 
 
 class MailRepository(S3Connector):
-    def read_by_s3_object_key(self, s3_object_key):
+    def read_mail_data_by_s3_object_key(self, s3_object_key):
         try:
             object = self.seoul_s3_client.get_object(
                 Bucket=self.seoul_bucket_name, Key=s3_object_key
@@ -19,7 +19,7 @@ class MailRepository(S3Connector):
         mail = Mail(id=None, mail_content=mail_content, s3_object_key=s3_object_key)
         return mail
 
-    def load_by_s3_object_key(self, mail: Mail):
+    def load_mail_data_by_s3_object_key(self, mail: Mail):
         try:
             object = self.seoul_s3_client.get_object(
                 Bucket=self.seoul_bucket_name, Key=mail.s3_object_key
@@ -49,7 +49,33 @@ class MailRepository(S3Connector):
             self.session.commit()
             self.mail.id = mail_model.id
 
-    class ReadMail(MysqlCRUDTemplate):
+    class ReadMailByS3ObjectKey(MysqlCRUDTemplate):
+        def __init__(self, s3_object_key) -> None:
+            self.s3_object_key = s3_object_key
+            super().__init__()
+
+        def execute(self):
+            mail_model = (
+                self.session.query(MailModel)
+                .filter(MailModel.s3_object_key == self.s3_object_key)
+                .first()
+            )
+            if not mail_model:
+                return None
+
+            mail = Mail(
+                id=mail_model.id,
+                s3_object_key=mail_model.s3_object_key,
+                subject=mail_model.subject,
+                summary_list=mail_model.summary_list,
+                newsletter_id=mail_model.newsletter_id,
+            )
+            return mail
+
+        def run(self) -> Mail:
+            return super().run()
+
+    class LoadMail(MysqlCRUDTemplate):
         def __init__(self, mail: Mail) -> None:
             self.mail = mail
             super().__init__()
@@ -69,6 +95,38 @@ class MailRepository(S3Connector):
             self.mail.share_text = self.mail._make_share_text()
             self.mail.newsletter_id = mail_model.newsletter_id
             return True
+
+    class UpdateMailSummaryList(MysqlCRUDTemplate):
+        def __init__(self, mail: Mail) -> None:
+            self.mail = mail
+            super().__init__()
+
+        def execute(self):
+            mail_model = (
+                self.session.query(MailModel)
+                .filter(MailModel.id == self.mail.id)
+                .first()
+            )
+            if not mail_model:
+                return None
+            mail_model.summary_list = self.mail.summary_list
+            self.session.commit()
+
+    class DeleteMail(MysqlCRUDTemplate):
+        def __init__(self, mail: Mail) -> None:
+            self.mail = mail
+            super().__init__()
+
+        def execute(self):
+            mail_model = (
+                self.session.query(MailModel)
+                .filter(MailModel.s3_object_key == self.mail.s3_object_key)
+                .first()
+            )
+            if not mail_model:
+                return False
+            self.session.delete(mail_model)
+            self.session.commit()
 
     class ReadMailListFromNewsletter(MysqlCRUDTemplate):
         def __init__(self, newsletter: NewsLetter) -> None:
