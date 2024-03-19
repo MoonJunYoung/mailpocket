@@ -15,6 +15,7 @@ requests = "2.31.0"
 pyjwt = "2.8.0"
 openai = "==0.28"
 bs4 = "*"
+growthbook = "*"
 
 [dev-packages]
 
