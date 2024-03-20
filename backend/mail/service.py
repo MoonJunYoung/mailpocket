@@ -1,4 +1,5 @@
 from backend.channel.repository import ChannelRepository
+from backend.common.exceptions import UnknownFromEamilException
 from backend.common.slack_api import SlackAPI
 from backend.mail.domain import Mail
 from backend.mail.repository import MailRepository
@@ -20,12 +21,15 @@ class MailService:
         self.slack_api = SlackAPI()
 
     def recv(self, s3_object_key):
-        mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
+        mail = self.mail_repository.read_mail_data_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
         self.slack_api.loging(mail)
         newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(
             mail.from_email
         ).run()
+        if not newsletter:
+            self.slack_api.loging_unknown_email_address(mail)
+            raise UnknownFromEamilException(mail.from_email)
         mail.set_newsletter_id(newsletter.id)
 
         mail.summary()
@@ -44,8 +48,8 @@ class MailService:
                 notified_slack_channel_id_list.append(channel.slack_channel_id)
 
     def read(self, s3_object_key):
-        mail = self.mail_repository.read_by_s3_object_key(s3_object_key)
-        self.mail_repository.ReadMail(mail).run()
+        mail = self.mail_repository.read_mail_data_by_s3_object_key(s3_object_key)
+        self.mail_repository.LoadMail(mail).run()
         mail.parser_eamil()
         return mail
 
@@ -53,6 +57,13 @@ class MailService:
         mail = self.mail_repository.ReadLastMailOfNewsltterByNewsletterID(
             newsletter_id
         ).run()
-        self.mail_repository.load_by_s3_object_key(mail)
+        self.mail_repository.load_mail_data_by_s3_object_key(mail)
         mail.parser_eamil()
         return mail
+
+    def summary_again(self, s3_object_key):
+        mail = self.mail_repository.ReadMailByS3ObjectKey(s3_object_key).run()
+        self.mail_repository.load_mail_data_by_s3_object_key(mail)
+        mail.parser_eamil()
+        mail.summary()
+        self.mail_repository.UpdateMailSummaryList(mail).run()

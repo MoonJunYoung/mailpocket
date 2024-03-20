@@ -31,6 +31,10 @@ import {
 import { SummaryNewsLetterDataType } from "../ReadPage";
 import PageLoding from "../../components/PageLoding";
 import { isMobile } from "../../App";
+import { Sheet } from "../../components/BottomSheet/BottomSheet";
+import { format, isSameDay } from "date-fns";
+import useScrollController from "../../hooks/useScrollController";
+import useSaveLastViewDate from "../../hooks/useSaveLastVIewDate";
 
 export type ChannelDataType = {
   id: number;
@@ -218,7 +222,7 @@ const Authentication = ({ handleLogOut }: any) => {
 const Item = ({ index, name, onClick, activeTab, setActiveTab }: any) => {
   return (
     <div
-      className={`px-[19px] border-b-[1px] border-b-#E8E8E8 h-[100px] cursor-pointer`}
+      className={`px-[10px] border-b-[1px] border-b-#E8E8E8 h-[100px] cursor-pointer`}
       onClick={() => {
         onClick(index);
       }}
@@ -235,7 +239,7 @@ const Item = ({ index, name, onClick, activeTab, setActiveTab }: any) => {
         {index === activeTab ? (
           <div className="border-t-[4px] border-solid border-[#8B5CF6] rounded-sm my-[20px]"></div>
         ) : (
-          <div className="break-keep text-[13px] mt-[6px] mb-[15px] text-[14px] font-bold text-[#666666]">
+          <div className="break-keep break-words text-[13px] mt-[6px] mb-[15px] text-[14px] font-bold text-[#666666]">
             {name}
           </div>
         )}
@@ -423,16 +427,18 @@ const Column = ({
 };
 
 const Main = ({ detailmail, newsLetters, activeMail }: MailType) => {
-  const main = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (main?.current?.scrollTop) {
-      main.current.scrollTop = 0;
+    if (mainRef?.current?.scrollTop) {
+      mainRef.current.scrollTop = 0;
     }
   }, [activeMail]);
+
   return (
     <div
       className="flex-[70%] h-[100vh] overflow-auto custom-scrollbar"
-      ref={main}
+      ref={mainRef}
     >
       <div className="max-w-[700px] mx-auto mt-[30px]">
         <div>

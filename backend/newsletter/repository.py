@@ -2,7 +2,6 @@ import datetime
 
 from sqlalchemy import func
 
-
 from backend.common.database.connector import MysqlCRUDTemplate
 from backend.common.database.model import (
     CategoryModel,
@@ -35,7 +34,7 @@ class NewsLetterRepository:
                 .first()
             )
             if not newsletter_model:
-                raise UnknownFromEamilException(self.from_email)
+                return False
             newsletter = NewsLetter(
                 id=newsletter_model.id,
                 name=newsletter_model.name,
@@ -83,7 +82,6 @@ class NewsLetterRepository:
                 mails=mail_list,
             )
             return newsletter
-
 
     class ReadAllNewsletters(MysqlCRUDTemplate):
         def execute(self):
@@ -231,7 +229,6 @@ class NewsLetterRepository:
         def run(self) -> list[NewsLetter]:
             return super().run()
 
-
     class UpdateNewsletterLastRecvDateTime(MysqlCRUDTemplate):
         def __init__(self, newsletter: NewsLetter) -> None:
             self.newsletter = newsletter
@@ -253,4 +250,3 @@ class NewsLetterRepository:
             for category_model in category_models:
                 category_list.append(Category(category_model.id, category_model.name))
             return category_list
-
