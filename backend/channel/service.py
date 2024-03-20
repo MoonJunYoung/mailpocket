@@ -43,7 +43,9 @@ class ChannelService:
                 ).run()
             )
             for subscribed_newsletter in subscribed_newsletter_list:
-                self.mail_repository.load_by_s3_object_key(subscribed_newsletter.mail)
+                self.mail_repository.load_mail_data_by_s3_object_key(
+                    subscribed_newsletter.mail
+                )
                 self.slack_api.sending_mail_recv_notification(
                     channel=channel,
                     mail=subscribed_newsletter.mail,

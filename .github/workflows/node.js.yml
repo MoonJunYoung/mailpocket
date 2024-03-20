@@ -1,10 +1,14 @@
 on:
   push:
-    branches: [ master ]
+    branches: 
+      - master
+      - develop
     paths:
       - 'frontend/**'
   pull_request:
-    branches: [ master ]
+    branches: 
+      - master
+      - develop
     paths:
       - 'frontend/**'
 
@@ -40,14 +44,20 @@ jobs:
       run: |
         cd frontend
         yarn build --if-present
+    - name: Set target S3 bucket
+      run: |
+        if [ "${{ github.ref }}" = "refs/heads/master" ]; then
+          echo "TARGET_BUCKET=${{ secrets.AWS_MAIN_BUILD_BUCKET }}" >> $GITHUB_ENV
+        else
+          echo "TARGET_BUCKET=${{ secrets.AWS_DEVELOP_BUILD_BUCKET }}" >> $GITHUB_ENV
+        fi
     - name: Upload to S3
-    
       uses: awact/s3-action@master
       with:
         args: --acl public-read --follow-symlinks --delete
       env:
         SOURCE_DIR: './frontend/build'
         AWS_REGION: 'ap-northeast-2'
-        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_S3_BUCKET: ${{ env.TARGET_BUCKET }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
