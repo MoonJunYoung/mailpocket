@@ -2,11 +2,12 @@ from fastapi import APIRouter, FastAPI, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.channel.presentation import ChannelPresentation
-from backend.common import ABtest
+from backend.common import experiment
 from backend.common.token import Token
 from backend.mail.presentation import MailPresentation
 from backend.newsletter.presentition import NewsLetterPresentation
 from backend.user.presentation import UserPresentation
+from backend.user.service import UserService
 
 app = FastAPI()
 main_router = APIRouter()
@@ -26,12 +27,16 @@ def haelth_check():
     return "haelth_check"
 
 
-@main_router.get("/features", status_code=200)
-def get_features(
+user_service = UserService()
+
+
+@main_router.get("/experiment", status_code=200)
+def get_fexperiment(
     Authorization=Header(None),
 ):
     user_id = Token.get_user_id_by_token(Authorization)
-    features = ABtest.get_features(user_id)
+    user = user_service.read(user_id)
+    features = experiment.get_experiment(user)
     return features
 
 
