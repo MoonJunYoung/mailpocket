@@ -85,7 +85,7 @@ const ReadPage = () => {
   const handleGetNewsLetterData = async () => {
     try {
       const responesSubscribe = await getSubscribeData(
-        "/newsletter?&subscribe_status=subscribed&sort_type=recent"
+        "/api/newsletter?&subscribe_status=subscribed&sort_type=recent"
       );
       setNewsLettersubscribe(responesSubscribe.data);
     } catch (error) {
