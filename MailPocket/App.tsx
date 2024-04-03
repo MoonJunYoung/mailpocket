@@ -10,8 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import OnboardingScreen from './sreens/OnboardingScreen';
-
+import OnboardingScreen from './src/sreens/OnboardingScreen';
 
 const App = () => {
   return (
