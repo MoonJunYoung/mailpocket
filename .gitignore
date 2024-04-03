@@ -3,3 +3,4 @@ test.py
 __pycache__
 test/
 backend_error.log
+.DS_Store
