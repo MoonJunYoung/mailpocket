@@ -88,7 +88,7 @@ const MyPage = () => {
 
   const handleSubscribe = async () => {
     let responesSubscribe = await getSubscribeData(
-      "/newsletter?&subscribe_status=subscribed&sort_type=recent"
+      "/api/newsletter?&subscribe_status=subscribed&sort_type=recent"
     );
     let test = responesSubscribe.data;
     return test;
@@ -222,7 +222,7 @@ const Authentication = ({ handleLogOut }: any) => {
 const Item = ({ index, name, onClick, activeTab, setActiveTab }: any) => {
   return (
     <div
-      className={`px-[10px] border-b-[1px] border-b-#E8E8E8 h-[100px] cursor-pointer`}
+      className={`px-[10px] border-b-[1px] border-b-#E8E8E8 h-[100px] cursor-pointer h-auto`}
       onClick={() => {
         onClick(index);
       }}

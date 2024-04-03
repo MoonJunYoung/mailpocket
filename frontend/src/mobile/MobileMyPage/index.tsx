@@ -50,12 +50,12 @@ const MobileMyPage = () => {
   const handlegetData = async () => {
     try {
       const responseNewsLetterList = await getMyPageSubscribeData(
-        "/newsletter?&subscribe_status=subscribed&sort_type=recent"
+        "/api/newsletter?&subscribe_status=subscribed&sort_type=recent"
       );
       setMyNewsLetter(responseNewsLetterList.data);
       if (responseNewsLetterList.data.length > 0) {
         const responseNewsLetterDetail = await getMyPageNewsLetterDetail(
-          `/newsletter/${
+          `/api/newsletter/${
             selectedItem ? selectedItem : responseNewsLetterList.data[0].id
           }/last-mail`
         );
