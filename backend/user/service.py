@@ -30,7 +30,7 @@ class UserService:
         user: User = self.user_repository.ReadByIdentifier(identifier).run()
         if not user:
             raise IdentifierNotFoundException(identifier=identifier)
-        if not bcrypt.checkpw(password.encode(), password.encode()):
+        if not bcrypt.checkpw(password.encode(), user.password.encode()):
             raise PasswordNotMatchException(identifier=identifier, password=password)
         return user
 
