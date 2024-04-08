@@ -13,15 +13,15 @@ class UserModel(Base):
     password = Column(String)
     platform = Column(String)
     platform_id = Column(String)
-    member_type = Column(String)
+    is_member = Column(Boolean)
 
-    def __init__(self, id, identifier, password, platform, platform_id, member_type):
+    def __init__(self, id, identifier, password, platform, platform_id, is_member):
         self.id = id
         self.identifier = identifier
         self.password = password
         self.platform = platform
         self.platform_id = platform_id
-        self.member_type = member_type
+        self.is_member = is_member
 
 
 class ChannelModel(Base):

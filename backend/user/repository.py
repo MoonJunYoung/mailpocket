@@ -15,14 +15,14 @@ class UserRepository:
             password=None,
             platform=None,
             platform_id=None,
-            member_type=None,
+            is_member=None,
         ) -> None:
             super().__init__()
             self.identifier = identifier
             self.password = password
             self.platform = platform
             self.platform_id = platform_id
-            self.member_type = member_type
+            self.is_member = is_member
 
         def execute(self):
             user_model = UserModel(
@@ -31,7 +31,7 @@ class UserRepository:
                 password=self.password,
                 platform=self.platform,
                 platform_id=self.platform_id,
-                member_type=self.member_type,
+                is_member=self.is_member,
             )
             self.session.add(user_model)
             self.session.commit()
@@ -41,7 +41,7 @@ class UserRepository:
                 password=user_model.password,
                 platform=user_model.platform,
                 platform_id=user_model.platform_id,
-                member_type=user_model.member_type,
+                is_member=user_model.is_member,
             )
 
         def run(self) -> User:
@@ -62,7 +62,7 @@ class UserRepository:
             self.password = password
             self.platform = platform
             self.platform_id = platform_id
-            self.member_type = "member"
+            self.is_member = True
 
         def execute(self):
             user_model = (
@@ -72,7 +72,7 @@ class UserRepository:
             user_model.password = self.password
             user_model.platform = self.platform
             user_model.platform_id = self.platform_id
-            user_model.member_type = self.member_type
+            user_model.is_member = self.is_member
             self.session.commit()
 
             return User(
@@ -81,7 +81,7 @@ class UserRepository:
                 password=user_model.password,
                 platform=user_model.platform,
                 platform_id=user_model.platform_id,
-                member_type=user_model.member_type,
+                is_member=user_model.is_member,
             )
 
         def run(self) -> User:
@@ -126,7 +126,7 @@ class UserRepository:
                 id=user_model.id,
                 platform_id=user_model.platform_id,
                 platform=user_model.platform,
-                member_type=user_model.member_type,
+                is_member=user_model.is_member,
             )
             return user
 
@@ -147,7 +147,7 @@ class UserRepository:
                 password=user_model.password,
                 platform_id=user_model.platform_id,
                 platform=user_model.platform,
-                member_type=user_model.member_type,
+                is_member=user_model.is_member,
             )
             return user
 

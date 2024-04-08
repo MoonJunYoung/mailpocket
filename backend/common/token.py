@@ -15,7 +15,7 @@ class Token:
     def create_token_by_user(user: User):
         payload = {
             "id": user.id,
-            "type": user.member_type,
+            "is_member": user.is_member,
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
         }
         token = jwt.encode(payload, secret_key)

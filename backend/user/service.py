@@ -22,7 +22,7 @@ class UserService:
         ).decode("utf-8")
 
         user = self.user_repository.Create(
-            identifier=identifier, password=encrypted_password, member_type="member"
+            identifier=identifier, password=encrypted_password, is_member=True
         ).run()
         return user
 
@@ -40,7 +40,7 @@ class UserService:
         return user
 
     def create_non_member_user(self):
-        user = self.user_repository.Create(member_type="non_member")
+        user = self.user_repository.Create(is_member=False).run()
         return user
 
     def oauth_login(self, platform_id, platform):
