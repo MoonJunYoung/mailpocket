@@ -1,9 +1,12 @@
+import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { postUserData } from '../../api/api';
 import { sendEventToAmplitude } from '../../components/Amplitude';
 
 const LandingPage = () => {
   const [scrollPercentage, setScrollPercentage] = useState(0);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -27,10 +30,33 @@ const LandingPage = () => {
     };
   }, []);
 
-  const handleAmplitudeData = () => {
-    sendEventToAmplitude("click start in landing page", '');
+  const handlePostUserData = async () => {
+    try {
+      const responseUserData = await postUserData();
+      if (responseUserData.status === 201) {
+        Cookies.set("authToken", responseUserData.data, {
+          expires: 30,
+        });
+      }
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패");
+    }
   }
 
+  const handleAmplitudeData = async () => {
+    try {
+      await handlePostUserData();
+      sendEventToAmplitude("click start in landing page", '');
+      const authToken = Cookies.get("authToken");
+      if (authToken) {
+        navigate("/subscribe");
+      } else {
+        console.log("토큰이 아직 발급되지 않았습니다.");
+      }
+    } catch (error) {
+      console.log("Api 데이터 불러오기 실패");
+    }
+  }
 
   return (
     <div className='bg-white flex flex-col items-center justify-center'>
@@ -114,8 +140,7 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-      <Link className="flex items-center justify-center fixed bottom-5 cursor-pointer left-0 right-0 mx-auto bg-customPurple w-[88%] max-w-[630px] h-[48px] rounded-md animate-fadeIn z-1  shadow-2xl text-base text-white font-bold" onClick={handleAmplitudeData} to="/sign-in">메일포켓 이용하기</Link>
-
+      <button className="flex items-center justify-center fixed bottom-5 cursor-pointer left-0 right-0 mx-auto bg-customPurple w-[88%] max-w-[630px] h-[48px] rounded-md animate-fadeIn z-1  shadow-2xl text-base text-white font-bold" onClick={handleAmplitudeData}>메일포켓 이용하기</button>
     </div>
   );
 }

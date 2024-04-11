@@ -126,11 +126,11 @@ code {
 }
 
 .authcontainer-submit_data {
-  @apply w-[270px] h-9 border-none text-sm md:w-[280px] md:h-6 md:text-base;
+  @apply w-[300px] h-9 border-none text-sm md:w-[280px] md:h-6 md:text-base;
 }
 
 .authcontainer-submit_title {
-  @apply my-2 text-xl font-extrabold md:text-xl;
+  @apply my-2 text-2xl font-extrabold md:text-xl;
 }
 
 .authcontainer-submit_coment {
@@ -138,11 +138,11 @@ code {
 }
 
 .auth-guidecoment {
-  @apply text-xs font-bold mr-1 text-gray-400;
+  @apply  text-base font-bold mr-1 text-gray-400;
 }
 
 .auth-link {
-  @apply text-xs font-bold text-customPurple no-underline md:text-sm;
+  @apply  text-base font-bold text-customPurple no-underline md:text-sm;
 }
 
 /* channle style */

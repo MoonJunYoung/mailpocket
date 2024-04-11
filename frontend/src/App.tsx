@@ -7,8 +7,6 @@ import {
 import MyPage from "./pages/MyPage";
 import MobileReadPage from "./mobile/MobileReadPage";
 import Subscribe from "./pages/SubscribePage";
-import SignIn from "./components/Auth/SignIn";
-import SingUp from "./components/Auth/SignUp";
 import RedirectMypage from "./components/RedirectMypage";
 import ReadPage from "./pages/ReadPage";
 import LandingPage from "./pages/LandingPage";
@@ -58,8 +56,6 @@ function App() {
         <Router>
           <Routes>
             <Route index element={<MyPage />} />
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/sign-up" element={<SingUp />} />
             <Route path="/kakao-oauth-redirect" element={<KakaoRedirect />} />
             <Route path="/naver-oauth-redirect" element={<NaverRedirect />} />
             <Route
@@ -68,8 +64,8 @@ function App() {
             />
             <Route path="/slack-oauth" element={<RedirectMypage />} />
             <Route path="/read" element={<ReadPage />} />
-            <Route path="/subscribe" element={<Subscribe />} />
             <Route path="/landingpage" element={<LandingPage />} />
+            <Route path="/subscribe" element={<Subscribe />} />
             <Route path="/mobileread" element={<MobileReadPage />} />
             <Route path="/mobilemypage" index element={<MobileMyPage />} />
             <Route path="/mobileSubscribe" element={<MobileSubscribe />} />
