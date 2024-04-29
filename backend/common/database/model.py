@@ -13,13 +13,15 @@ class UserModel(Base):
     password = Column(String)
     platform = Column(String)
     platform_id = Column(String)
+    is_member = Column(Boolean)
 
-    def __init__(self, id, identifier, password, platform, platform_id):
+    def __init__(self, id, identifier, password, platform, platform_id, is_member):
         self.id = id
         self.identifier = identifier
         self.password = password
         self.platform = platform
         self.platform_id = platform_id
+        self.is_member = is_member
 
 
 class ChannelModel(Base):
@@ -54,7 +56,6 @@ class NewsLetterModel(Base):
     operating_status = Column(Boolean)
     category_id = Column(Integer)
 
-
     def __init__(self, id, name, from_email, send_date, category_id=None):
         self.id = id
         self.name = name
@@ -85,7 +86,6 @@ class SubscribeModel(Base):
         self.id = id
         self.newsletter_id = newsletter_id
         self.user_id = user_id
-
 
 
 class SubscribeRankingModel(Base):

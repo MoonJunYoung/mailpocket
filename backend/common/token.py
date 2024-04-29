@@ -5,15 +5,17 @@ import jwt
 from dotenv import load_dotenv
 
 from backend.common.exceptions import InvalidTokenException, TokenIsMissingException
+from backend.user.domain import User
 
 load_dotenv()
 secret_key = os.environ.get("JWT_SECRET_KEY")
 
 
 class Token:
-    def create_token_by_user_id(user_id):
+    def create_token_by_user(user: User):
         payload = {
-            "id": user_id,
+            "id": user.id,
+            "is_member": user.is_member,
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
         }
         token = jwt.encode(payload, secret_key)
