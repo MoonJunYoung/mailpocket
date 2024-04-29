@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  decodedToken,
   getCategory,
   getNewsletterData,
   getSubscribeData,
@@ -20,25 +21,25 @@ import SlackGuideModal from "../../components/Modal/SlackGuideModal";
 import { Category } from "../../components/Category";
 import "../../index.css";
 import { NewsLetterDataType } from "../../pages/SubscribePage";
+import SignUp from "../../components/Modal/SignUp";
 export type SummaryItem = {
   [key: string]: string;
 };
 
 const MobileSubscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
-  const [newslettersubscribe, setNewsLettersubscribe] = useState<
-    NewsLetterDataType[]
-  >([]);
+  const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([]);
   const [newsletterchecked, setNewsLetterChecked] = useState<number[]>([]);
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(false);
+  const [slackGuideOpenModal, setSlackGuideOpenModal] = useState(false);
+  const [authOpenModal, setAuthOpenModal] = useState(false);
   const [isActiveMailModal, setIsActiveMailModal] = useState(false);
   const [acitveMailData, setActiveMailData] = useState();
   const [activeCategory, setActiveCategory] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [subscribelength, setNewsLettersubscribeLength] = useState(0)
   const [categories, setCategories] = useState([]);
-
+  const authTokenDecode = decodedToken();
   const authToken = Token();
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, {});
@@ -46,11 +47,10 @@ const MobileSubscribe = () => {
 
   useEffect(() => {
     if (!authToken) {
-      navigate("/landingpage");
-    } else {
-      sendEventToAmplitude("view select article", "");
+      navigate('/landingpage')
     }
-  }, [authToken, navigate]);
+    sendEventToAmplitude("view select article", "");
+  }, []);
 
   const fetchNewsletter = async (
     lastId: string | undefined,
@@ -70,7 +70,7 @@ const MobileSubscribe = () => {
       params.category_id = category;
     }
 
-    const { data } = await getNewsletterData("/api/newsletter", params);
+    const { data } = await getNewsletterData("/newsletter", params);
 
     setSubscribeable((prevData) => [...prevData, ...data]);
 
@@ -111,7 +111,7 @@ const MobileSubscribe = () => {
   const handleGetNewsLetterData = async () => {
     try {
       const responesSubscribe = await getSubscribeData(
-        "/api/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
+        "/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
       );
       setNewsLettersubscribe(responesSubscribe.data);
     } catch (error) {
@@ -122,7 +122,7 @@ const MobileSubscribe = () => {
   const handleGetNewsLetterLengthData = async () => {
     try {
       const responesSubscribe = await getSubscribeData(
-        "/api/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
+        "/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
       );
       setNewsLettersubscribeLength(responesSubscribe.data.length);
     } catch (error) {
@@ -166,7 +166,11 @@ const MobileSubscribe = () => {
   }, [newslettersubscribe]);
 
   const handleModalOpen = () => {
-    setOpenModal(true);
+    if (authTokenDecode === false) {
+      setAuthOpenModal(true);
+    } else {
+      setSlackGuideOpenModal(true);
+    }
   };
 
   const handleNewsLetterSubcribeDataRenewal = () => {
@@ -182,7 +186,7 @@ const MobileSubscribe = () => {
 
   return (
     <div className="mx-auto min-h-[100vh] bg-white">
-      <Nav />
+      <Nav setAuthOpenModal={setAuthOpenModal} authTokenDecode={authTokenDecode} />
       <div className="mx-auto max-w-[1200px] mt-3 mb-10">
         {isActiveMailModal === true ? (
           <MailModal
@@ -279,9 +283,12 @@ const MobileSubscribe = () => {
           </div>
         </div>
       </div>
-      {openModal && (
+      {authOpenModal && (
+        <SignUp setAuthOpenModal={setAuthOpenModal} />
+      )}
+      {slackGuideOpenModal && (
         <SlackGuideModal
-          setOpenModal={setOpenModal}
+          setSlackGuideOpenModal={setSlackGuideOpenModal}
           handlePostNewsLetterData={handlePostNewsLetterData}
           subscribelength={newslettersubscribe.length}
         />

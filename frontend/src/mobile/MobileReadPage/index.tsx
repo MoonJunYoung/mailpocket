@@ -3,7 +3,7 @@ import { MobileReadNav } from "../../components/mobileComponent/MobileNav";
 import MobileSeeMore from "../../components/mobileComponent/MobileSeeMore";
 import MobileSummary from "../../components/mobileComponent/MobileSummary";
 import { useLocation } from "react-router-dom";
-import { getReadMailData, getSubscribeData, Token } from "../../api/api";
+import { decodedToken, getReadMailData, getSubscribeData, Token } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import { SummaryItem } from "../../pages/SubscribePage";
 import PageLoding from "../../components/PageLoding";
@@ -34,6 +34,7 @@ const MobileReadPage = () => {
   const searchParams = new URLSearchParams(location.search);
   const mail = searchParams.get("mail");
   const authToken = Token();
+  const authTokenDecode = decodedToken();
   const mainRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const bottomSheetSetter = () => {
@@ -75,7 +76,7 @@ const MobileReadPage = () => {
   const handleGetNewsLetterData = async () => {
     try {
       const responesSubscribe = await getSubscribeData(
-        "/api/newsletter?&subscribe_status=subscribed&sort_type=recent"
+        "/newsletter?&subscribe_status=subscribed&sort_type=recent"
       );
       setNewsLettersubscribe(responesSubscribe.data);
     } catch (error) {
@@ -103,7 +104,7 @@ const MobileReadPage = () => {
 
   return (
     <div className="overflow-auto h-[100vh]" ref={mainRef}>
-      {authToken ? "" : <MobileSeeMore />}
+      {!authToken || authTokenDecode === false ? <MobileSeeMore /> : "" }
       <MobileReadNav
         ReadNavNewsLetterData={readmaildata}
         newslettersubscribe={newslettersubscribe}

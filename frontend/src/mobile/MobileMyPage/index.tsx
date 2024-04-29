@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sheet } from "../../components/BottomSheet/BottomSheet";
 import {
+  decodedToken,
   getMyPageNewsLetterDetail,
   getMyPageSubscribeData,
   Token,
@@ -29,18 +30,15 @@ export interface NavNewsLetterDataType {
 
 const MobileMyPage = () => {
   const [mynewsletter, setMyNewsLetter] = useState<NewsLetterDataType[]>([]);
-  const [mynewsletterdetail, setMyNewsLetterDetail] = useState<
-    NavNewsLetterDataType[]
-  >([]);
+  const [mynewsletterdetail, setMyNewsLetterDetail] = useState<NavNewsLetterDataType[]>([]);
   const [selectedItem, setSelectedItem] = useState(0);
   const navigate = useNavigate();
   const authToken = Token();
   const main = useRef<HTMLDivElement>(null);
-
-  const s = ""
+  const authTokenDecode = decodedToken();
 
   useEffect(() => {
-    if (!authToken) {
+    if (!authToken || authTokenDecode === false) {
       navigate("/landingpage");
     } else {
       sendEventToAmplitude("view my page", "");
@@ -50,13 +48,12 @@ const MobileMyPage = () => {
   const handlegetData = async () => {
     try {
       const responseNewsLetterList = await getMyPageSubscribeData(
-        "/api/newsletter?&subscribe_status=subscribed&sort_type=recent"
+        "/newsletter?&subscribe_status=subscribed&sort_type=recent"
       );
       setMyNewsLetter(responseNewsLetterList.data);
       if (responseNewsLetterList.data.length > 0) {
         const responseNewsLetterDetail = await getMyPageNewsLetterDetail(
-          `/api/newsletter/${
-            selectedItem ? selectedItem : responseNewsLetterList.data[0].id
+          `/newsletter/${selectedItem ? selectedItem : responseNewsLetterList.data[0].id
           }/last-mail`
         );
         setMyNewsLetterDetail([responseNewsLetterDetail.data]);

@@ -1,24 +1,33 @@
 import Cookies from 'js-cookie'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { postSignInData, Token } from '../../api/api'
 import { isMobile } from '../../App'
+import useOnClickOutside from '../../hooks/useOnClickOutside'
 import { AmplitudeSetUserId, sendEventToAmplitude } from '../Amplitude'
-import Nav from '../Nav'
 import { GoogleLogin, KakaoLogin, NaverLogin } from '../Oauth/SocialPlatformLogin'
-import Symbol from '../Symbol'
+import SignUp from './SignUp'
 
+interface SignInModalType {
+  setAuthOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setSignInOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const SignIn = () => {
+const SignIn = ({ setAuthOpenModal, setSignInOpenModal }: SignInModalType) => {
   const [formData, setFormData] = useState({
     identifier: "",
     password: ""
   })
   const [notAllow, setNotAllow] = useState(true);
+  const [signUpOpenModal, setSignUpOpenModal] = useState(false)
 
   const navigate = useNavigate();
   const authToken = Token();
+  const ref = useRef<HTMLDivElement | null>(null);
+  useOnClickOutside(ref, () => {
+    setAuthOpenModal(false);
+  });
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,14 +38,14 @@ const SignIn = () => {
     })
   };
 
-  useEffect(() => {
-    if (authToken) {
-      isMobile ? navigate("/mobilemypage") : navigate("/");
-    } else {
-      sendEventToAmplitude('view sign in', '');
-    }
-  }, [authToken, navigate]);
+  const handleOpenModal = () => {
+    setSignUpOpenModal(true)
+    setSignInOpenModal(false)
+  }
 
+  useEffect(() => {
+      sendEventToAmplitude('view sign in', '');
+  }, []);
 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,11 +59,9 @@ const SignIn = () => {
         await AmplitudeSetUserId()
         sendEventToAmplitude("complete sign in", "")
         isMobile ? navigate("/mobilemypage") : navigate("/");
-      } else {
-        alert("아이디 및 비밀번호를 확인해주세요.")
       }
     } catch (error) {
-      alert("실패했습니다. 다시 시도하세요.");
+      alert("아이디 및 비밀번호를 확인해주세요.");
     }
   };
 
@@ -68,18 +75,23 @@ const SignIn = () => {
   }, [formData]);
 
   return (
-    <div className='text-center mx-auto max-w-900 h-auto'>
-      <Nav />
-      <div className='basecontainer'>
-        <Symbol />
-        <div className='basecontainer-submitcontainer signin-container' style={{ boxShadow: "-1px 5px 11px 1px lightgray" }}>
+    <div className="z-10 absolute">
+      <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center">
+        <div ref={ref}
+          className='py-3 px-7 rounded-lg relative flex justify-center flex-col max-h-400 w-[430px] bg-white'>
+            <div
+              className="absolute top-1 right-3 cursor-pointer text-2xl"
+              onClick={() => setAuthOpenModal(false)}
+            >
+              X
+            </div>
           <form className='authcontainer-submit ' onSubmit={handleSubmit}>
             <div>
               <p className='authcontainer-submit_title'>
                 뉴스레터 3줄 요약
               </p>
-              <p className='text-gray-400  text-xs  font-semibold'>
-                긴 내용도 지루하지 않도록
+              <p className='text-gray-400  text-base font-semibold'>
+                긴 내용도 지루하지 않게
               </p>
             </div>
             <div className='flex flex-col justify-center items-centerf gap-5  w-full mt-6'>
@@ -113,8 +125,16 @@ const SignIn = () => {
           </form>
           <div className='mb-7'>
             <span className='auth-guidecoment'>아이디가 없으신가요?</span>
-            <Link className='auth-link' to="/sign-up">10초만에 가입하기</Link>
+            <span className='auth-link cursor-pointer' onClick={handleOpenModal}>10초만에 가입하기</span>
           </div>
+          {signUpOpenModal && (
+            <SignUp setAuthOpenModal={setAuthOpenModal} />
+            // <SlackGuideModal
+            //   setOpenModal={setOpenModal}
+            //   handlePostNewsLetterData={handlePostNewsLetterData}
+            //   subscribelength={subscribelength}
+            // />
+          )}
         </div>
       </div>
     </div>
