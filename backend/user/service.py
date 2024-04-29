@@ -47,14 +47,12 @@ class UserService:
         existing_user: User = self.user_repository.ReadUserByPlatformID(
             platform_id=platform_id,
             platform=platform,
-            member_type="member",
         ).run()
         if existing_user:
             return existing_user
 
         user = self.user_repository.Create(
-            platform_id=platform_id,
-            platform=platform,
+            platform_id=platform_id, platform=platform, is_member=True
         ).run()
         return user
 
