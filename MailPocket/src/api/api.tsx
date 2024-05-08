@@ -118,5 +118,5 @@ export const getMyPageSubscribeData = (query: string) => {
 // category
 
 export const getCategorys = () => {
-  return axiosData().get("/newsletter/categories ");
+  return axiosData().get("/newsletter/categories");
 };
