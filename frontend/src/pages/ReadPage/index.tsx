@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { getReadMailData, getSubscribeData, Token } from "../../api/api";
+import { decodedToken, getReadMailData, getSubscribeData, Token } from "../../api/api";
 import { isMobile } from "../../App";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import PageLoding from "../../components/PageLoding";
@@ -10,6 +10,7 @@ import { SubscribeNewsLetterDataType, Summary } from "../../components/Summary";
 import { SummaryItem } from "../SubscribePage";
 import { isSameDay, format } from "date-fns";
 import { Sheet } from "../../components/BottomSheet/BottomSheet";
+import SignUp from "../../components/Modal/SignUp";
 
 export interface SummaryNewsLetterDataType {
   id: number;
@@ -28,16 +29,16 @@ const ReadPage = () => {
   const [readmaildata, setReadMailData] = useState<SummaryNewsLetterDataType[]>(
     []
   );
-  const [newslettersubscribe, setNewsLettersubscribe] = useState<
-    SubscribeNewsLetterDataType[]
-  >([]);
+  const [newslettersubscribe, setNewsLettersubscribe] = useState<SubscribeNewsLetterDataType[]>([]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const mail = searchParams.get("mail");
   const authToken = Token();
+  const authTokenDecode = decodedToken();
   const navigate = useNavigate();
   const mainRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const [authOpenModal, setAuthOpenModal] = useState(false);
 
   const bottomSheetSetter = () => {
     const container = mainRef.current;
@@ -47,7 +48,7 @@ const ReadPage = () => {
     if (!container) return;
     if (
       container?.scrollTop /
-        (container?.scrollHeight - container?.clientHeight) >=
+      (container?.scrollHeight - container?.clientHeight) >=
       0.2
     ) {
       scrollPosition = true;
@@ -64,7 +65,7 @@ const ReadPage = () => {
   };
 
   useEffect(() => {
-    if (!authToken) {
+    if (!authToken || authTokenDecode === false) {
       const timer = setInterval(() => {
         mainRef?.current?.addEventListener("scroll", bottomSheetSetter);
       }, 2000);
@@ -82,10 +83,14 @@ const ReadPage = () => {
     }
   }, [isMobile]);
 
+  const handleModalOpen = () => {
+    setAuthOpenModal(true);
+  };
+
   const handleGetNewsLetterData = async () => {
     try {
       const responesSubscribe = await getSubscribeData(
-        "/api/newsletter?&subscribe_status=subscribed&sort_type=recent"
+        "/newsletter?&subscribe_status=subscribed&sort_type=recent"
       );
       setNewsLettersubscribe(responesSubscribe.data);
     } catch (error) {
@@ -113,9 +118,7 @@ const ReadPage = () => {
 
   return (
     <div className="bg-white overflow-scroll h-[100vh]" ref={mainRef}>
-      {authToken ? (
-        ""
-      ) : (
+      {!authToken || authTokenDecode === false ? (
         <div
           className="flex sticky top-0 z-1 bg-white items-center justify-between border-b p-4 "
           ref={mainRef}
@@ -137,13 +140,15 @@ const ReadPage = () => {
               메일포켓 알아보기
             </Link>
           </div>
-          <Link
+          <span
             className="font-extrabold mr-4 text-base text-customPurple"
-            to="/sign-in"
+            onClick={handleModalOpen}
           >
             로그인하기
-          </Link>
+          </span>
         </div>
+      ) : (
+        ""
       )}
       <div className="flex flex-col items-center justify-center pb-[80px]">
         <Summary
@@ -174,6 +179,11 @@ const ReadPage = () => {
         </div>
       </div>
       <Sheet open={open} setOpen={setOpen} mailData={readmaildata}></Sheet>
+      {
+        authOpenModal && (
+          <SignUp setAuthOpenModal={setAuthOpenModal} />
+        )
+      }
     </div>
   );
 };
