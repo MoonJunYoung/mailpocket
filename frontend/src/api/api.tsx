@@ -21,7 +21,9 @@ export let decodedToken = () => {
 
 const axiosData = () =>
   axios.create({
+
     baseURL: "https://api.mailpocket.me/",
+
     headers: {
       Authorization: Token(),
     },

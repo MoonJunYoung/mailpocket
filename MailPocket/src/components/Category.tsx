@@ -7,6 +7,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { getCategorys } from '../api/api';
 
 
@@ -19,7 +20,7 @@ interface CategoryDateType {
 
 const Category = () => {
   const [categorys, setCategorys] = useState<CategoryDateType[]>([])
-
+  const dispatch = useDispatch();
 
   useEffect(() => {
     handleGetCategory()
@@ -30,7 +31,8 @@ const Category = () => {
   const handleGetCategory = async () => {
     try {
       const responseData = await getCategorys()
-      if (responseData.status === 201) {
+      if (responseData.status === 200) {
+        dispatch({ type: 'UPDATE_CATEGORY_SUCCESS', payload: responseData.data });
         setCategorys(responseData.data)
       }
     } catch (error) {
@@ -40,7 +42,7 @@ const Category = () => {
 
   return (
     <View>
-      <Text>dkdsdfdsfsdk</Text>
+      <Text>dkdsdfdsㄴㅇㅎㄴㅎㅇㄴㅎsdk</Text>
     </View>
   )
 }

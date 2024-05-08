@@ -11,13 +11,17 @@ import {
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import OnboardingScreen from './src/sreens/OnboardingScreen';
+import { Provider } from 'react-redux';
+import store from './src/store/store';
 
 const App = () => {
   return (
     <SafeAreaProvider>
-      <SafeAreaView>
-        <OnboardingScreen />
-      </SafeAreaView>
+      <Provider store={store}>
+        <SafeAreaView>
+          <OnboardingScreen />
+        </SafeAreaView>
+      </Provider>
     </SafeAreaProvider>
 
   )
