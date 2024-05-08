@@ -6,19 +6,19 @@ import { isMobile } from "../../App";
 import { sendEventToAmplitude } from "../Amplitude";
 
 interface SlackGuideModalType {
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setSlackGuideOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   handlePostNewsLetterData: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>;
   subscribelength: number;
 }
 
 const SlackGuideModal = ({
-  setOpenModal,
+  setSlackGuideOpenModal,
   handlePostNewsLetterData,
   subscribelength,
 }: SlackGuideModalType) => {
   const ref = useRef<HTMLDivElement | null>(null);
   useOnClickOutside(ref, () => {
-    setOpenModal(false);
+    setSlackGuideOpenModal(false);
   });
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const SlackGuideModal = ({
   }, []);
 
   return (
-    <div className="z-10 absolute ">
+    <div className="z-10 absolute">
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <div
           ref={ref}
@@ -35,7 +35,7 @@ const SlackGuideModal = ({
           <div className="my-5 w-full flex flex-col items-start gap-2 ">
             <div
               className="absolute top-1 right-3 cursor-pointer text-xl font-extrabold"
-              onClick={() => setOpenModal(false)}
+              onClick={() => setSlackGuideOpenModal(false)}
             >
               X
             </div>

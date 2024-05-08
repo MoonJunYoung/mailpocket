@@ -1,13 +1,16 @@
-from fastapi import APIRouter, FastAPI, Request
+from fastapi import APIRouter, FastAPI, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.channel.presentation import ChannelPresentation
+from backend.common import experiment
+from backend.common.token import Token
 from backend.mail.presentation import MailPresentation
 from backend.newsletter.presentition import NewsLetterPresentation
 from backend.user.presentation import UserPresentation
+from backend.user.service import UserService
 
 app = FastAPI()
-main_router = APIRouter(prefix="/api")
+main_router = APIRouter()
 origins = ["*"]
 
 app.add_middleware(
@@ -22,6 +25,19 @@ app.add_middleware(
 @main_router.get("/haelth-check", status_code=200)
 def haelth_check():
     return "haelth_check"
+
+
+user_service = UserService()
+
+
+@main_router.get("/experiment", status_code=200)
+def get_fexperiment(
+    Authorization=Header(None),
+):
+    user_id = Token.get_user_id_by_token(Authorization)
+    user = user_service.read(user_id)
+    features = experiment.get_experiment(user)
+    return features
 
 
 main_router.include_router(MailPresentation.router)

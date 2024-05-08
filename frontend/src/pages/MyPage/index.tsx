@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  decodedToken,
   deleteChannelData,
   getChannelData,
   getMail,
@@ -61,6 +62,8 @@ const MyPage = () => {
   const [detailmail, setDetailMail] = useState<any[]>([]);
   const navigate = useNavigate();
   const authToken = Token();
+  const authTokenDecode = decodedToken();
+
 
   useEffect(() => {
     if (isMobile) {
@@ -69,7 +72,7 @@ const MyPage = () => {
   }, [isMobile]);
 
   useEffect(() => {
-    if (!authToken) {
+    if (!authToken || authTokenDecode === false) {
       navigate("/landingpage");
     } else {
       sendEventToAmplitude("view my page", "");
@@ -88,7 +91,7 @@ const MyPage = () => {
 
   const handleSubscribe = async () => {
     let responesSubscribe = await getSubscribeData(
-      "/api/newsletter?&subscribe_status=subscribed&sort_type=recent"
+      "/newsletter?&subscribe_status=subscribed&sort_type=recent"
     );
     let test = responesSubscribe.data;
     return test;
@@ -102,7 +105,7 @@ const MyPage = () => {
   const handleLogOut = async () => {
     Cookies.remove("authToken");
     await AmplitudeResetUserId();
-    navigate("/sign-in");
+    navigate("/landingpage");
   };
 
   const itemClick = async (id: any) => {
@@ -222,7 +225,7 @@ const Authentication = ({ handleLogOut }: any) => {
 const Item = ({ index, name, onClick, activeTab, setActiveTab }: any) => {
   return (
     <div
-      className={`px-[10px] border-b-[1px] border-b-#E8E8E8 h-[100px] cursor-pointer`}
+      className={`px-[10px] border-b-[1px] border-b-#E8E8E8 h-[100px] cursor-pointer h-auto`}
       onClick={() => {
         onClick(index);
       }}

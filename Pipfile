@@ -14,10 +14,8 @@ boto3 = "1.34.10"
 requests = "2.31.0"
 pyjwt = "2.8.0"
 openai = "==0.28"
-bs4 = "*"
+bs4 = "0.0.2"
 
 [dev-packages]
 
 [requires]
-python_version = "3.11"
-python_full_version = "3.11.4"

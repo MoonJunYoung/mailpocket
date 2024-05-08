@@ -5,9 +5,12 @@ import {
   getNewsletterData,
   getSubscribeData,
   Params,
+  getUserData,
   readPageSubscribe,
   readPageUnSubscribe,
   Token,
+  decodedToken,
+  postUserData,
 } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import { useInfiniteQuery } from "react-query";
@@ -18,6 +21,8 @@ import { Loader } from "../../components/Loader";
 import SlackGuideModal from "../../components/Modal/SlackGuideModal";
 import { Category } from "../../components/Category";
 import { isMobile } from "../../App";
+import SignUp from "../../components/Modal/SignUp";
+
 
 export type SummaryItem = {
   [key: string]: string;
@@ -36,23 +41,20 @@ export type NewsLetterDataType = {
   };
 };
 
+
+
 const Subscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
-  const [newslettersubscribe, setNewsLettersubscribe] = useState<
-    NewsLetterDataType[]
-  >([]);
+  const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([]);
   const [subscribelength, setNewsLettersubscribeLength] = useState(0)
-  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>(
-    {}
-  );
-  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<
-    Record<number, boolean>
-  >({});
+  const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>({});
+  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(false);
+  const [authOpenModal, setAuthOpenModal] = useState(false);
+  const [slackGuideOpenModal, setSlackGuideOpenModal] = useState(false);
   const [activeCategory, setActiveCategory] = useState(0);
   const [categories, setCategories] = useState([]);
-
+  const authTokenDecode = decodedToken();
   const authToken = Token();
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, {});
@@ -71,14 +73,12 @@ const Subscribe = () => {
     }
   }, [isMobile]);
 
-
   useEffect(() => {
-    if (!authToken) {
-      navigate("/landingpage");
-    } else {
-      sendEventToAmplitude("view select article", "");
+    if(!authToken) {
+      navigate('/landingpage')
     }
-  }, [authToken, navigate]);
+    sendEventToAmplitude("view select article", "");
+  }, []);
 
   const fetchNewsletter = async (
     lastId: string | undefined,
@@ -98,7 +98,7 @@ const Subscribe = () => {
       params.category_id = category;
     }
 
-    const { data } = await getNewsletterData("/api/newsletter", params);
+    const { data } = await getNewsletterData("/newsletter", params);
     setSubscribeable((prevData) => [...prevData, ...data]);
     return data;
   };
@@ -130,14 +130,15 @@ const Subscribe = () => {
         fetchNext();
       }, 500);
     }
-
     return () => clearTimeout(timerId);
   }, [fetchNext, isPageEnd, hasNextPage]);
+
+
 
   const handleGetNewsLetterData = async () => {
     try {
       const responesSubscribe = await getSubscribeData(
-        "/api/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
+        "/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
       );
       setNewsLettersubscribe(responesSubscribe.data);
     } catch (error) {
@@ -145,11 +146,10 @@ const Subscribe = () => {
     }
   };
 
-
   const handleGetNewsLetterLengthData = async () => {
     try {
       const responesSubscribe = await getSubscribeData(
-        "/api/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
+        "/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
       );
       setNewsLettersubscribeLength(responesSubscribe.data.length);
     } catch (error) {
@@ -167,8 +167,6 @@ const Subscribe = () => {
       } else {
         await sendEventToAmplitude("complete to select article", "");
         await sendEventToAmplitude("click add destination", "");
-  
-
         const url = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
         window.open(url, "_blank");
       }
@@ -176,6 +174,7 @@ const Subscribe = () => {
       console.log("Api 데이터 보내기 실패");
     }
   };
+
 
   const handleNewsLetterSelected = async (
     newsletterId: number,
@@ -239,7 +238,11 @@ const Subscribe = () => {
   };
 
   const handleModalOpen = () => {
-    setOpenModal(true);
+    if (authTokenDecode === false) {
+      setAuthOpenModal(true);
+    } else {
+      setSlackGuideOpenModal(true);
+    }
   };
 
   const truncate = (str: string, n: number) => {
@@ -248,7 +251,7 @@ const Subscribe = () => {
 
   return (
     <div className="mx-auto h-auto">
-      <Nav />
+      <Nav setAuthOpenModal={setAuthOpenModal} authTokenDecode={authTokenDecode} />
       <div className="mx-auto max-w-[1200px] mt-10 mb-10">
         <div className="flex justify-between md:gap-8">
           <div className="flex gap-2 justify-center">
@@ -507,9 +510,12 @@ const Subscribe = () => {
           </div>
         </div>
       </div>
-      {openModal && (
+      {authOpenModal && (
+        <SignUp setAuthOpenModal={setAuthOpenModal} />
+      )}
+      {slackGuideOpenModal && (
         <SlackGuideModal
-          setOpenModal={setOpenModal}
+          setSlackGuideOpenModal={setSlackGuideOpenModal}
           handlePostNewsLetterData={handlePostNewsLetterData}
           subscribelength={subscribelength}
         />

@@ -9,21 +9,83 @@ from backend.user.domain import User
 
 class UserRepository:
     class Create(MysqlCRUDTemplate):
-        def __init__(self, user: User) -> None:
-            self.user = user
+        def __init__(
+            self,
+            identifier=None,
+            password=None,
+            platform=None,
+            platform_id=None,
+            is_member=None,
+        ) -> None:
             super().__init__()
+            self.identifier = identifier
+            self.password = password
+            self.platform = platform
+            self.platform_id = platform_id
+            self.is_member = is_member
 
         def execute(self):
             user_model = UserModel(
                 id=None,
-                identifier=self.user.identifier,
-                password=self.user.password,
-                platform=self.user.platform,
-                platform_id=self.user.platform_id,
+                identifier=self.identifier,
+                password=self.password,
+                platform=self.platform,
+                platform_id=self.platform_id,
+                is_member=self.is_member,
             )
             self.session.add(user_model)
             self.session.commit()
-            self.user.id = user_model.id
+            return User(
+                id=user_model.id,
+                identifier=user_model.identifier,
+                password=user_model.password,
+                platform=user_model.platform,
+                platform_id=user_model.platform_id,
+                is_member=user_model.is_member,
+            )
+
+        def run(self) -> User:
+            return super().run()
+
+    class Update(MysqlCRUDTemplate):
+        def __init__(
+            self,
+            id,
+            identifier=None,
+            password=None,
+            platform=None,
+            platform_id=None,
+        ) -> None:
+            super().__init__()
+            self.id = id
+            self.identifier = identifier
+            self.password = password
+            self.platform = platform
+            self.platform_id = platform_id
+            self.is_member = True
+
+        def execute(self):
+            user_model = (
+                self.session.query(UserModel).filter(UserModel.id == self.id).first()
+            )
+            user_model.identifier = self.identifier
+            user_model.password = self.password
+            user_model.platform = self.platform
+            user_model.platform_id = self.platform_id
+            user_model.is_member = self.is_member
+            self.session.commit()
+
+            return User(
+                id=user_model.id,
+                identifier=user_model.identifier,
+                password=user_model.password,
+                platform=user_model.platform,
+                platform_id=user_model.platform_id,
+                is_member=user_model.is_member,
+            )
+
+        def run(self) -> User:
+            return super().run()
 
     class ReadByIdentifier(MysqlCRUDTemplate):
         def __init__(self, identifier) -> None:
@@ -45,6 +107,29 @@ class UserRepository:
             )
             return user
 
+    class ReadUserByPlatformID(MysqlCRUDTemplate):
+        def __init__(self, platform_id, platform) -> None:
+            self.platform_id = platform_id
+            self.platform = platform
+            super().__init__()
+
+        def execute(self):
+            user_model = (
+                self.session.query(UserModel)
+                .filter(UserModel.platform == self.platform)
+                .filter(UserModel.platform_id == self.platform_id)
+                .first()
+            )
+            if not user_model:
+                return None
+            user = User(
+                id=user_model.id,
+                platform_id=user_model.platform_id,
+                platform=user_model.platform,
+                is_member=user_model.is_member,
+            )
+            return user
+
     class ReadByID(MysqlCRUDTemplate):
         def __init__(self, id) -> None:
             self.id = id
@@ -62,6 +147,7 @@ class UserRepository:
                 password=user_model.password,
                 platform_id=user_model.platform_id,
                 platform=user_model.platform,
+                is_member=user_model.is_member,
             )
             return user
 
@@ -130,25 +216,3 @@ class UserRepository:
             for subscribe_model in subscribe_models:
                 self.session.delete(subscribe_model)
             self.session.commit()
-
-    class ReadUserByPlatformID(MysqlCRUDTemplate):
-        def __init__(self, platform_id, platform) -> None:
-            self.platform_id = platform_id
-            self.platform = platform
-            super().__init__()
-
-        def execute(self):
-            user_model = (
-                self.session.query(UserModel)
-                .filter(UserModel.platform == self.platform)
-                .filter(UserModel.platform_id == self.platform_id)
-                .first()
-            )
-            if not user_model:
-                return None
-            user = User(
-                id=user_model.id,
-                platform_id=user_model.platform_id,
-                platform=user_model.platform,
-            )
-            return user
