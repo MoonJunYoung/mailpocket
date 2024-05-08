@@ -167,7 +167,7 @@ const Subscribe = () => {
       } else {
         await sendEventToAmplitude("complete to select article", "");
         await sendEventToAmplitude("click add destination", "");
-  
+
 
         const url = "https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=";
         window.open(url, "_blank");
