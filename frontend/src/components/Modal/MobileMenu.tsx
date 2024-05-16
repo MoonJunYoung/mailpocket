@@ -19,7 +19,6 @@ const MobileMenu = ({
   onSelectItem,
   selectItemId,
 }: MobileMenuType) => {
-  const [isOpen, setIsOpen] = useState(true);
   const [ModalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(
     selectItemId ? selectItemId : mynewsletter[0].id
@@ -27,7 +26,6 @@ const MobileMenu = ({
   const navigate = useNavigate();
 
   const closeModal = () => {
-    setIsOpen(false);
     setTimeout(() => {
       setOpenModal(false);
     }, 480);
@@ -50,11 +48,11 @@ const MobileMenu = ({
         {/* 네비게이션 아이템 영역 */}
         <div className="relative h-screen">
           <div className="bg-white flex flex-col w-fit h-[100%]">
-            <div className="subscribe-scrollbar flex flex-col items-center overflow-y-auto  ">
+            <div className="subscribe-scrollbar flex flex-col items-center overflow-y-auto">
               {mynewsletter.map((data) => (
                 <div className="">
                   <div
-                    className={`h-[120px] gap-3 text-center text-[13px] break-words break-keep border-b px-2 py-4 flex flex-col items-center justify-center`}
+                    className={`h-[120px] gap-5 text-center text-[13px] break-words break-keep border-b px-2 py-4 flex flex-col items-center justify-center`}
                     key={data.id}
                     onClick={() => {
                       handleItemClick(data.id);
@@ -79,13 +77,9 @@ const MobileMenu = ({
               ))}
             </div>
             <div className="">
-              <div className="flex flex-col  ">
-                <div
-                  className="flex flex-col gap-5
-                "
-                >
+              <div className="flex flex-col">
+                <div className="flex flex-col gap-5">
                   <ChangeButton></ChangeButton>
-
                   <div
                     onClick={() => {
                       setModalOpen(true);

@@ -50,9 +50,9 @@ export const sendEventToAmplitude = async (
   properties: any
 ) => {
   try {
-    // if (process.env.NODE_ENV === "development") {
-    //   console.log(`${eventName}: ${JSON.stringify(properties || {})}`);
-    // }
+    if (process.env.NODE_ENV === "development") {
+      console.log(`${eventName}: ${JSON.stringify(properties || {})}`);
+    }
     amplitude.track(eventName, properties);
   } catch (error) {
     console.error("Amplitude 초기화 중 오류 발생:", error);

@@ -12,16 +12,17 @@ const RedirectMypage = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const accessCode = queryParams.get("code");
-
     if (accessCode) {
       const sendAccessToken = async () => {
         setLoading(true);
         try {
           const response = await postSlackToken({ code: accessCode });
+          console.log(response)
           const responseHeaders = (response.headers as AxiosHeaders).get?.(
             "Location"
           );
           if (response.status === 201) {
+            console.log(responseHeaders)
             const responseAmplitudeData = await getSlackToken(responseHeaders);
             sendEventToAmplitude("complete to add destination", {
               workspace: responseAmplitudeData.data.team_name,

@@ -45,7 +45,7 @@ const MobileReadPage = () => {
     if (!container) return;
     if (
       container?.scrollTop /
-        (container?.scrollHeight - container?.clientHeight) >=
+      (container?.scrollHeight - container?.clientHeight) >=
       0.2
     ) {
       scrollPosition = true;
@@ -104,7 +104,7 @@ const MobileReadPage = () => {
 
   return (
     <div className="overflow-auto h-[100vh]" ref={mainRef}>
-      {!authToken || authTokenDecode === false ? <MobileSeeMore /> : "" }
+      {!authToken || authTokenDecode === false ? <MobileSeeMore /> : ""}
       <MobileReadNav
         ReadNavNewsLetterData={readmaildata}
         newslettersubscribe={newslettersubscribe}
