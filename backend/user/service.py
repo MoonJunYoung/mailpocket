@@ -69,7 +69,7 @@ class UserService:
 
             user = self.user_repository.Update(
                 id=user_id, identifier=identifier, password=encrypted_password
-            )
+            ).run()
 
         elif platform_id and platform:
             existing_user: User = self.user_repository.ReadUserByPlatformID(
@@ -81,6 +81,6 @@ class UserService:
 
             user = self.user_repository.Update(
                 id=user_id, platform_id=platform_id, platform=platform
-            )
+            ).run()
 
         return user
