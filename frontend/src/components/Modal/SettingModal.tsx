@@ -23,7 +23,7 @@ export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
           >
             <img src="/images/close.svg" alt="" className="size-6" />
           </span>
-          <div className="p-[40px] h-full">
+          <div className="p-[40px] m-2 h-full">
             <div className="flex flex-col h-full">
               <div className="flex flex-col gap-2 text-[20px] font-extrabold">
                 <div>{newsLetters.length}개의 뉴스레터 소식을</div>

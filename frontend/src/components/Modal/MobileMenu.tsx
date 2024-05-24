@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NewsLetterDataType } from "../../pages/SubscribePage";
 import { AmplitudeResetUserId } from "../Amplitude";
@@ -11,9 +11,11 @@ interface MobileMenuType {
   mynewsletter: NewsLetterDataType[];
   onSelectItem: React.Dispatch<React.SetStateAction<number>>;
   selectItemId: number;
+  openModal: boolean;
 }
 
 const MobileMenu = ({
+  openModal,
   setOpenModal,
   mynewsletter,
   onSelectItem,
@@ -24,18 +26,19 @@ const MobileMenu = ({
     selectItemId ? selectItemId : mynewsletter[0].id
   );
   const navigate = useNavigate();
-
-  const closeModal = () => {
-    setTimeout(() => {
-      setOpenModal(false);
-    }, 480);
-  };
-
+  const [isAnimating, setIsAnimating] = useState(true);
   const handleLogOut = async () => {
     Cookies.remove("authToken");
     await AmplitudeResetUserId();
     navigate("/sign-in");
   };
+
+  useEffect(() => {
+    if (!isAnimating) {
+      setTimeout(() => { setOpenModal(false) }, 500)
+    }
+  }, [isAnimating])
+
 
   const handleItemClick = (id: number) => {
     onSelectItem(id);
@@ -43,12 +46,17 @@ const MobileMenu = ({
   };
 
   return (
-    <div className="">
-      <div className="fixed inset-0 bg-stone-300 bg-opacity-50  z-10">
+    <div>
+      <div className={`absolute top-0 inset-0 z-10 overflow-hidden ${isAnimating ? 'animate-left-to-right' : 'animate-right-to-left'}`}>
         {/* 네비게이션 아이템 영역 */}
-        <div className="relative h-screen">
-          <div className="bg-white flex flex-col w-fit h-[100%]">
+        <div className="h-screen fixed">
+          <div className="bg-white flex flex-col w-fit h-[100%] ">
             <div className="subscribe-scrollbar flex flex-col items-center overflow-y-auto">
+              <div className="cursor-pointer text-lg px-6 py-4 mb-4 border-b">
+                <span className=" text-gray-600" onClick={() => { setIsAnimating(false) }}>
+                  닫기
+                </span>
+              </div>
               {mynewsletter.map((data) => (
                 <div className="">
                   <div
@@ -64,11 +72,10 @@ const MobileMenu = ({
                       alt={String(data.id)}
                     />
                     <span
-                      className={`font-semibold w-[65px] pb-2  ${
-                        selectedItem === data.id
-                          ? "border-customPurple border-solid border-b-4 "
-                          : ""
-                      }`}
+                      className={`font-semibold w-[65px] pb-2  ${selectedItem === data.id
+                        ? "border-customPurple border-solid border-b-4 "
+                        : ""
+                        }`}
                     >
                       {data.name}
                     </span>
@@ -109,11 +116,6 @@ const MobileMenu = ({
                 )}
               </div>
             </div>
-          </div>
-          <div className="absolute top-0 left-20">
-            <span className="cursor-pointer text-2xl" onClick={closeModal}>
-              <img src="images/close.svg" className="size-[30px]" alt="닫기" />
-            </span>
           </div>
         </div>
       </div>

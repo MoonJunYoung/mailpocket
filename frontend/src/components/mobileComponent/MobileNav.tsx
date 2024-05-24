@@ -72,9 +72,8 @@ export const MobileReadNav = ({
       {ReadNavNewsLetterData.map((data) => (
         <div
           key={data.id}
-          className={`bg-white p-3 flex items-center justify-center gap-4 ${
-            authToken ? "" : "mb-4"
-          }`}
+          className={`bg-white p-3 flex items-center justify-center gap-4 ${authToken ? "" : "mb-4"
+            }`}
         >
           <div className="flex items-center justify-center gap-3">
             <img
@@ -130,12 +129,10 @@ export const MobileMyPageNav = ({
   selectItemId,
 }: MobileMayPageNavType) => {
   const [openModal, setOpenModal] = useState(false);
+  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substring(0, n) + "..." : str;
   };
-  const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<
-    Record<number, boolean>
-  >({});
 
   useEffect(() => {
     if (mynewsletter) {
@@ -238,6 +235,7 @@ export const MobileMyPageNav = ({
       ))}
       {openModal && (
         <MobileMenu
+          openModal={openModal}
           setOpenModal={setOpenModal}
           mynewsletter={mynewsletter}
           onSelectItem={onSelectItem}
