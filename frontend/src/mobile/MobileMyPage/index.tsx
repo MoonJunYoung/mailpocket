@@ -72,7 +72,7 @@ const MobileMyPage = () => {
   }, [selectedItem]);
 
   return (
-    <div className="">
+    <>
       <MobileMyPageNav
         MayPageNavNewsLetterData={mynewsletterdetail}
         mynewsletter={mynewsletter}
@@ -92,7 +92,7 @@ const MobileMyPage = () => {
           );
         })}
       </div>
-    </div>
+    </>
   );
 };
 
