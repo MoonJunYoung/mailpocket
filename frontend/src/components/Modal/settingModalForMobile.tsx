@@ -5,16 +5,18 @@ import { sendEventToAmplitude } from "../Amplitude";
 
 export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
   const [channels, setChannels] = useState([]);
+
   useEffect(() => {
     let channelData = getChannelData("/channel");
     channelData.then((result: any) => {
       setChannels(result.data);
     });
   }, [openModal]);
+
   return (
     <div className="w-full h-full fixed top-0">
       <div className="h-full bg-black bg-opacity-35">
-        <div className="w-[400px] h-[500px] fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-white rounded-lg">
+        <div className="w-[330px] h-[450px] fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-white rounded-lg">
           <span
             onClick={() => {
               setOpenModal(false);
@@ -23,9 +25,9 @@ export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
           >
             <img src="/images/close.svg" alt="" className="size-6" />
           </span>
-          <div className="p-[40px] h-full">
+          <div className="p-[30px] h-full">
             <div className="flex flex-col h-full">
-              <div className="flex flex-col gap-2 text-[20px] text-left font-extrabold">
+              <div className="flex flex-col gap-2 text-[20px] text-left font-extrabold text-lg">
                 <div>{newsLetters.length}개의 뉴스레터 소식을</div>
                 <div>{channels.length}개의 채널에 전달하고 있어요.</div>
               </div>
@@ -59,7 +61,7 @@ export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
                                 setChannels(channelData.data);
                               }}
                             >
-                              <img src="images/archive.svg" alt="as" />
+                              <img className="w-[35px]" src="images/archive.svg" alt="as" />
                             </div>
                           </div>
                         </div>
@@ -70,7 +72,7 @@ export const SettingModal = ({ setOpenModal, newsLetters, openModal }: any) => {
               </div>
               <div className="">
                 <Link onClick={() => sendEventToAmplitude("click add destination", "")} to="https://slack.com/oauth/v2/authorize?client_id=6427346365504.6466397212374&scope=incoming-webhook,team:read&user_scope=">
-                  <button className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[15px] rounded-md font-semibold">
+                  <button className="bg-[#8F36FF] text-[#FFFFFF] w-full p-[10px] rounded-md font-semibold">
                     채널 추가하기
                   </button>
                 </Link>

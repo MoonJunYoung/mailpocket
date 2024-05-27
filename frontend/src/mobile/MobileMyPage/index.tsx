@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sheet } from "../../components/BottomSheet/BottomSheet";
 import {
   decodedToken,
   getMyPageNewsLetterDetail,
@@ -9,11 +8,9 @@ import {
 } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
 import { MobileMyPageNav } from "../../components/mobileComponent/MobileNav";
-
 import MobileSummary from "../../components/mobileComponent/MobileSummary";
 import PageLoding from "../../components/PageLoding";
 import { NewsLetterDataType, SummaryItem } from "../../pages/SubscribePage";
-import { format, isSameDay } from "date-fns";
 
 export interface NavNewsLetterDataType {
   id: number;

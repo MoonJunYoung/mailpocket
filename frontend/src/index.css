@@ -178,27 +178,29 @@ code {
 /* menu */
 
 .animate-right-to-left {
-  animation: right-to-left 1300ms;
+  animation: right-to-left 1500ms;
 }
+
 
 @keyframes right-to-left {
   0% {
-    transform: translateX(-100px);
+    transform: translateX(0px);
   }
   40% {
-    transform: translateX(0px);
+    transform: translateX(-100px);
   }
 }
 
 .animate-left-to-right {
-  animation: left-to-right 1300ms;
+  animation: left-to-right 1500ms;
 }
 
 @keyframes left-to-right {
   0% {
-    transform: translateX(0px);
-  }
-  40% {
     transform: translateX(-100px);
   }
+  40% {
+    transform: translateX(0px);
+  }
 }
+

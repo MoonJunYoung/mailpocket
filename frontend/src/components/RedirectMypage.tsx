@@ -12,7 +12,6 @@ const RedirectMypage = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const accessCode = queryParams.get("code");
-
     if (accessCode) {
       const sendAccessToken = async () => {
         setLoading(true);

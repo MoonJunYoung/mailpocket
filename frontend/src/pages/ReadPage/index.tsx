@@ -102,6 +102,7 @@ const ReadPage = () => {
     try {
       const response = await getReadMailData(mail);
       setReadMailData([response.data]);
+      console.log("111111")
       sendEventToAmplitude("view article detail", {
         "article name": response.data.from_name,
         "post name": response.data.subject,
@@ -112,6 +113,7 @@ const ReadPage = () => {
   };
 
   useEffect(() => {
+    console.log("2222")
     handleGetData();
     handleGetNewsLetterData();
   }, [location]);
