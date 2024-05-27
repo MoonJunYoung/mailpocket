@@ -190,7 +190,7 @@ export const MobileMyPageNav = ({
   };
 
   return (
-    <div>
+    <div className="relative">
       {MayPageNavNewsLetterData.map((data) => (
         <div
           key={data.newsletter_id}

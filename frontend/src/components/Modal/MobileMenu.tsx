@@ -47,7 +47,7 @@ const MobileMenu = ({
 
   return (
     <div>
-      <div className={`absolute top-0 inset-0 z-10 overflow-hidden ${isAnimating ? 'animate-left-to-right' : 'animate-right-to-left'}`}>
+      <div className={` absolute top-0 inset-0 z-10 ${isAnimating ? 'animate-left-to-right' : 'animate-right-to-left'}`}>
         {/* 네비게이션 아이템 영역 */}
         <div className="h-screen fixed">
           <div className="bg-white flex flex-col w-fit h-[100%] ">
@@ -64,6 +64,7 @@ const MobileMenu = ({
                     key={data.id}
                     onClick={() => {
                       handleItemClick(data.id);
+                      setIsAnimating(false)
                     }}
                   >
                     <img
