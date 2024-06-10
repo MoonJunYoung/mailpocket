@@ -156,7 +156,7 @@ code {
 
 .custom-scrollbar::-webkit-scrollbar {
   height: 8px;
-  width: 3px;
+  width: 2px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -177,25 +177,25 @@ code {
 
 /* menu */
 
-.animate-right-to-left {
-  animation: right-to-left 1500ms;
+.animate-list-slide-to-left {
+  animation: list-slide-to-left 2500ms;
 }
 
 
-@keyframes right-to-left {
+@keyframes list-slide-to-left {
   0% {
-    transform: translateX(0px);
+    transform: translateX(-50px);
   }
   40% {
     transform: translateX(-100px);
   }
 }
 
-.animate-left-to-right {
-  animation: left-to-right 1500ms;
+.animate-list-slide-to-right  {
+  animation: list-slide-to-right 2000ms;
 }
 
-@keyframes left-to-right {
+@keyframes list-slide-to-right {
   0% {
     transform: translateX(-100px);
   }
@@ -204,3 +204,31 @@ code {
   }
 }
 
+
+
+.animate-details-slide-to-left {
+  animation: details-slide-to-left 2500ms;
+}
+
+
+@keyframes details-slide-to-left {
+  0% {
+    transform: translateX(-50px);
+  }
+  40% {
+    transform: translateX(-270px);
+  }
+}
+
+.animate-details-slide-to-right  {
+  animation: details-slide-to-right 1500ms;
+}
+
+@keyframes details-slide-to-right {
+  0% {
+    transform: translateX(-100px);
+  }
+  40% {
+    transform: translateX(0px);
+  }
+}

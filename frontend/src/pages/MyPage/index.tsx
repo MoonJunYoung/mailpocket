@@ -390,9 +390,8 @@ const ListItem = ({
           });
         }
       }}
-      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${
-        id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
-      }`}
+      className={`min-h-[100px] border-b-[1px] border-b-#E8E8E8 cursor-pointer ${id === activeMail && activeMail ? "bg-[#FAF7FE]" : ""
+        }`}
     >
       <div className="ml-[20px] focus:bg-slate-100 min-h-[inherit]">{item}</div>
     </div>
@@ -433,8 +432,11 @@ const Main = ({ detailmail, newsLetters, activeMail }: MailType) => {
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (mainRef?.current?.scrollTop) {
-      mainRef.current.scrollTop = 0;
+    if (mainRef.current) {
+      mainRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
   }, [activeMail]);
 

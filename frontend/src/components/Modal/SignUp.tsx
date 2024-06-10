@@ -12,10 +12,11 @@ import SignIn from './SignIn'
 
 interface SignUpModalType {
   setAuthOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setSignUpOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
-const SignUp = ({ setAuthOpenModal }: SignUpModalType) => {
+const SignUp = ({ setAuthOpenModal, setSignUpOpenModal }: SignUpModalType) => {
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
@@ -57,7 +58,7 @@ const SignUp = ({ setAuthOpenModal }: SignUpModalType) => {
         });
         await AmplitudeSetUserId()
         sendEventToAmplitude("complete sign up", "")
-        isMobile ? navigate("/mobileSubscribe") : navigate("/");
+        isMobile ? navigate("/mobilemypage") : navigate("/");
       }
     } catch (error) {
       alert("아이디 및 비밀번호를 확인해주세요.");
@@ -66,6 +67,7 @@ const SignUp = ({ setAuthOpenModal }: SignUpModalType) => {
 
   const handleOpenModal = () => {
     setSignInOpenModal(true)
+    setSignUpOpenModal(false)
   }
 
   useEffect(() => {
@@ -83,8 +85,8 @@ const SignUp = ({ setAuthOpenModal }: SignUpModalType) => {
 
 
   return (
-    <div className='text-center mx-auto max-w-900 h-auto'>
-      <div className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center">
+    <div className="z-10 absolute">
+      <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center">
         <div ref={ref}
           className={`py-3 px-7 rounded-lg relative flex justify-center flex-col max-h-400 w-[430px] z-10 bg-white ${isMobile ? "" : "transition-all ease-in-out animate-fadeIn"}`}>
           <div
@@ -141,7 +143,7 @@ const SignUp = ({ setAuthOpenModal }: SignUpModalType) => {
             <span className='auth-link cursor-pointer' onClick={handleOpenModal}>로그인 하기</span>
           </div>
           {signInOpenModal && (
-            <SignIn setAuthOpenModal={setAuthOpenModal} setSignInOpenModal={setSignInOpenModal} />
+            <SignIn setAuthOpenModal={setAuthOpenModal} />
             // <SlackGuideModal
             //   setOpenModal={setOpenModal}
             //   handlePostNewsLetterData={handlePostNewsLetterData}

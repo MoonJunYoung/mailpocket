@@ -1,19 +1,17 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getCategory,
   getNewsletterData,
   getSubscribeData,
   Params,
-  getUserData,
   readPageSubscribe,
   readPageUnSubscribe,
   Token,
   decodedToken,
-  postUserData,
 } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, QueryFunctionContext } from "@tanstack/react-query";
 import Nav from "../../components/Nav";
 import Symbol from "../../components/Symbol";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
@@ -21,8 +19,7 @@ import { Loader } from "../../components/Loader";
 import SlackGuideModal from "../../components/Modal/SlackGuideModal";
 import { Category } from "../../components/Category";
 import { isMobile } from "../../App";
-import SignUp from "../../components/Modal/SignUp";
-
+import SignIn from "../../components/Modal/SignIn";
 
 export type SummaryItem = {
   [key: string]: string;
@@ -41,12 +38,15 @@ export type NewsLetterDataType = {
   };
 };
 
-
+export type NewsletterResponse = {
+  data: NewsLetterDataType[];
+  nextCursor?: string | null;
+};
 
 const Subscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
   const [newslettersubscribe, setNewsLettersubscribe] = useState<NewsLetterDataType[]>([]);
-  const [subscribelength, setNewsLettersubscribeLength] = useState(0)
+  const [subscribelength, setNewsLettersubscribeLength] = useState(0);
   const [seeMoreStates, setSeeMoreStates] = useState<{ [id: number]: boolean }>({});
   const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
   const navigate = useNavigate();
@@ -74,16 +74,16 @@ const Subscribe = () => {
   }, [isMobile]);
 
   useEffect(() => {
-    if(!authToken) {
-      navigate('/landingpage')
+    if (!authToken) {
+      navigate('/landingpage');
     }
     sendEventToAmplitude("view select article", "");
-  }, []);
+  }, [authToken, navigate]);
 
   const fetchNewsletter = async (
-    lastId: string | undefined,
+    lastId: any,
     category: number | undefined = 0
-  ) => {
+  ): Promise<NewsletterResponse> => {
     let params: Params = {
       in_mail: true,
       subscribe_status: "subscribable",
@@ -100,21 +100,17 @@ const Subscribe = () => {
 
     const { data } = await getNewsletterData("/newsletter", params);
     setSubscribeable((prevData) => [...prevData, ...data]);
-    return data;
+    return { data, nextCursor: data.length ? data[data.length - 1].id : null };
   };
 
-  const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useInfiniteQuery(
-      ["newsletter", activeCategory],
-      ({ pageParam }) => fetchNewsletter(pageParam, activeCategory),
-      {
-        getNextPageParam: (lastPage) => {
-          const lastItem = lastPage[lastPage.length - 1];
-          return lastItem ? lastItem.id : null;
-        },
-        refetchOnWindowFocus: false,
-      }
-    );
+  const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage, error, status } =
+    useInfiniteQuery<NewsletterResponse, Error>({
+      queryKey: ["newsletter", activeCategory],
+      queryFn: ({ pageParam }: QueryFunctionContext) => fetchNewsletter(pageParam, activeCategory),
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      refetchOnWindowFocus: false,
+      initialPageParam: undefined,
+    });
 
   const fetchNext = useCallback(async () => {
     const res = await fetchNextPage();
@@ -133,14 +129,12 @@ const Subscribe = () => {
     return () => clearTimeout(timerId);
   }, [fetchNext, isPageEnd, hasNextPage]);
 
-
-
   const handleGetNewsLetterData = async () => {
     try {
-      const responesSubscribe = await getSubscribeData(
+      const responseSubscribe = await getSubscribeData(
         "/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
       );
-      setNewsLettersubscribe(responesSubscribe.data);
+      setNewsLettersubscribe(responseSubscribe.data);
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
     }
@@ -148,10 +142,10 @@ const Subscribe = () => {
 
   const handleGetNewsLetterLengthData = async () => {
     try {
-      const responesSubscribe = await getSubscribeData(
+      const responseSubscribe = await getSubscribeData(
         "/newsletter?in_mail=true&subscribe_status=subscribed&sort_type=ranking"
       );
-      setNewsLettersubscribeLength(responesSubscribe.data.length);
+      setNewsLettersubscribeLength(responseSubscribe.data.length);
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
     }
@@ -175,7 +169,6 @@ const Subscribe = () => {
     }
   };
 
-
   const handleNewsLetterSelected = async (
     newsletterId: number,
     bool: boolean,
@@ -189,7 +182,7 @@ const Subscribe = () => {
           [newsletterId]: bool,
         }));
       }
-      handleGetNewsLetterLengthData()
+      handleGetNewsLetterLengthData();
       sendEventToAmplitude("select article", {
         "article name": newslettername,
       });
@@ -211,25 +204,19 @@ const Subscribe = () => {
           [newsletterId]: bool,
         }));
       }
-      handleGetNewsLetterLengthData()
+      handleGetNewsLetterLengthData();
       sendEventToAmplitude("unselect article", {
         "article name": newslettername,
       });
-
-      setSubscriptionStatusMap((prevMap) => ({
-        ...prevMap,
-        [newsletterId]: bool,
-      }));
     } catch (error) {
       console.log("Api 데이터 불러오기 실패");
     }
   };
 
-
   useEffect(() => {
     handleGetNewsLetterData();
     handleCategory();
-    handleGetNewsLetterLengthData()
+    handleGetNewsLetterLengthData();
   }, []);
 
   const handleCategory = async () => {
@@ -511,7 +498,7 @@ const Subscribe = () => {
         </div>
       </div>
       {authOpenModal && (
-        <SignUp setAuthOpenModal={setAuthOpenModal} />
+        <SignIn setAuthOpenModal={setAuthOpenModal} />
       )}
       {slackGuideOpenModal && (
         <SlackGuideModal

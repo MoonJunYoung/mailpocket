@@ -129,6 +129,16 @@ export const readPageUnSubscribe = (newsletterId: number) => {
 
 // mobilemypage
 
+export const getMyPageNewsLetterDetails = async (query: string) => {
+  try {
+    const responseNewsLetterDetail = await axiosData().get(`/newsletter/${query}/mail`);
+    return responseNewsLetterDetail.data;
+  } catch (error) {
+    console.error('Error fetching newsletter detail:', error);
+    throw error;
+  }
+};
+
 export const getMyPageNewsLetterDetail = (query: string) => {
   return axiosData().get(query);
 };
