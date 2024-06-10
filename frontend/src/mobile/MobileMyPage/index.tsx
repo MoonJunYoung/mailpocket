@@ -26,13 +26,27 @@ export interface NavNewsLetterDataType {
 }
 
 const MobileMyPage = () => {
-  const [mynewsletter, setMyNewsLetter] = useState<NewsLetterDataType[]>([]);
-  const [mynewsletterdetail, setMyNewsLetterDetail] = useState<NavNewsLetterDataType[]>([]);
+  const [myNewsLetter, setMyNewsLetter] = useState<NewsLetterDataType[]>([]);
+  const [myNewsLetterDetailKey, setMyNewsLetterDetailKey] = useState("");
+  const [myNewsLetterDetail, setMyNewsLetterDetail] = useState<NavNewsLetterDataType[]>([]);
   const [selectedItem, setSelectedItem] = useState(0);
+  const [activeMail, setActiveMail] = useState(0);
   const navigate = useNavigate();
   const authToken = Token();
-  const main = useRef<HTMLDivElement>(null);
   const authTokenDecode = decodedToken();
+  const mainRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [activeMail]);
+
+
 
   useEffect(() => {
     if (!authToken || authTokenDecode === false) {
@@ -49,10 +63,7 @@ const MobileMyPage = () => {
       );
       setMyNewsLetter(responseNewsLetterList.data);
       if (responseNewsLetterList.data.length > 0) {
-        const responseNewsLetterDetail = await getMyPageNewsLetterDetail(
-          `/newsletter/${selectedItem ? selectedItem : responseNewsLetterList.data[0].id
-          }/last-mail`
-        );
+        const responseNewsLetterDetail = await getMyPageNewsLetterDetail(myNewsLetterDetailKey ? `/mail?key=${myNewsLetterDetailKey}` : `/newsletter/${responseNewsLetterList.data[0].id}/last-mail`);
         setMyNewsLetterDetail([responseNewsLetterDetail.data]);
         sendEventToAmplitude("view article detail", {
           "article name": responseNewsLetterDetail.data.from_name,
@@ -69,19 +80,22 @@ const MobileMyPage = () => {
 
   useEffect(() => {
     handlegetData();
-  }, [selectedItem]);
+  }, [myNewsLetterDetailKey]);
 
   return (
-    <>
+    <div className="h-[100vh] overflow-auto custom-scrollbar" ref={mainRef}>
       <MobileMyPageNav
-        MayPageNavNewsLetterData={mynewsletterdetail}
-        mynewsletter={mynewsletter}
+        MayPageNavNewsLetterData={myNewsLetterDetail}
+        mynewsletter={myNewsLetter}
         onSelectItem={setSelectedItem}
         selectItemId={selectedItem}
+        setMyNewsLetterDetailKey={setMyNewsLetterDetailKey}
+        setActiveMail={setActiveMail}
+        activeMail={activeMail}
       />
-      <div className="mx-3 overflow-x-hidden h-[100vh]" ref={main}>
-        <MobileSummary summaryNewsLetterData={mynewsletterdetail} />
-        {mynewsletterdetail.map((data) => {
+      <div className="mx-3 h-full" ref={mainRef}>
+        <MobileSummary summaryNewsLetterData={myNewsLetterDetail} />
+        {myNewsLetterDetail.map((data) => {
           return data.html_body !== null ? (
             <div
               className="mt-10 overflow-x-auto"
@@ -92,7 +106,7 @@ const MobileMyPage = () => {
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 

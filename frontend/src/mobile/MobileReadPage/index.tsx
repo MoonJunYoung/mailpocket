@@ -103,17 +103,17 @@ const MobileReadPage = () => {
   }, [location]);
 
   return (
-    <div className="overflow-auto h-[100vh]" ref={mainRef}>
+    <div className="overflow-auto h-[100vh] custom-scrollbar" ref={mainRef}>
       {!authToken || authTokenDecode === false ? <MobileSeeMore /> : ""}
       <MobileReadNav
         ReadNavNewsLetterData={readmaildata}
         newslettersubscribe={newslettersubscribe}
       />
-      <div className="mt-1">
+      <div className="mt-1 mx-3">
         <MobileSummary summaryNewsLetterData={readmaildata} />
       </div>
 
-      <div className="mt-5">
+      <div className="mt-5 mx-3">
         {readmaildata.map((data) => {
           return data.html_body !== null ? (
             <div dangerouslySetInnerHTML={{ __html: data.html_body }} />

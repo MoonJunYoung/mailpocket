@@ -12,7 +12,7 @@ import {
   Token,
 } from "../../api/api";
 import { sendEventToAmplitude } from "../../components/Amplitude";
-import { useInfiniteQuery } from "react-query";
+import { QueryFunctionContext, useInfiniteQuery } from "@tanstack/react-query";
 import Nav from "../../components/Nav";
 import Symbol from "../../components/Symbol";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
@@ -21,10 +21,17 @@ import SlackGuideModal from "../../components/Modal/SlackGuideModal";
 import { Category } from "../../components/Category";
 import "../../index.css";
 import { NewsLetterDataType } from "../../pages/SubscribePage";
-import SignUp from "../../components/Modal/SignUp";
+import SignIn from "../../components/Modal/SignIn";
+
 export type SummaryItem = {
   [key: string]: string;
 };
+
+export type NewsletterResponse = {
+  data: NewsLetterDataType[];
+  nextCursor?: string | null;
+};
+
 
 const MobileSubscribe = () => {
   const [subscribeable, setSubscribeable] = useState<NewsLetterDataType[]>([]);
@@ -53,9 +60,9 @@ const MobileSubscribe = () => {
   }, []);
 
   const fetchNewsletter = async (
-    lastId: string | undefined,
+    lastId: any,
     category: number | undefined = 0
-  ) => {
+  ): Promise<NewsletterResponse> => {
     let params: Params = {
       in_mail: true,
       subscribe_status: "subscribable",
@@ -71,24 +78,18 @@ const MobileSubscribe = () => {
     }
 
     const { data } = await getNewsletterData("/newsletter", params);
-
     setSubscribeable((prevData) => [...prevData, ...data]);
-
-    return data;
+    return { data, nextCursor: data.length ? data[data.length - 1].id : null };
   };
 
-  const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useInfiniteQuery(
-      ["newsletter", activeCategory],
-      ({ pageParam }) => fetchNewsletter(pageParam, activeCategory),
-      {
-        getNextPageParam: (lastPage) => {
-          const lastItem = lastPage[lastPage.length - 1];
-          return lastItem ? lastItem.id : null;
-        },
-        refetchOnWindowFocus: false,
-      }
-    );
+  const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage, error, status } =
+    useInfiniteQuery<NewsletterResponse, Error>({
+      queryKey: ["newsletter", activeCategory],
+      queryFn: ({ pageParam }: QueryFunctionContext) => fetchNewsletter(pageParam, activeCategory),
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      refetchOnWindowFocus: false,
+      initialPageParam: undefined,
+    });
 
   const fetchNext = useCallback(async () => {
     const res = await fetchNextPage();
@@ -104,7 +105,6 @@ const MobileSubscribe = () => {
         fetchNext();
       }, 500);
     }
-
     return () => clearTimeout(timerId);
   }, [fetchNext, isPageEnd, hasNextPage]);
 
@@ -284,7 +284,7 @@ const MobileSubscribe = () => {
         </div>
       </div>
       {authOpenModal && (
-        <SignUp setAuthOpenModal={setAuthOpenModal} />
+        <SignIn setAuthOpenModal={setAuthOpenModal} />
       )}
       {slackGuideOpenModal && (
         <SlackGuideModal

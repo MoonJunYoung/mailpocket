@@ -11,6 +11,7 @@ import { SummaryItem } from "../SubscribePage";
 import { isSameDay, format } from "date-fns";
 import { Sheet } from "../../components/BottomSheet/BottomSheet";
 import SignUp from "../../components/Modal/SignUp";
+import SignIn from "../../components/Modal/SignIn";
 
 export interface SummaryNewsLetterDataType {
   id: number;
@@ -102,7 +103,6 @@ const ReadPage = () => {
     try {
       const response = await getReadMailData(mail);
       setReadMailData([response.data]);
-      console.log("111111")
       sendEventToAmplitude("view article detail", {
         "article name": response.data.from_name,
         "post name": response.data.subject,
@@ -113,7 +113,6 @@ const ReadPage = () => {
   };
 
   useEffect(() => {
-    console.log("2222")
     handleGetData();
     handleGetNewsLetterData();
   }, [location]);
@@ -122,7 +121,7 @@ const ReadPage = () => {
     <div className="bg-white overflow-scroll h-[100vh]" ref={mainRef}>
       {!authToken || authTokenDecode === false ? (
         <div
-          className="flex sticky top-0 z-1 bg-white items-center justify-between border-b p-4 "
+          className="flex sticky top-0 z-10 bg-white items-center justify-between border-b p-4 "
           ref={mainRef}
         >
           <img
@@ -183,7 +182,7 @@ const ReadPage = () => {
       <Sheet open={open} setOpen={setOpen} mailData={readmaildata}></Sheet>
       {
         authOpenModal && (
-          <SignUp setAuthOpenModal={setAuthOpenModal} />
+          <SignIn setAuthOpenModal={setAuthOpenModal} />
         )
       }
     </div>

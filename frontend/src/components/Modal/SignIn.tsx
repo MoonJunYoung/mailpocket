@@ -11,10 +11,9 @@ import SignUp from './SignUp'
 
 interface SignInModalType {
   setAuthOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setSignInOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SignIn = ({ setAuthOpenModal, setSignInOpenModal }: SignInModalType) => {
+const SignIn = ({ setAuthOpenModal }: SignInModalType) => {
   const [formData, setFormData] = useState({
     identifier: "",
     password: ""
@@ -40,11 +39,10 @@ const SignIn = ({ setAuthOpenModal, setSignInOpenModal }: SignInModalType) => {
 
   const handleOpenModal = () => {
     setSignUpOpenModal(true)
-    setSignInOpenModal(false)
   }
 
   useEffect(() => {
-      sendEventToAmplitude('view sign in', '');
+    sendEventToAmplitude('view sign in', '');
   }, []);
 
 
@@ -75,16 +73,16 @@ const SignIn = ({ setAuthOpenModal, setSignInOpenModal }: SignInModalType) => {
   }, [formData]);
 
   return (
-    <div className="z-10 absolute">
-      <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center">
+    <div className='text-center mx-auto max-w-900 h-auto'>
+      <div className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center">
         <div ref={ref}
           className='py-3 px-7 rounded-lg relative flex justify-center flex-col max-h-400 w-[430px] bg-white'>
-            <div
-              className="absolute top-1 right-3 cursor-pointer text-2xl"
-              onClick={() => setAuthOpenModal(false)}
-            >
-              X
-            </div>
+          <div
+            className="absolute top-1 right-3 cursor-pointer text-2xl"
+            onClick={() => setAuthOpenModal(false)}
+          >
+            X
+          </div>
           <form className='authcontainer-submit ' onSubmit={handleSubmit}>
             <div>
               <p className='authcontainer-submit_title'>
@@ -128,7 +126,7 @@ const SignIn = ({ setAuthOpenModal, setSignInOpenModal }: SignInModalType) => {
             <span className='auth-link cursor-pointer' onClick={handleOpenModal}>10초만에 가입하기</span>
           </div>
           {signUpOpenModal && (
-            <SignUp setAuthOpenModal={setAuthOpenModal} />
+            <SignUp setAuthOpenModal={setAuthOpenModal} setSignUpOpenModal={setSignUpOpenModal} />
             // <SlackGuideModal
             //   setOpenModal={setOpenModal}
             //   handlePostNewsLetterData={handlePostNewsLetterData}

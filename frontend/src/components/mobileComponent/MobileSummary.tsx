@@ -42,10 +42,10 @@ const MobileSummary = ({ summaryNewsLetterData }: SummaryProps) => {
             <div key={data.id} className={`p-3 flex flex-col items-start border-b h-[230px] ${expandedSummaries[data.id] ? 'h-auto' : 'overflow-hidden'} custom-scrollbar`}>
               {data.summary_list ? (
                 Object.entries(data.summary_list).map(([key, value]) => (
-                  <div className='mt-1' key={key}>
+                  <div className='my-2' key={key}>
                     <div className='flex flex-col'>
                       <p className='font-extrabold'>{key}</p>
-                      <span className='text-sm text-gray-500 font-semibold'>{value}</span>
+                      <span className='mt-1 text-sm text-gray-500 font-semibold'>{value}</span>
                     </div>
                   </div>
                 ))

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { NamedImportBindings } from "typescript";
 import { readPageSubscribe, readPageUnSubscribe, Token } from "../../api/api";
 import { NavNewsLetterDataType } from "../../mobile/MobileMyPage";
 import { SummaryNewsLetterDataType } from "../../pages/ReadPage";
 import { NewsLetterDataType } from "../../pages/SubscribePage";
 import { sendEventToAmplitude } from "../Amplitude";
-import MobileMenu from "../Modal/MobileMenu";
+import MobileMenu, { MenuNewsletterDetailType } from "../Modal/MobileMenu";
 import { SubscribeNewsLetterDataType } from "../Summary";
 
 interface ReadNavNewsLetterDataType {
@@ -72,7 +71,7 @@ export const MobileReadNav = ({
       {ReadNavNewsLetterData.map((data) => (
         <div
           key={data.id}
-          className={`bg-white p-3 flex items-center justify-center gap-4 ${authToken ? "" : "mb-4"
+          className={`bg-white p-3 flex items-center justify-center gap-4 mb-4 ${authToken ? "" : "mb-4"
             }`}
         >
           <div className="flex items-center justify-center gap-3">
@@ -115,11 +114,14 @@ export const MobileReadNav = ({
   );
 };
 
-interface MobileMayPageNavType {
+interface MobileMyPageNavType {
   MayPageNavNewsLetterData: NavNewsLetterDataType[];
   mynewsletter: NewsLetterDataType[];
   onSelectItem: React.Dispatch<React.SetStateAction<number>>;
   selectItemId: number;
+  setMyNewsLetterDetailKey: React.Dispatch<React.SetStateAction<string>>;
+  activeMail: number
+  setActiveMail: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const MobileMyPageNav = ({
@@ -127,7 +129,10 @@ export const MobileMyPageNav = ({
   mynewsletter,
   onSelectItem,
   selectItemId,
-}: MobileMayPageNavType) => {
+  setMyNewsLetterDetailKey,
+  activeMail,
+  setActiveMail,
+}: MobileMyPageNavType) => {
   const [openModal, setOpenModal] = useState(false);
   const [subscriptionStatusMap, setSubscriptionStatusMap] = useState<Record<number, boolean>>({});
   const truncate = (str: string, n: number) => {
@@ -190,7 +195,7 @@ export const MobileMyPageNav = ({
   };
 
   return (
-    <div className="relative">
+    <div className=" sticky top-0 z-10">
       {MayPageNavNewsLetterData.map((data) => (
         <div
           key={data.newsletter_id}
@@ -235,11 +240,13 @@ export const MobileMyPageNav = ({
       ))}
       {openModal && (
         <MobileMenu
-          openModal={openModal}
           setOpenModal={setOpenModal}
           mynewsletter={mynewsletter}
           onSelectItem={onSelectItem}
           selectItemId={selectItemId}
+          setMyNewsLetterDetailKey={setMyNewsLetterDetailKey}
+          activeMail={activeMail}
+          setActiveMail={setActiveMail}
         />
       )}
     </div>
