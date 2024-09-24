@@ -83,7 +83,7 @@ const MobileMyPage = () => {
   }, [myNewsLetterDetailKey]);
 
   return (
-    <div className="h-[100vh] overflow-auto custom-scrollbar" ref={mainRef}>
+    <div className="h-screen overflow-auto custom-scrollbar" ref={mainRef}>
       <MobileMyPageNav
         MayPageNavNewsLetterData={myNewsLetterDetail}
         mynewsletter={myNewsLetter}

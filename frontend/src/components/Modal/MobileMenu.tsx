@@ -94,8 +94,8 @@ const MobileMenu = ({
 
   return (
     <div>
-      <div className={`absolute top-0 inset-0 z-10 ${isAnimating ? 'animate-list-slide-to-right' : 'animate-list-slide-to-left'}`}>
-        <div className="h-screen fixed">
+      <div className={`fixed top-0 ${isAnimating ? 'animate-list-slide-to-right' : 'animate-list-slide-to-left'}`}>
+        <div className="">
           <div className="flex h-screen">
             <div className="bg-white flex flex-col w-fit justify-between">
               <div className="subscribe-scrollbar flex flex-col items-center overflow-y-auto">
